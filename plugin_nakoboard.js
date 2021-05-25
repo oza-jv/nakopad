@@ -67,10 +67,10 @@ async function AD1input() {
 	// recieve
 	await WaitForInputReport()		// イベント発生まで待つ
 	console.log( `AD1input: ${ADval}` );
-	return ADval;
 // Add 2021/5/26 By Matsunaga /////////
 //	ReadFlag = 1;
 ////////////////
+	return ADval;
 }
 
 // ボード側から受信したときのイベント
