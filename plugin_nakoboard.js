@@ -10,6 +10,12 @@ let device;
 var ADval = 0;
 var USBconnected = 0;	// 処理可＝1，不可＝０
 var outputReport = new Uint8Array(64);
+
+// Add 2021/5/26 By Matsunaga /////////
+var ReadFlag = 0;
+////////////////
+
+
 const filters = [
   {
     // なでしこボードのHIDフィルタ
@@ -76,6 +82,9 @@ function handleInputReport(e) {
 	ADval = data.getUint8(2);
 	ADval = (ADval << 8) | data.getUint8(1);
 	console.log(`sensor: ${ADval}` );
+// Add 2021/5/26 By Matsunaga /////////
+	ReadFlag = 1;
+////////////////
 }
 
 function setADval(v) {
@@ -315,8 +324,16 @@ const PluginNakoBoard = {
 				resolve(ADval);
 			});
 			*/
-			sleep(500);
+// Add 2021/5/26 By Matsunaga /////////
+			ReadFlag = 0;
+////////////////
 			AD1input();
+
+// Add 2021/5/26 By Matsunaga /////////
+			while(ReadFlag == 0){
+			}
+////////////////
+			
 			console.log( `result: ${ADval}` );
 			return ADval;
 		} else {
