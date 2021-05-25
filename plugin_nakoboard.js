@@ -328,8 +328,6 @@ const PluginNakoBoard = {
 // Add 2021/5/26 By Matsunaga /////////
 			ReadFlag = 0;
 			ADval2 = AD1input();
-//			while(ReadFlag == 0){
-//			}
 ////////////////
 			
 			console.log( `result: ${ADval2}` );
