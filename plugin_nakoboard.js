@@ -8,12 +8,11 @@
 let outputReportId = 0;
 let device;
 var ADval = 0;
-var ADval2 = 0;
 var USBconnected = 0;	// 処理可＝1，不可＝０
 var outputReport = new Uint8Array(64);
 
 // Add 2021/5/26 By Matsunaga /////////
-var ReadFlag = 0;
+//var ReadFlag = 0;
 ////////////////
 
 
@@ -70,7 +69,7 @@ async function AD1input() {
 	console.log( `AD1input: ${ADval}` );
 	return ADval;
 // Add 2021/5/26 By Matsunaga /////////
-	ReadFlag = 1;
+//	ReadFlag = 1;
 ////////////////
 }
 
@@ -326,12 +325,14 @@ const PluginNakoBoard = {
 			});
 			*/
 // Add 2021/5/26 By Matsunaga /////////
-			ReadFlag = 0;
-			ADval2 = AD1input();
+//			ReadFlag = 0;
+			AD1input();
+//			while(ReadFlag == 0){
+//			}
 ////////////////
 			
-			console.log( `result: ${ADval2}` );
-			return ADval2;
+			console.log( `result: ${ADval}` );
+			return ADval;
 		} else {
 			return -2;
 		};
