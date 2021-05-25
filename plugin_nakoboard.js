@@ -8,6 +8,7 @@
 let outputReportId = 0;
 let device;
 var ADval = 0;
+var ADval2 = 0;
 var USBconnected = 0;	// 処理可＝1，不可＝０
 var outputReport = new Uint8Array(64);
 
@@ -68,6 +69,9 @@ async function AD1input() {
 	await WaitForInputReport()		// イベント発生まで待つ
 	console.log( `AD1input: ${ADval}` );
 	return ADval;
+// Add 2021/5/26 By Matsunaga /////////
+	ReadFlag = 1;
+////////////////
 }
 
 // ボード側から受信したときのイベント
@@ -82,9 +86,6 @@ function handleInputReport(e) {
 	ADval = data.getUint8(2);
 	ADval = (ADval << 8) | data.getUint8(1);
 	console.log(`sensor: ${ADval}` );
-// Add 2021/5/26 By Matsunaga /////////
-	ReadFlag = 1;
-////////////////
 }
 
 function setADval(v) {
@@ -326,16 +327,13 @@ const PluginNakoBoard = {
 			*/
 // Add 2021/5/26 By Matsunaga /////////
 			ReadFlag = 0;
-////////////////
-			AD1input();
-
-// Add 2021/5/26 By Matsunaga /////////
-			while(ReadFlag == 0){
-			}
+			ADval2 = AD1input();
+//			while(ReadFlag == 0){
+//			}
 ////////////////
 			
-			console.log( `result: ${ADval}` );
-			return ADval;
+			console.log( `result: ${ADval2}` );
+			return ADval2;
 		} else {
 			return -2;
 		};
