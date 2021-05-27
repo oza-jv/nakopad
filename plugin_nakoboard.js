@@ -317,23 +317,25 @@ const PluginNakoBoard = {
 			// send
 			outputReport[0] = 'A'.charCodeAt(0);
 			device.sendReport(outputReportId, outputReport);
+
+			ReadFlag = 0;
 			
 			// recieve
-			//WaitForInputReport()		// イベント発生まで待つ
-			/*.then( (resolve, reject) => {
+			WaitForInputReport()		// イベント発生まで待つ
+			.then( (resolve, reject) => {
 				console.log( `result: ${ADval}` );
 				resolve(ADval);
 			});
-			*/
+			
 // Add 2021/5/26 By Matsunaga /////////
-			ReadFlag = 0;
-			ADval2 = AD1input();
+//			ReadFlag = 0;
+//			AD1input();
 			while(ReadFlag == 0){
 			}
 ////////////////
 			
 			console.log( `result: ${ADval}` );
-			return ADval2;
+			return ADval;
 		} else {
 			return -2;
 		};
