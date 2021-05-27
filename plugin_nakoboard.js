@@ -315,8 +315,8 @@ const PluginNakoBoard = {
 			*/
 			
 			// send
-			outputReport[0] = 'A'.charCodeAt(0);
-			device.sendReport(outputReportId, outputReport);
+			//outputReport[0] = 'A'.charCodeAt(0);
+			//device.sendReport(outputReportId, outputReport);
 
 			ReadFlag = 0;
 			
