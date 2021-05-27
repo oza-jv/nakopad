@@ -13,6 +13,7 @@ var outputReport = new Uint8Array(64);
 
 // Add 2021/5/26 By Matsunaga /////////
 var ReadFlag = 0;
+var ADval2 = 0;
 ////////////////
 
 
@@ -326,13 +327,13 @@ const PluginNakoBoard = {
 			*/
 // Add 2021/5/26 By Matsunaga /////////
 			ReadFlag = 0;
-			AD1input();
+			ADval2 = AD1input();
 			while(ReadFlag == 0){
 			}
 ////////////////
 			
 			console.log( `result: ${ADval}` );
-			return ADval;
+			return ADval2;
 		} else {
 			return -2;
 		};
