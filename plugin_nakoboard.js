@@ -321,17 +321,17 @@ const PluginNakoBoard = {
 			ReadFlag = 0;
 			
 			// recieve
-			WaitForInputReport()		// イベント発生まで待つ
-			.then( (resolve, reject) => {
+			//WaitForInputReport()		// イベント発生まで待つ
+			/*.then( (resolve, reject) => {
 				console.log( `result: ${ADval}` );
 				resolve(ADval);
 			});
-			
+			*/
 // Add 2021/5/26 By Matsunaga /////////
-//			ReadFlag = 0;
-//			AD1input();
-//			while(ReadFlag == 0){
-//			}
+			ReadFlag = 0;
+			AD1input();
+			while(ReadFlag == 0){
+			}
 ////////////////
 			
 			console.log( `result: ${ADval}` );
