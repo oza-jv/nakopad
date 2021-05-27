@@ -66,7 +66,8 @@ async function AD1input() {
 	await device.sendReport(outputReportId, outputReport);
 	
 	// recieve
-	await WaitForInputReport()		// イベント発生まで待つ
+//	await WaitForInputReport()		// イベント発生まで待つ
+	await handleInputReport()		// イベント発生まで待つ
 	console.log( `AD1input: ${ADval}` );
 // Add 2021/5/26 By Matsunaga /////////
 	ReadFlag = 1;
@@ -85,6 +86,9 @@ function handleInputReport(e) {
 	// 測定値
 	ADval = data.getUint8(2);
 	ADval = (ADval << 8) | data.getUint8(1);
+// Add 2021/5/26 By Matsunaga /////////
+	ReadFlag = 1;
+////////////////
 	console.log(`sensor: ${ADval}` );
 }
 
