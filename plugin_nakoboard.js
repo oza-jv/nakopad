@@ -12,7 +12,7 @@ var USBconnected = 0;	// 処理可＝1，不可＝０
 var outputReport = new Uint8Array(64);
 
 // Add 2021/5/26 By Matsunaga /////////
-//var ReadFlag = 0;
+var ReadFlag = 0;
 ////////////////
 
 
@@ -68,7 +68,7 @@ async function AD1input() {
 	await WaitForInputReport()		// イベント発生まで待つ
 	console.log( `AD1input: ${ADval}` );
 // Add 2021/5/26 By Matsunaga /////////
-//	ReadFlag = 1;
+	ReadFlag = 1;
 ////////////////
 	return ADval;
 }
@@ -325,10 +325,10 @@ const PluginNakoBoard = {
 			});
 			*/
 // Add 2021/5/26 By Matsunaga /////////
-//			ReadFlag = 0;
+			ReadFlag = 0;
 			AD1input();
-//			while(ReadFlag == 0){
-//			}
+			while(ReadFlag == 0){
+			}
 ////////////////
 			
 			console.log( `result: ${ADval}` );
