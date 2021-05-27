@@ -66,8 +66,8 @@ async function AD1input() {
 	await device.sendReport(outputReportId, outputReport);
 	
 	// recieve
-//	await WaitForInputReport()		// イベント発生まで待つ
-	await handleInputReport()		// イベント発生まで待つ
+	await WaitForInputReport()		// イベント発生まで待つ
+//	await handleInputReport()		// イベント発生まで待つ
 	console.log( `AD1input: ${ADval}` );
 // Add 2021/5/26 By Matsunaga /////////
 	ReadFlag = 1;
