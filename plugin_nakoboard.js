@@ -91,9 +91,6 @@ function handleInputReport(e) {
 	// 測定値
 	ADval = data.getUint8(2);
 	ADval = (ADval << 8) | data.getUint8(1);
-// Add 2021/5/26 By Matsunaga /////////
-	ReadFlag = 1;
-////////////////
 	console.log(`sensor: ${ADval}` );
 }
 
