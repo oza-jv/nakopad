@@ -6,7 +6,9 @@
 
 // JSルーチン
 let outputReportId = 0;
+// Add 2021/6/4 By Matsunaga /////////
 let inputReportId = 0;
+//
 let device;
 var ADval = 0;
 var USBconnected = 0;	// 処理可＝1，不可＝０
@@ -67,7 +69,7 @@ async function AD1input() {
 	await device.sendReport(outputReportId, outputReport);
 	
 	// recieve
-// Add 2021/5/30 By Matsunaga /////////
+// Add 2021/6/4 By Matsunaga /////////
 	await WaitForInputReport()		// イベント発生まで待つ
     let data = await device.receiveReport(inputReportId);
 	ADval = data.getUint8(2);
