@@ -68,7 +68,7 @@ async function AD1input() {
 	// recieve
 // Add 2021/5/30 By Matsunaga /////////
 	await WaitForInputReport()		// イベント発生まで待つ
-    let data = await device.receiveReport(inputreportId);
+    let data = await device.receiveReport(outputreportId);
 	ADval = data.getUint8(2);
 	ADval = (ADval << 8) | data.getUint8(1);
 	console.log( `AD1input: ${ADval}` );
