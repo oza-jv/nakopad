@@ -18,6 +18,24 @@ const PluginHyouji = {
     }
   },
   
+  '自分IP': {
+    type: 'func',
+    josi: [],
+    fn: function (sys) {
+      fetch( './api/ip.php' )
+        .then( res => {
+          if (res.ok) {
+            return res.text();
+          } else {
+            return 'error';
+          }
+        })
+        .catch(e => {
+          return( "==ERROR==" + e + "" );
+        });
+    }
+  },
+  
   'クジラ': { type: 'const', value: './img/kujira.png' },
   'ライオン': { type: 'const', value: './img/lion.gif' },
   'ペンギン': { type: 'const', value: './img/penguin.gif' },
