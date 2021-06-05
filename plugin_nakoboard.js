@@ -7,7 +7,7 @@
 // JSルーチン
 let outputReportId = 0;
 // Add 2021/6/4 By Matsunaga /////////
-let inputReportId = 0;
+let inputReportId = 2;
 //
 let device;
 var ADval = 0;
