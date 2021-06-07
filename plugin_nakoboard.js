@@ -6,9 +6,6 @@
 
 // JSルーチン
 let outputReportId = 0;
-// Add 2021/6/4 By Matsunaga /////////
-let inputReportId = 2;
-//
 let device;
 var ADval = 0;
 var USBconnected = 0;	// 処理可＝1，不可＝０
@@ -69,13 +66,13 @@ async function AD1input() {
 	await device.sendReport(outputReportId, outputReport);
 	
 	// recieve
-// Add 2021/6/4 By Matsunaga /////////
 	await WaitForInputReport()		// イベント発生まで待つ
-    let data = await device.receiveFeatureReport(inputReportId);
+// Add 2021/6/4 By Matsunaga /////////
+/*    let data = await device.receiveFeatureReport(inputReportId);
 	ADval = data.getUint8(2);
 	ADval = (ADval << 8) | data.getUint8(1);
 	console.log( `AD1input: ${ADval}` );
-	ReadFlag = 1;
+	ReadFlag = 1;*/
 ////////////////
 	return ADval;
 }
@@ -334,7 +331,7 @@ const PluginNakoBoard = {
 			});
 			*/
 // Add 2021/5/26 By Matsunaga /////////
-			ReadFlag = 0;
+//			ReadFlag = 0;
 			AD1input();
 //			while(ReadFlag == 0){
 //			}
