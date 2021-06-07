@@ -71,9 +71,9 @@ async function AD1input() {
 /*    let data = await device.receiveFeatureReport(inputReportId);
 	ADval = data.getUint8(2);
 	ADval = (ADval << 8) | data.getUint8(1);
-	console.log( `AD1input: ${ADval}` );
 	ReadFlag = 1;*/
 ////////////////
+	console.log( `AD1input: ${ADval}` );
 	return ADval;
 }
 
