@@ -18,21 +18,22 @@ const PluginHyouji = {
     }
   },
   
-  '自分IP': {
+  '自分IP取得': {
     type: 'func',
     josi: [],
     fn: function (sys) {
-      fetch( './api/ip.php' )
-        .then( res => {
-          if (res.ok) {
-            return res.text();
-          } else {
-            return 'error';
-          }
-        })
-        .catch(e => {
-          return( "==ERROR==" + e + "" );
-        });
+      var ip = '';
+      
+      fetch( './api/ip.php', {method: 'GET'} )
+      .then( res => {
+        return res.text()
+      }).then( text => {
+        console.log( text );
+        sys.__v0['対象'] = text;
+        ip = text;
+      });
+      
+      return ip;
     }
   },
   
