@@ -10,14 +10,6 @@ let device;
 let ADval = 0;
 let USBconnected = 0;	// 処理可＝1，不可＝０
 let outputReport = new Uint8Array(64);
-let Wait_input = 0;		// 1=測定待機中
-
-// Add 2021/5/26 By Matsunaga /////////
-var ReadFlag = 0;
-var ADval2 = 0;
-////////////////
-
-
 
 /*---------------------------------------------
    なでしこボード用の関数群
@@ -107,25 +99,8 @@ function sleep(msec) {
 }
 
 // センサ１測定用の関数
-let WaitForInputReport;
-//const WaitForInputReport = () => new Promise(resolve => device.addEventListener("inputreport", handleInputReport));
+let WaitForInputReport;		// 「ボード接続」内で定義
 
-async function AD1input() {
-	// send
-	outputReport[0] = 'A'.charCodeAt(0);
-	await device.sendReport(outputReportId, outputReport);
-	
-	// recieve
-	await WaitForInputReport()		// イベント発生まで待つ
-// Add 2021/6/4 By Matsunaga /////////
-/*    let data = await device.receiveFeatureReport(inputReportId);
-	ADval = data.getUint8(2);
-	ADval = (ADval << 8) | data.getUint8(1);
-	ReadFlag = 1;*/
-////////////////
-	console.log( `AD1input: ${ADval}` );
-	return ADval;
-}
 
 /*---------------------------------------------
    なでしこプラグインでの命令追加
@@ -350,9 +325,8 @@ const PluginNakoBoard = {
 				try {
 					outputReport[0] = 'A'.charCodeAt(0);
 					await device.sendReport(outputReportId, outputReport)
-					console.log( ADval );
 					await WaitForInputReport();
-					console.log( ADval );
+					console.log( `センサ1測定a: ${ADval}` );
 					return ADval;
 				} catch(e) {
 					throw -1;
@@ -360,9 +334,10 @@ const PluginNakoBoard = {
 			}
 			
 			let a = WaitForInput().then( res => {
-				console.log(res);
+				console.log( `res: ${res}` );
 				return res;
 			});
+			console.log( `センサ1測定b: ${ADval}` );
 			return ADval;
 		}
 	}
