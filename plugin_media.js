@@ -16,7 +16,7 @@ const PluginMedia = {
     type: 'func',
     josi: [['の', 'を'],['へ', 'に']],
     isVariableJosi: true,
-    return_none: true,
+    return_none: false,
     fn: function (aPic, ...pID) {
       try {
         const sys = pID.pop();
@@ -41,6 +41,7 @@ const PluginMedia = {
   '絵読込': { // @id=aIDの画像をaPicに差し替える // @エヨミコミ
     type: 'func',
     josi: [['に'],['を']],
+    return_none: true,
     fn: function (aID, aPic, sys) {
       try {
         const parent = document.querySelector("#" + aID);
@@ -58,6 +59,7 @@ const PluginMedia = {
     // あらかじめaudio要素を設置しておく場合はこっち。
     type: 'func',
     josi: [['に'],['を']],
+    return_none: true,
     fn: function (aID, aSrc, sys) {
       try {
         const audio = document.querySelector("#" + aID);
@@ -77,7 +79,7 @@ const PluginMedia = {
     type: 'func',
     josi: [['の', 'を'],['へ', 'に']],
     isVariableJosi: true,
-    return_none: true,
+    return_none: false,
     fn: function (aSrc, ...pID) {
       try {
         const sys = pID.pop();
@@ -104,6 +106,7 @@ const PluginMedia = {
   '音再生': { // @id=aIDのaudio要素に設定されている音を頭から再生する // @オトサイセイ
     type: 'func',
     josi: [['の', 'を']],
+    return_none: true,
     fn: function (aID, sys) {
       try {
         const audio = document.querySelector("#" + aID);
@@ -120,6 +123,7 @@ const PluginMedia = {
   '音再開': { // @id=aIDのaudio要素に設定されている音を停止位置から再生する // @オトサイカイ
     type: 'func',
     josi: [['の', 'を']],
+    return_none: true,
     fn: function (aID, sys) {
       try {
         const audio = document.querySelector("#" + aID);
@@ -135,6 +139,7 @@ const PluginMedia = {
   '音停止': { // @id=aIDのaudio要素に設定されている音を一時停止する // @オトテイシ
     type: 'func',
     josi: [['の', 'を']],
+    return_none: true,
     fn: function (aID, sys) {
       try {
         const audio = document.querySelector("#" + aID);
@@ -152,6 +157,7 @@ const PluginMedia = {
     // あらかじめvideo要素を設置しておく場合はこっち。
     type: 'func',
     josi: [['に'],['を']],
+    return_none: true,
     fn: function (aID, aSrc, sys) {
       try {
         const video = document.querySelector("#" + aID);
@@ -172,7 +178,7 @@ const PluginMedia = {
     type: 'func',
     josi: [['の', 'を'],['へ', 'に']],
     isVariableJosi: true,
-    return_none: true,
+    return_none: false,
     fn: function (aSrc, ...pID) {
       try {
         const sys = pID.pop();
@@ -202,6 +208,7 @@ const PluginMedia = {
   '動画再生': { // @id=aIDのvideo要素に設定されている動画を頭から再生する // @ドウガサイセイ
     type: 'func',
     josi: [['の', 'を']],
+    return_none: true,
     fn: function (aID, sys) {
       try {
         const video = document.querySelector("#" + aID);
@@ -218,6 +225,7 @@ const PluginMedia = {
   '動画停止': { // @id=aIDのvideo要素に設定されている動画を一時停止する // @ドウガテイシ
     type: 'func',
     josi: [['の', 'を']],
+    return_none: true,
     fn: function (aID, sys) {
       try {
         const video = document.querySelector("#" + aID);
@@ -233,6 +241,7 @@ const PluginMedia = {
   '動画再開': { // @id=aIDのvideo要素に設定されている動画を停止位置から再生する // @ドウガサイカイ
     type: 'func',
     josi: [['の', 'を']],
+    return_none: true,
     fn: function (aID, sys) {
       try {
         const video = document.querySelector("#" + aID);
@@ -248,6 +257,7 @@ const PluginMedia = {
   '動画音オン': {
     type: 'func',
     josi: [['の', 'を']],
+    return_none: true,
     fn: function (aID, sys) {
       const video = document.querySelector("#" + aID);
       video.muted = false;
@@ -257,6 +267,7 @@ const PluginMedia = {
   '動画音オフ': {
     type: 'func',
     josi: [['の']],
+    return_none: true,
     fn: function (aID, sys) {
       const video = document.querySelector("#" + aID);
       video.muted = true;
@@ -268,6 +279,7 @@ const PluginMedia = {
   '書': {
     type: 'func',
     josi: [['と', 'を']],
+    return_none: true,
     fn: function (text, sys) {
       const parent = sys.__v0['DOM親要素']
       var te = document.createElement('span')
