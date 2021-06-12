@@ -331,6 +331,10 @@ const nako3_canvas_off = function () {
 	canvas.hidden = true;
 }
 
+const nako3_getIP = function () {
+  return IP;
+}
+
 // 独自関数の登録
 var nako3_add_func = function () {
   navigator.nako3.setFunc("描画オン", [], nako3_canvas_on);
@@ -366,14 +370,16 @@ const SAMPLE_LIST = [
 	{ value: './sample/sample-omikuji-3.txt', name: 'おみくじ3 もし～ならば～違えばもし' },
 	{ value: '', name: '--' },
 	{ value: './sample/sample-kazuate-1.txt', name: '数当て1 乱数と分岐' },
-	{ value: './sample/sample-kazuate-2.txt', name: '数当て2 反復' },
-	{ value: './sample/sample-kazuate-3.txt', name: '数当て3 ヒントを加える' },
-	{ value: './sample/sample-kazuate-4.txt', name: '数当て4 フラグ変数を使う' },
+	{ value: './sample/sample-kazuate-2.txt', name: '数当て2 音を加える' },
+	{ value: './sample/sample-kazuate-3.txt', name: '数当て3 反復' },
+	{ value: './sample/sample-kazuate-4.txt', name: '数当て4 ヒントを加える' },
+	{ value: './sample/sample-kazuate-5.txt', name: '数当て5 フラグ変数を使う' },
 	{ value: './sample/sample-kazuate.txt',   name: '数当てゲーム 豪華版' },
 	{ value: '', name: '--' },
 	{ value: './sample/sample-click10sec.txt', name: 'マウス練習 １０秒ゲーム' },
 	{ value: './sample/sample-timer-1.txt',    name: '簡易タイマー' },
 	{ value: '', name: '--' },
+	{ value: './sample/sample-net00-ip.txt',  name: '双方向0 IPアドレスを調べる' },
 	{ value: './sample/sample-net01-zipcode.txt',  name: '双方向1 郵便番号取得' },
 	{ value: './sample/sample-net02-tenki.txt',    name: '双方向2 天気予報取得(1)' },
 	{ value: './sample/sample-net03-pcr.txt',      name: '双方向3 PCR陽性者数取得' },
@@ -473,3 +479,5 @@ function nako3_scrtop() {
 		editor.gotoLine(1);
 	}
 }
+
+

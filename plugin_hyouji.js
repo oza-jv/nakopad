@@ -1,5 +1,5 @@
 /**
- * なでしこ3 追加プラグイン 2021/4/11
+ * なでしこ3 追加プラグイン 2021/6/12
  * file : plugin_hyouji.js
  * サイト用に「表示」と定数を追加するだけ。
  */
@@ -18,25 +18,6 @@ const PluginHyouji = {
     }
   },
   
-  '自分IP取得': {
-    type: 'func',
-    josi: [],
-    fn: function (sys) {
-      var ip = '';
-      
-      fetch( './api/ip.php', {method: 'GET'} )
-      .then( res => {
-        return res.text()
-      }).then( text => {
-        console.log( text );
-        sys.__v0['対象'] = text;
-        ip = text;
-      });
-      
-      return ip;
-    }
-  },
-  
   'クジラ': { type: 'const', value: './img/kujira.png' },
   'ライオン': { type: 'const', value: './img/lion.gif' },
   'ペンギン': { type: 'const', value: './img/penguin.gif' },
@@ -44,7 +25,8 @@ const PluginHyouji = {
   'ピンポン': { type: 'const', value: './audio/se_maoudamashii_chime13.mp3' },
   'ブブー': { type: 'const', value: './audio/se_maoudamashii_onepoint32.mp3' },
   '発車ベル': { type: 'const', value: './audio/se_maoudamashii_jingle03.mp3' },
-  '陽性者数API': { type: 'const', value: './api/get_pcr_positive_daily.php' }
+  '陽性者数API': { type: 'const', value: './api/get_pcr_positive_daily.php' },
+  '自分IP取得': { type: 'const', value: './api/ip.php' }	// 2021.6.12追加
 }
 
 // モジュールのエクスポート(必ず必要)
