@@ -363,7 +363,10 @@ const PluginNakoBoard = {
 				console.log(res);
 				return res;
 			});
-			return a.resolve;
+			// ↑ここまでは上手くいっています。
+
+			return ADval;
+			// ↑こうすると，1回前の測定値が返ってきます。
 		}
 	}
   }
