@@ -59,12 +59,15 @@ function sleep(msec) {
 }
 
 // センサ１測定用の関数
-const WaitForInputReport = () => new Promise(resolve => device.addEventListener("inputreport", resolve));
+let WaitForInputReport;
+//const WaitForInputReport = () => new Promise(resolve => device.addEventListener("inputreport", handleInputReport));
+let WaitForInputReport;		// 「ボード接続」内で定義
+
 async function AD1input() {
 	// send
 	outputReport[0] = 'A'.charCodeAt(0);
 	await device.sendReport(outputReportId, outputReport);
-	
+
 	// recieve
 	await WaitForInputReport()		// イベント発生まで待つ
 // Add 2021/6/4 By Matsunaga /////////
@@ -302,50 +305,33 @@ const PluginNakoBoard = {
     type: 'func',
     josi: [],
     return_none: false,
-    pure: true,
     fn: function (sys) { 
     	ChkHIDItem();
 		if( USBconnected == 1 ) {
-			/*
-			AD1input();
-			waitFor(300)
-			.then(() => {
-				sys.__v0['センサ値'] = ADval;
-				//console.log( `result: ${result}` );
-				console.log( `センサ値: ${sys.__v0['センサ値']}` );
-				return ADval;
-			});
-			*/
-			
-			// send
-			outputReport[0] = 'A'.charCodeAt(0);
-			device.sendReport(outputReportId, outputReport);
+			async function WaitForInput() {
+				try {
+					outputReport[0] = 'A'.charCodeAt(0);
+					await device.sendReport(outputReportId, outputReport)
+					console.log( ADval );
+					await WaitForInputReport();
+					console.log( ADval );
+					console.log( `センサ1測定a: ${ADval}` );
+					return ADval;
+				} catch(e) {
+					throw -1;
+				}
+			}
 
-			ReadFlag = 0;
-			
-			// recieve
-			WaitForInputReport()		// イベント発生まで待つ
-			/*.then( (resolve, reject) => {
-				console.log( `result: ${ADval}` );
-				resolve(ADval);
+			let a = WaitForInput().then( res => {
+				console.log(res);
+				console.log( `res: ${res}` );
+				return res;
 			});
-			*/
-// Add 2021/5/26 By Matsunaga /////////
-//			ReadFlag = 0;
-//			AD1input();
-//			while(ReadFlag == 0){
-//			}
-////////////////
-			
-			console.log( `result: ${ADval}` );
+			console.log( `センサ1測定b: ${ADval}` );
 			return ADval;
-		} else {
-			return -2;
-		};
-	},
-	return_none: false
+		}
+	}
   }
-
 }
 
 // モジュールのエクスポート(必ず必要)
