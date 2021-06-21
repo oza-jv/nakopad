@@ -1,5 +1,5 @@
 /**
- * なでしこ3 追加プラグイン 2021/6/12
+ * なでしこ3 追加プラグイン 2021/6/22
  * file : plugin_nakoboard.js
  * Chromeブラウザでなでしこボードを使うためのプラグイン。
  */
@@ -321,22 +321,27 @@ const PluginNakoBoard = {
     fn: function (sys) { 
     	ChkHIDItem();
 		if( USBconnected == 1 ) {
+			let result;
+			
 			async function WaitForInput() {
 				try {
 					outputReport[0] = 'A'.charCodeAt(0);
 					await device.sendReport(outputReportId, outputReport)
 					await WaitForInputReport();
+					result = ADval;
 					console.log( `センサ1測定a: ${ADval}` );
 					return ADval;
 				} catch(e) {
 					throw -1;
 				}
 			}
-			
-			let a = WaitForInput().then( res => {
+
+			WaitForInput().then( res => {
 				console.log( `res: ${res}` );
 				return res;
 			});
+			
+			sleep(500);
 			console.log( `センサ1測定b: ${ADval}` );
 			return ADval;
 		}
