@@ -328,6 +328,7 @@ const PluginNakoBoard = {
 					outputReport[0] = 'A'.charCodeAt(0);
 					await device.sendReport(outputReportId, outputReport)
 					await WaitForInputReport();
+					console.log( ADval );
 					result = ADval;
 					console.log( `センサ1測定a: ${ADval}` );
 					return ADval;
@@ -335,7 +336,6 @@ const PluginNakoBoard = {
 					throw -1;
 				}
 			}
-
 			WaitForInput().then( res => {
 				console.log( `res: ${res}` );
 				return res;
