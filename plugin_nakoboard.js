@@ -305,15 +305,7 @@ const PluginNakoBoard = {
 	}
   },
 
-  'センサ1': {
-    type: 'func',
-    josi: [],
-    return_none: false,
-    fn: function () { 
-    	return ADval;
-    }
-  },
-
+  /*
   'センサ1測定': {
     type: 'func',
     josi: [],
@@ -344,6 +336,44 @@ const PluginNakoBoard = {
 			sleep(500);
 			console.log( `センサ1測定b: ${ADval}` );
 			return ADval;
+		}
+	}
+  },
+  */
+
+  'センサ1': { type: 'var', value: 0 },
+  'センサ1測定時': {
+    type: 'func',
+    josi: [['で']],
+    pure: true,
+    return_none: true,
+    fn: function (callback, sys) { 
+    	ChkHIDItem();
+		if( USBconnected == 1 ) {
+			let result;
+			
+			async function WaitForInput(sys) {
+				try {
+					outputReport[0] = 'A'.charCodeAt(0);
+					await device.sendReport(outputReportId, outputReport)
+					await WaitForInputReport();
+					console.log( ADval );
+					result = ADval;
+					console.log( `センサ1測定時a: ${ADval}` );
+					return ADval;
+				} catch(e) {
+					throw e;
+				}
+			}
+			WaitForInput().then( res => {
+				console.log( `res: ${res}` );
+				return res;
+			}).then(text => {
+				sys.__v0['センサ1'] = text;
+				callback(text);
+			}).catch(err => {
+				console.log('[センサ1測定時.error]', err);
+			});
 		}
 	}
   }
