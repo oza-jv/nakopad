@@ -1,5 +1,5 @@
 /**
- * なでしこ3 追加プラグイン 2021/6/22
+ * なでしこ3 追加プラグイン 2021/7/3
  * file : plugin_nakoboard.js
  * Chromeブラウザでなでしこボードを使うためのプラグイン。
  */
@@ -85,11 +85,7 @@ let handleInputReport = (event) => {
 	ADval = data.getUint8(2);
 	ADval = (ADval << 8) | data.getUint8(1);
 	console.log(`sensor: ${ADval}` );
-	Wait_input = 0;
 }
-
-// promiseを使ったnミリ秒待機
-const waitFor = (n) => new Promise(resolve => setTimeout(resolve, n));
 
 // n秒間待機
 function sleep(msec) {
@@ -108,7 +104,7 @@ let WaitForInputReport;		// 「ボード接続」内で定義
 const PluginNakoBoard = {
   'ボード接続': {
     type: 'func',
-    josi: [[]],
+    josi: [],
     fn: function (sys) {
 		// HID APIを使えるか
 		if(!("hid" in navigator)) {
@@ -152,12 +148,19 @@ const PluginNakoBoard = {
 				ChkHIDItem();
 			});
 		})().catch( e => console.log(e) );
+
+		// ちょっと待つことで正常に動作させる。
+    	try {
+    		sys.__exec( '秒待機', [0.2, sys] );
+    	} catch(e) {
+    		console.log(e);
+    	}
     }
   },
   
   'ボード切断': {
     type: 'func',
-    josi: [[]],
+    josi: [],
     fn: function (text, sys) {
 		if (!device) return;
 		if( ChkHIDItem() < 1 ) return;
@@ -169,42 +172,25 @@ const PluginNakoBoard = {
   
   'ボード状態': {
     type: 'func',
-    josi: [[]],
+    josi: [],
     fn: function (sys) {
 		ChkHIDItem();
 		return USBconnected;
     }
   },
 
-  '秒待': {
+  '秒発音': {	// @なでしこボードのブザーを鳴らす。nをs秒発音。 // @ハツオン
     type: 'func',
-    josi: [[]],
-    return_none: true,
-    fn: async function (text, sys) {
-		if( USBconnected == 1 ) {
-			let sec = Number( text );
-			if( isNaN(sec) ) return;
-			if( sec<0 ) return;
-			if( sec>10 ) sec=10;
-			
-			//await waitFor(sec*1000);
-			sleep(sec*1000)
-		}
-    }
-  },
-
-  '発音': {
-    type: 'func',
-    josi: [[], ['を']],
+    josi: [[''], ['を']],
     isVariableJosi: true,
     return_none: true,
-    fn: function (...pID) {
+    fn: function (sec, ...pID) {
     	let note = 15;
     	
     	// 引数チェック
     	const sys = pID.pop();
     	if( pID.length > 0 ) {
-    		// 数値チェック
+    		// 音の高さ(note)チェック
     		let text = pID[0];
 			note = Number( text );
 			if( isNaN(note) ) note = 15;
@@ -213,6 +199,9 @@ const PluginNakoBoard = {
 		} else {
 			note = 15;
 		}
+
+		if( sec < 0 ) sec = 0;
+		if( sec > 2 ) sec = 2;
 
 		ChkHIDItem();
 		if( USBconnected == 1 ) {
@@ -228,23 +217,38 @@ const PluginNakoBoard = {
 
 			beep_turnon();
 			device.sendReport(outputReportId, outputReport);
-			console.log(`beep on  note:${note}`);
-			sleep(500);
+			console.log(`beep on  note:${note} sec:${sec}`);
+			sleep(sec*1000);
 
 			// beep
 			beep_turnoff();
 			device.sendReport(outputReportId, outputReport);
-			//sleep(200);
 			console.log("beep off");
 			
 		}
 	}
   },
+  '発音': { // @ (note)を0.5秒発音する。単に「発音」とすればnote=15で発音。
+    type: 'func',
+    josi: [['を']],
+    isVariableJosi: true,
+    return_none: true,
+    fn: function (...pID) {
+    	let text = 15;
+
+    	// 引数チェック
+    	const sys = pID.pop();
+    	if( pID.length > 0 )  text = pID[0];
+    	
+    	// 「noteを0.5秒発音」と同じ意味にする
+    	sys.__exec( '秒発音', [0.5, text, sys] );
+    }
+  },
 
   'LEDオン': {
     type: 'func',
-    josi: [[]],
-    fn: function (text, sys) {
+    josi: [],
+    fn: function (sys) {
 		ChkHIDItem();
 		if( USBconnected == 1 ) {
 			// turn on
@@ -259,8 +263,8 @@ const PluginNakoBoard = {
 
   'LEDオフ': {
     type: 'func',
-    josi: [[]],
-    fn: function (text, sys) {
+    josi: [],
+    fn: function (sys) {
 		ChkHIDItem();
 		if( USBconnected == 1 ) {
 			// turn on
@@ -275,8 +279,8 @@ const PluginNakoBoard = {
 
   '出力1オン': {
     type: 'func',
-    josi: [[]],
-    fn: function (text, sys) {
+    josi: [],
+    fn: function (sys) {
 		ChkHIDItem();
 		if( USBconnected == 1 ) {
 			// turn on
@@ -291,8 +295,8 @@ const PluginNakoBoard = {
 
   '出力1オフ': {
     type: 'func',
-    josi: [[]],
-    fn: function (text, sys) {
+    josi: [],
+    fn: function (sys) {
 		ChkHIDItem();
 		if( USBconnected == 1 ) {
 			// turn on
@@ -305,77 +309,60 @@ const PluginNakoBoard = {
 	}
   },
 
-  /*
+  'センサ1': { type: 'var', value: 0 },
   'センサ1測定': {
     type: 'func',
     josi: [],
-    return_none: false,
+    return_none: true,
     fn: function (sys) { 
     	ChkHIDItem();
 		if( USBconnected == 1 ) {
-			let result;
-			
 			async function WaitForInput() {
 				try {
 					outputReport[0] = 'A'.charCodeAt(0);
 					await device.sendReport(outputReportId, outputReport)
 					await WaitForInputReport();
-					console.log( ADval );
-					result = ADval;
+					sys.__v0['センサ1'] = ADval;
+					sys.__v0['それ'] = ADval;
 					console.log( `センサ1測定a: ${ADval}` );
-					return ADval;
 				} catch(e) {
-					throw -1;
+					console.log(e);
 				}
 			}
-			WaitForInput().then( res => {
-				console.log( `res: ${res}` );
-				return res;
-			});
-			
-			sleep(500);
-			console.log( `センサ1測定b: ${ADval}` );
-			return ADval;
+			WaitForInput();
+
+			// ちょっと待つことで正常に動作させる。
+			if (sys.__genMode == '非同期モード') {
+	    		sys.__exec( '秒待機', [0.2, sys] );
+			}
 		}
 	}
   },
-  */
-
-  'センサ1': { type: 'var', value: 0 },
-  'センサ1測定時': {
+ 
+  'ボード待': {
     type: 'func',
-    josi: [['で']],
-    pure: true,
+    josi: [],
     return_none: true,
-    fn: function (callback, sys) { 
-    	ChkHIDItem();
-		if( USBconnected == 1 ) {
-			let result;
-			
-			async function WaitForInput(sys) {
-				try {
-					outputReport[0] = 'A'.charCodeAt(0);
-					await device.sendReport(outputReportId, outputReport)
-					await WaitForInputReport();
-					console.log( ADval );
-					result = ADval;
-					console.log( `センサ1測定時a: ${ADval}` );
-					return ADval;
-				} catch(e) {
-					throw e;
-				}
-			}
-			WaitForInput().then( res => {
-				console.log( `res: ${res}` );
-				return res;
-			}).then(text => {
-				sys.__v0['センサ1'] = text;
-				callback(text);
-			}).catch(err => {
-				console.log('[センサ1測定時.error]', err);
-			});
-		}
-	}
+    fn: function (sys) {
+    	try {
+    		sys.__exec( '秒待機', [0.2, sys] );
+    	} catch(e) {
+    		console.log(e);
+    	}
+    }
+  },
+
+  '🚉': {  // @ エキ
+    type: 'func',
+    josi: [],
+    return_none: true,
+    fn: function (sys) {
+    	try {
+    		sys.__exec( '秒待機', [0.2, sys] );
+    	} catch(e) {
+    		console.log(e);
+    	}
+    }
   }
 
 }
