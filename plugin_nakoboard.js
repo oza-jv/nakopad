@@ -10,6 +10,7 @@ let device;
 let ADval = 0;
 let USBconnected = 0;	// 処理可＝1，不可＝０
 let outputReport = new Uint8Array(64);
+const WAIT_SEC = 0.3;		// 処理を待機する秒数
 
 /*---------------------------------------------
    なでしこボード用の関数群
@@ -151,7 +152,7 @@ const PluginNakoBoard = {
 
 		// ちょっと待つことで正常に動作させる。
     	try {
-    		sys.__exec( '秒待機', [0.2, sys] );
+    		sys.__exec( '秒待機', [WAIT_SEC, sys] );
     	} catch(e) {
     		console.log(e);
     	}
@@ -185,26 +186,26 @@ const PluginNakoBoard = {
     isVariableJosi: true,
     return_none: true,
     fn: function (sec, ...pID) {
-    	let note = 15;
-    	
-    	// 引数チェック
-    	const sys = pID.pop();
-    	if( pID.length > 0 ) {
-    		// 音の高さ(note)チェック
-    		let text = pID[0];
-			note = Number( text );
-			if( isNaN(note) ) note = 15;
-			if( note < 0  ) note = 0;
-			if( note > 23 ) note = 23;
-		} else {
-			note = 15;
-		}
-
-		if( sec < 0 ) sec = 0;
-		if( sec > 2 ) sec = 2;
-
 		ChkHIDItem();
 		if( USBconnected == 1 ) {
+	    	let note = 15;
+	    	
+	    	// 引数チェック
+	    	const sys = pID.pop();
+	    	if( pID.length > 0 ) {
+	    		// 音の高さ(note)チェック
+	    		let text = pID[0];
+				note = Number( text );
+				if( isNaN(note) ) note = 15;
+				if( note < 0  ) note = 0;
+				if( note > 23 ) note = 23;
+			} else {
+				note = 15;
+			}
+
+			if( sec < 0 ) sec = 0;
+			if( sec > 2 ) sec = 2;
+
 			// beep
 			const beep_turnon = () => {
 				outputReport[0] = 'P'.charCodeAt(0);
@@ -234,14 +235,17 @@ const PluginNakoBoard = {
     isVariableJosi: true,
     return_none: true,
     fn: function (...pID) {
-    	let text = 15;
+		ChkHIDItem();
+		if( USBconnected == 1 ) {
+	    	let text = 15;
 
-    	// 引数チェック
-    	const sys = pID.pop();
-    	if( pID.length > 0 )  text = pID[0];
-    	
-    	// 「noteを0.5秒発音」と同じ意味にする
-    	sys.__exec( '秒発音', [0.5, text, sys] );
+	    	// 引数チェック
+	    	const sys = pID.pop();
+	    	if( pID.length > 0 )  text = pID[0];
+	    	
+	    	// 「noteを0.5秒発音」と同じ意味にする
+	    	sys.__exec( '秒発音', [0.5, text, sys] );
+		}
     }
   },
 
@@ -333,7 +337,7 @@ const PluginNakoBoard = {
 
 			// ちょっと待つことで正常に動作させる。
 			if (sys.__genMode == '非同期モード') {
-	    		sys.__exec( '秒待機', [0.2, sys] );
+	    		sys.__exec( '秒待機', [WAIT_SEC, sys] );
 			}
 		}
 	}
@@ -344,11 +348,14 @@ const PluginNakoBoard = {
     josi: [],
     return_none: true,
     fn: function (sys) {
-    	try {
-    		sys.__exec( '秒待機', [0.2, sys] );
-    	} catch(e) {
-    		console.log(e);
-    	}
+		ChkHIDItem();
+		if( USBconnected == 1 ) {
+	    	try {
+	    		sys.__exec( '秒待機', [WAIT_SEC, sys] );
+	    	} catch(e) {
+	    		console.log(e);
+	    	}
+	    }
     }
   },
 
@@ -357,12 +364,15 @@ const PluginNakoBoard = {
     josi: [],
     return_none: true,
     fn: function (sys) {
-    	try {
-    		sys.__exec( '秒待機', [0.2, sys] );
-    	} catch(e) {
-    		console.log(e);
-    	}
-    }
+		ChkHIDItem();
+		if( USBconnected == 1 ) {
+	    	try {
+	    		sys.__exec( '秒待機', [WAIT_SEC, sys] );
+	    	} catch(e) {
+	    		console.log(e);
+	    	}
+	    }
+	}
   }
 
 }
