@@ -2,7 +2,7 @@
  * なでしこ3 追加プラグイン 2021/7/4  Ver1.0
  * file : plugin_nakoboard.js
  * Chromeブラウザでなでしこボードを使うためのプラグイン。
- * なでしこv3.2.20以降の「!非同期モード」で実行するほうが正しく動作します。
+ * なでしこv3.2.23以降の「!非同期モード」で実行するほうが正しく動作します。
  */
 
 // 変数定義
@@ -157,7 +157,6 @@ const PluginNakoBoard = {
     	try {
 			// ちょっと待つことで正常に動作させる。
 			if (sys.__genMode == '非同期モード') {
-				//sys.__exec( '秒待機', [WAIT_SEC, sys] );
 				sys.async = true;
 				setTimeout(() => {
 					sys.nextAsync(sys)
@@ -349,7 +348,7 @@ const PluginNakoBoard = {
 			outputReport[1] = 2;
 			outputReport[2] = 1;
 			device.sendReport(outputReportId, outputReport);
-			console.log("output1 turn on");
+			console.log("output2 turn on");
 		}
 	}
   },
@@ -365,7 +364,7 @@ const PluginNakoBoard = {
 			outputReport[1] = 2;
 			outputReport[2] = 0;
 			device.sendReport(outputReportId, outputReport);
-			console.log("output1 turn off");
+			console.log("output2 turn off");
 		}
 	}
   },
@@ -662,6 +661,23 @@ const PluginNakoBoard = {
 	    	}
 	    }
 	}
+  },
+  
+  '!クリア': {
+    type: 'func',
+    josi: [],
+    pure: false,
+    fn: function (sys) {
+      //ボード側の出力を全てオフに
+      sys.__exec('出力1オフ', [sys]);
+      sys.__exec('出力2オフ', [sys]);
+      sys.__exec('Bセット', ['0000', sys]);
+
+      // イベントハンドラの削除
+      sys.__removeAllDomEvent();
+      sys.__exec('全タイマー停止', [sys]);
+      if (sys.__genMode == '非同期モード') { sys.__stopAsync(sys); }
+    }
   }
 
 }
