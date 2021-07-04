@@ -13,10 +13,10 @@ function nako3_run() {
 		"「" + div_name + "」へDOM親要素設定;" +
 		"「" + div_name + "」に「」をHTML設定;" +
 		"「" + canvas_name + "」へ描画開始;\n"
-	const preCode = addon
+	//const preCode = addon
 	try {
 		nako3_clear(2)
-		navigator.nako3.runReset(preCode + code, "main.nako3", preCode)
+		navigator.nako3.runReset(addon + code, '', addon)
 		nako3_scr();
 	} catch (e) {
 		nako3_print("==ERROR==" + e.message + "")
