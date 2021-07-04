@@ -1,7 +1,8 @@
 /**
- * なでしこ3 追加プラグイン 2021/7/3
+ * なでしこ3 追加プラグイン 2021/7/4  Ver1.0
  * file : plugin_nakoboard.js
  * Chromeブラウザでなでしこボードを使うためのプラグイン。
+ * なでしこv3.2.20以降の「!非同期モード」で実行するほうが正しく動作します。
  */
 
 // 変数定義
@@ -32,7 +33,6 @@ let ChkHIDItem = function () {
 	} else {
 		USBconnected = 0;			// 接続したが未オープン
 	}
-	//console.log('ChkHIDItem: ' + USBconnected);
 	return USBconnected;
 };
 
@@ -43,11 +43,14 @@ let ChkHIDItem = function () {
 // 接続時のイベント
 navigator.hid.addEventListener('connect', ({device}) => {
 	console.log(`HID connected: ${device.productName}`);
+	ChkHIDItem();
 });
 
 //切断時のイベント
 navigator.hid.addEventListener('disconnect', ({device}) => {
 	console.log(`HID disconnected: ${device.productName}`);
+	device.close();
+	ChkHIDItem();
 });
 
 // デバッグ用
@@ -152,7 +155,16 @@ const PluginNakoBoard = {
 
 		// ちょっと待つことで正常に動作させる。
     	try {
-    		sys.__exec( '秒待機', [WAIT_SEC, sys] );
+			// ちょっと待つことで正常に動作させる。
+			if (sys.__genMode == '非同期モード') {
+				//sys.__exec( '秒待機', [WAIT_SEC, sys] );
+				sys.async = true;
+				setTimeout(() => {
+					sys.nextAsync(sys)
+				}, WAIT_SEC * 1000)
+			} else {
+				sys.__exec('秒逐次待機', [WAIT_SEC, sys]);
+			}
     	} catch(e) {
     		console.log(e);
     	}
@@ -171,12 +183,25 @@ const PluginNakoBoard = {
     }
   },
   
-  'ボード状態': {
+  'ボード状態': { // @利用可＝１，未オープン＝０，未接続＝－１
     type: 'func',
     josi: [],
     fn: function (sys) {
 		ChkHIDItem();
 		return USBconnected;
+    }
+  },
+
+  'ボード未接続': {	// @未接続・未オープンならばはい（１）を，それ以外はいいえ（０）を返す
+    type: 'func',
+    josi: [],
+    fn: function (sys) {
+		ChkHIDItem();
+		if( USBconnected == 1 ) {
+			return 0;
+		} else {
+			return 1;
+		}
     }
   },
 
@@ -218,13 +243,13 @@ const PluginNakoBoard = {
 
 			beep_turnon();
 			device.sendReport(outputReportId, outputReport);
-			console.log(`beep on  note:${note} sec:${sec}`);
+			//console.log(`beep on  note:${note} sec:${sec}`);
 			sleep(sec*1000);
 
 			// beep
 			beep_turnoff();
 			device.sendReport(outputReportId, outputReport);
-			console.log("beep off");
+			//console.log("beep off");
 			
 		}
 	}
@@ -271,7 +296,7 @@ const PluginNakoBoard = {
     fn: function (sys) {
 		ChkHIDItem();
 		if( USBconnected == 1 ) {
-			// turn on
+			// turn off
 			outputReport[0] = 'O'.charCodeAt(0);
 			outputReport[1] = 0;
 			outputReport[2] = 0;
@@ -303,7 +328,7 @@ const PluginNakoBoard = {
     fn: function (sys) {
 		ChkHIDItem();
 		if( USBconnected == 1 ) {
-			// turn on
+			// turn off
 			outputReport[0] = 'O'.charCodeAt(0);
 			outputReport[1] = 1;
 			outputReport[2] = 0;
@@ -313,7 +338,182 @@ const PluginNakoBoard = {
 	}
   },
 
+  '出力2オン': {
+    type: 'func',
+    josi: [],
+    fn: function (sys) {
+		ChkHIDItem();
+		if( USBconnected == 1 ) {
+			// turn on
+			outputReport[0] = 'O'.charCodeAt(0);
+			outputReport[1] = 2;
+			outputReport[2] = 1;
+			device.sendReport(outputReportId, outputReport);
+			console.log("output1 turn on");
+		}
+	}
+  },
+
+  '出力2オフ': {
+    type: 'func',
+    josi: [],
+    fn: function (sys) {
+		ChkHIDItem();
+		if( USBconnected == 1 ) {
+			// turn off
+			outputReport[0] = 'O'.charCodeAt(0);
+			outputReport[1] = 2;
+			outputReport[2] = 0;
+			device.sendReport(outputReportId, outputReport);
+			console.log("output1 turn off");
+		}
+	}
+  },
+
+  '出力オン': {
+    type: 'func',
+    josi: [['の','を']],
+    fn: function (port, sys) {
+		ChkHIDItem();
+		if( USBconnected == 1 ) {
+			// 引数チェック
+			if( port < 1 ) return 0;
+			if( port > 7 ) return 0;
+		
+			// turn on
+			outputReport[0] = 'O'.charCodeAt(0);
+			outputReport[1] = port;
+			outputReport[2] = 1;
+			device.sendReport(outputReportId, outputReport);
+			console.log(`output${port} turn on`);
+		}
+		return 1;
+	}
+  },
+
+  '出力オフ': {
+    type: 'func',
+    josi: [['の','を']],
+    fn: function (port, sys) {
+		ChkHIDItem();
+		if( USBconnected == 1 ) {
+			// 引数チェック
+			if( port < 1 ) return 0;
+			if( port > 7 ) return 0;
+		
+			// turn off
+			outputReport[0] = 'O'.charCodeAt(0);
+			outputReport[1] = port;
+			outputReport[2] = 0;
+			device.sendReport(outputReportId, outputReport);
+			console.log(`output${port} turn off`);
+		}
+	}
+  },
+
+  'B4オン': {
+    type: 'func',
+    josi: [],
+    return_none: true,
+    fn: function (sys) { 
+      sys.__exec('出力オン', [4,sys]);
+    }
+  },
+
+  'B4オフ': {
+    type: 'func',
+    josi: [],
+    return_none: true,
+    fn: function (sys) { 
+      sys.__exec('出力オフ', [4,sys]);
+    }
+  },
+
+  'B5オン': {
+    type: 'func',
+    josi: [],
+    return_none: true,
+    fn: function (sys) { 
+      sys.__exec('出力オン', [5,sys]);
+    }
+  },
+
+  'B5オフ': {
+    type: 'func',
+    josi: [],
+    return_none: true,
+    fn: function (sys) { 
+      sys.__exec('出力オフ', [5,sys]);
+    }
+  },
+
+  'B6オン': {
+    type: 'func',
+    josi: [],
+    return_none: true,
+    fn: function (sys) { 
+      sys.__exec('出力オン', [6,sys]);
+    }
+  },
+
+  'B6オフ': {
+    type: 'func',
+    josi: [],
+    return_none: true,
+    fn: function (sys) { 
+      sys.__exec('出力オフ', [6,sys]);
+    }
+  },
+
+  'B7オン': {
+    type: 'func',
+    josi: [],
+    return_none: true,
+    fn: function (sys) { 
+      sys.__exec('出力オン', [7,sys]);
+    }
+  },
+
+  'B7オフ': {
+    type: 'func',
+    josi: [],
+    return_none: true,
+    fn: function (sys) { 
+      sys.__exec('出力オフ', [7,sys]);
+    }
+  },
+
+  'Bセット': {
+    type: 'func',
+    josi: [['で','を']],
+    fn: function (str, sys) {
+		// 引数チェック
+		let s = (str + '0000').slice(0, 4);		// ４文字にする
+		console.log(s);
+		let st = 0;
+		
+		ChkHIDItem();
+		if( USBconnected == 1 ) {
+			// ビット列生成
+			if( s.charAt(0) != '0' ) st |= 0x80;
+			if( s.charAt(1) != '0' ) st |= 0x40;
+			if( s.charAt(2) != '0' ) st |= 0x20;
+			if( s.charAt(3) != '0' ) st |= 0x10;
+		
+			outputReport[0] = 'E'.charCodeAt(0);
+			outputReport[1] = st;
+			outputReport[2] = 0;
+			device.sendReport(outputReportId, outputReport);
+			console.log(`bitset ${s}(${st})`);
+		}
+		return st;
+	}
+  },
+
   'センサ1': { type: 'var', value: 0 },
+  'センサ2': { type: 'var', value: 0 },
+  'センサ3': { type: 'var', value: 0 },
+
   'センサ1測定': {
     type: 'func',
     josi: [],
@@ -328,7 +528,7 @@ const PluginNakoBoard = {
 					await WaitForInputReport();
 					sys.__v0['センサ1'] = ADval;
 					sys.__v0['それ'] = ADval;
-					console.log( `センサ1測定a: ${ADval}` );
+					console.log( `センサ1測定: ${ADval}` );
 				} catch(e) {
 					console.log(e);
 				}
@@ -337,7 +537,80 @@ const PluginNakoBoard = {
 
 			// ちょっと待つことで正常に動作させる。
 			if (sys.__genMode == '非同期モード') {
-	    		sys.__exec( '秒待機', [WAIT_SEC, sys] );
+				sys.async = true;
+				setTimeout(() => {
+					sys.nextAsync(sys)
+				}, WAIT_SEC * 1000)
+			} else {
+				sys.__exec('秒逐次待機', [WAIT_SEC, sys]);
+			}
+		}
+	}
+  },
+
+  'センサ2測定': {
+    type: 'func',
+    josi: [],
+    return_none: true,
+    fn: function (sys) { 
+    	ChkHIDItem();
+		if( USBconnected == 1 ) {
+			async function WaitForInput() {
+				try {
+					outputReport[0] = 'a'.charCodeAt(0);
+					await device.sendReport(outputReportId, outputReport)
+					await WaitForInputReport();
+					sys.__v0['センサ2'] = ADval;
+					sys.__v0['それ'] = ADval;
+					console.log( `センサ2測定: ${ADval}` );
+				} catch(e) {
+					console.log(e);
+				}
+			}
+			WaitForInput();
+
+			// ちょっと待つことで正常に動作させる。
+			if (sys.__genMode == '非同期モード') {
+				sys.async = true;
+				setTimeout(() => {
+					sys.nextAsync(sys)
+				}, WAIT_SEC * 1000)
+			} else {
+				sys.__exec('秒逐次待機', [WAIT_SEC, sys]);
+			}
+		}
+	}
+  },
+
+  'センサ3測定': {
+    type: 'func',
+    josi: [],
+    return_none: true,
+    fn: function (sys) { 
+    	ChkHIDItem();
+		if( USBconnected == 1 ) {
+			async function WaitForInput() {
+				try {
+					outputReport[0] = 'z'.charCodeAt(0);
+					await device.sendReport(outputReportId, outputReport)
+					await WaitForInputReport();
+					sys.__v0['センサ3'] = ADval;
+					sys.__v0['それ'] = ADval;
+					console.log( `センサ3測定: ${ADval}` );
+				} catch(e) {
+					console.log(e);
+				}
+			}
+			WaitForInput();
+
+			// ちょっと待つことで正常に動作させる。
+			if (sys.__genMode == '非同期モード') {
+				sys.async = true;
+				setTimeout(() => {
+					sys.nextAsync(sys)
+				}, WAIT_SEC * 1000)
+			} else {
+				sys.__exec('秒逐次待機', [WAIT_SEC, sys]);
 			}
 		}
 	}
@@ -350,11 +623,19 @@ const PluginNakoBoard = {
     fn: function (sys) {
 		ChkHIDItem();
 		if( USBconnected == 1 ) {
-	    	try {
-	    		sys.__exec( '秒待機', [WAIT_SEC, sys] );
-	    	} catch(e) {
-	    		console.log(e);
-	    	}
+			try {
+				// ちょっと待つことで正常に動作させる。
+				if (sys.__genMode == '非同期モード') {
+					sys.async = true
+					setTimeout(() => {
+						sys.nextAsync(sys)
+					}, WAIT_SEC * 1000)
+				} else {
+					sys.__exec('秒逐次待機', [WAIT_SEC, sys])
+				}
+			} catch(e) {
+				console.log(e);
+			}
 	    }
     }
   },
@@ -367,7 +648,15 @@ const PluginNakoBoard = {
 		ChkHIDItem();
 		if( USBconnected == 1 ) {
 	    	try {
-	    		sys.__exec( '秒待機', [WAIT_SEC, sys] );
+				// ちょっと待つことで正常に動作させる。
+				if (sys.__genMode == '非同期モード') {
+					sys.async = true
+					setTimeout(() => {
+						sys.nextAsync(sys)
+					}, WAIT_SEC * 1000)
+				} else {
+					sys.__exec('秒逐次待機', [WAIT_SEC, sys])
+				}
 	    	} catch(e) {
 	    		console.log(e);
 	    	}
