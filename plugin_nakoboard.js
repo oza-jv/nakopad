@@ -254,14 +254,10 @@ const PluginNakoBoard = {
 
         beep_turnon();
         device.sendReport(outputReportId, outputReport);
-        //console.log(`beep on  note:${note} sec:${sec}`);
         sleep(sec*1000);
 
-        // beep
         beep_turnoff();
         device.sendReport(outputReportId, outputReport);
-        //console.log("beep off");
-        
       }
     }
   },
@@ -501,7 +497,6 @@ const PluginNakoBoard = {
     fn: function (str, sys) {
       // 引数チェック
       let s = (str + '0000').slice(0, 4);    // ４文字にする
-      console.log(s);
       let st = 0;
       
       ChkHIDItem();
@@ -546,7 +541,7 @@ const PluginNakoBoard = {
               await WaitForInputReport();
               sys.__v0['センサ1'] = ADval;
               sys.__v0['それ'] = ADval;
-              console.log( `センサ1測定: ${ADval}` );
+              //console.log( `センサ1測定: ${ADval}` );
             } catch(e) {
               console.log(e);
             }
@@ -581,7 +576,7 @@ const PluginNakoBoard = {
               await WaitForInputReport();
               sys.__v0['センサ2'] = ADval;
               sys.__v0['それ'] = ADval;
-              console.log( `センサ2測定: ${ADval}` );
+              //console.log( `センサ2測定: ${ADval}` );
             } catch(e) {
               console.log(e);
             }
@@ -616,7 +611,7 @@ const PluginNakoBoard = {
               await WaitForInputReport();
               sys.__v0['センサ3'] = ADval;
               sys.__v0['それ'] = ADval;
-              console.log( `センサ3測定: ${ADval}` );
+              //console.log( `センサ3測定: ${ADval}` );
             } catch(e) {
               console.log(e);
             }
