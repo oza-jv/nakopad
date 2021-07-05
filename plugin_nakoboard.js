@@ -1,5 +1,5 @@
 /**
- * なでしこ3 追加プラグイン 2021/7/4  Ver1.0
+ * なでしこ3 追加プラグイン 2021/7/5  Ver1.01
  * file : plugin_nakoboard.js
  * Chromeブラウザでなでしこボードを使うためのプラグイン。
  * なでしこv3.2.23以降の「!非同期モード」で実行するほうが正しく動作します。
@@ -674,8 +674,6 @@ const PluginNakoBoard = {
       sys.__exec('Bセット', ['0000', sys]);
 
       // イベントハンドラの削除
-      sys.__removeAllDomEvent();
-      sys.__exec('全タイマー停止', [sys]);
       if (sys.__genMode == '非同期モード') { sys.__stopAsync(sys); }
     }
   }

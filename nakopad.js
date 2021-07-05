@@ -355,12 +355,14 @@ function baseName(str) {
 }
 
 // 「止める」ボタン…メディアの再生を停止
+//  2021.7.5 非同期モードの処理を停止するように追加
 function nako3_break() {
 	const media = document.getElementsByClassName('media');
 	for (let i = 0; i < media.length; i++ ) {
 		media[i].pause();
 	}
 	speechSynthesis.cancel();
+	navigator.nako3.clearPlugins();
 }
 
 // サンプルプログラムのオプションをこちらで定義 21.3.21  4/11追加
