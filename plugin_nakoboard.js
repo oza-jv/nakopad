@@ -49,6 +49,8 @@ navigator.hid.addEventListener('connect', ({device}) => {
 //切断時のイベント
 navigator.hid.addEventListener('disconnect', ({device}) => {
   console.log(`HID disconnected: ${device.productName}`);
+
+  device.removeEventListener("inputreport", handleInputReport);
   device.close();
   ChkHIDItem();
 });
