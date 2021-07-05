@@ -156,6 +156,9 @@ const PluginNakoBoard = {
 
             //chkReportID(device);
             ChkHIDItem();
+
+            // 接続したことを表示
+            nako3_print("なでしこボードを接続しました。");
           });
         })().catch( e => console.log(e) );
 
