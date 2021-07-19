@@ -10,7 +10,7 @@
  * 
  */
 
-const WAIT_SEC = 0.1;    // 処理を待機する秒数
+const WAIT_SEC_md = 0.1;    // 処理を待機する秒数
 
 const PluginMedia = {
   // --- 画像関係 ---
@@ -37,7 +37,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
         }
         
         return img.id;
@@ -61,7 +61,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
         }
       } catch(e) {
         // エラーを表示
@@ -133,7 +133,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
         }
       } catch(e) {
         // エラーを表示
@@ -155,7 +155,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
         }
       } catch(e) {
         // エラーを表示
@@ -177,7 +177,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md* 1000);
         }
       } catch(e) {
         // エラーを表示
@@ -203,7 +203,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
         }
       } catch(e) {
         // エラーを表示
@@ -241,7 +241,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
         }
 
         return video.id;
@@ -266,7 +266,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
         }
       } catch(e) {
         // エラーを表示
@@ -288,7 +288,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
         }
       } catch(e) {
         // エラーを表示
@@ -310,7 +310,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
         }
       } catch(e) {
         // エラーを表示
@@ -331,7 +331,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
         }
     }
   },
@@ -347,7 +347,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
         }
     }
   },
@@ -370,7 +370,7 @@ const PluginMedia = {
         // 2021.7.16 非同期モードでのWAITを追加
         if (sys.__genMode == '非同期モード') {
           sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
         }
     }
   }
