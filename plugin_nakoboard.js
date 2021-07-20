@@ -11,7 +11,7 @@ let device;
 let ADval = 0;
 let USBconnected = 0;  // 処理可＝1，不可＝０
 let outputReport = new Uint8Array(64);
-const WAIT_SEC = 0.3;    // 処理を待機する秒数
+const WAIT_SEC = 0.4;    // 処理を待機する秒数
 
 /*---------------------------------------------
    なでしこボード用の関数群

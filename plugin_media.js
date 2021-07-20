@@ -10,7 +10,7 @@
  * 
  */
 
-const WAIT_SEC_md = 0.1;    // 処理を待機する秒数
+const WAIT_SEC_md = 0.4;    // 処理を待機する秒数
 
 const PluginMedia = {
   // --- 画像関係 ---
