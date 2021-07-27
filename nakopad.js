@@ -482,4 +482,52 @@ function nako3_scrtop() {
 	}
 }
 
+// モーダル関連の追加　2021.7.25
+const nako3_init_modal = function() {
+	const m_open = document.getElementById('m_open');
+	const m_close = document.getElementById('m_close');
+	const m_modal = document.getElementById('m_modal');
+	const m_modal_bk = document.getElementById('m_modal_bk');
+
+	m_open.addEventListener('click', function () {
+		nako3_disp_modal( "./doc/pic.html" );
+		m_modal.classList.add('is-show');
+		m_modal_bk.classList.add('is-show');
+	});
+	
+	m_close.addEventListener('click', function () {
+		m_modal.classList.remove('is-show');
+		m_modal_bk.classList.remove('is-show');
+	});
+	
+	m_modal.addEventListener('click', function () {
+		m_modal.classList.remove('is-show');
+		m_modal_bk.classList.remove('is-show');
+	});
+}
+
+const nako3_disp_modal = function( fname ) {
+	if (!fname) return;
+
+	const m_contents = document.getElementById('m_contents');
+	
+	try {
+		fetch( fname )
+			.then((data) => {
+				if (data.ok) {
+					return data.text();
+				} else {
+					return Promise.reject(new Error('読み込み失敗'));
+				}
+			})
+			.then((text) => {
+				m_contents.innerHTML = text;
+			})
+			.catch((e) => {
+				m_contents.innerHTML = e;
+			});
+	} catch(e) {
+		console.log(e);
+	}
+}
 
