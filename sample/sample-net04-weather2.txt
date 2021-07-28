@@ -1,37 +1,35 @@
-// 天気予報の取得　その2
-// 天気予報API(https://weather.tsukumijima.net/)のデータを利用して作成
+!非同期モード
+// ネットワーク通信を利用して
+// 天気予報を取得するサンプル
+// （データは天気予報API(https://weather.tsukumijima.net/)を利用して作成）
 
-// 天気予報を取得するためのURIを指定する。
-// 最後の都市番号は，地点定義表 https://weather.tsukumijima.net/primary_area.xml
-// で確認する。
-api="https://weather.tsukumijima.net/api/forecast?city=140010"。    // 140010は神奈川県東部
+// (1) 取得したい情報を変数に入れておく
+都市番号＝「140020」。　   // 140010は神奈川県東部，140020は西部
+時期＝0。　　　　　　　 　 // 0-今日,1-明日,2-明後日
 
-// URIへ送信してデータを依頼する
-apiにAJAX送信した時には
-　　// JSON形式のデータを受信する。
-　　// 辞書型配列「データ」に代入される。
-　　データ＝対象をJSONデコード。
+// (2) 天気予報を取得するためのURIを指定する。
+// 都市番号は，地点定義表 https://weather.tsukumijima.net/primary_area.xmlで確認する。
+API＝「https://weather.tsukumijima.net/api/forecast?city=」＆都市番号。
+
+// (3) URIからJSON形式の情報を受信する。
+// 辞書型配列「天気情報」に代入する。
+APIからAJAX受信。
+天気情報＝対象をJSONデコード。
 　　
-　　// 地域名を取得
-　　地域＝データ['title']。
-　　地域を表示。
-　　地域を声出す。
-    改行作成。
+// (4) 地域名を取得する。
+地域＝天気情報['title']。
+地域を表示。
+改行作成。
 
-    // 明日の予報を取得
-    予報＝データ['forecasts'][1]。  // 0-今日,1-明日,2-明後日
-    予報['dateLabel']を表示。       // 「今日」「明日」「明後日」
-    予報['dateLabel']を声出す。
+// (5) 明日の予報を取得する。
+予報＝天気情報['forecasts'][時期]。
+予報['dateLabel']を表示。       　　// 「今日」「明日」「明後日」
 
-    予報['telop']を表示。           // もっとも簡単な天気予報
-    予報['telop']を声出す。
+予報['telop']を表示。          　　 // もっとも簡単な天気予報
+予報['detail']['weather']を表示。　 // 予報の詳細
+予報['image']['url']を絵追加。  　　// 画像のURLを取得して表示
+改行作成。
 
-    予報['detail']['weather']を表示。// 予報の詳細
-    予報['image']['url']を絵追加。  // 画像を取得して表示
-    改行作成。
-
-    // 概況を取得
-    概況＝データ['description']。
-    概況['headlineText']を表示。
-    概況['headlineText']を声出す。
-ここまで。
+// (6) 概況を取得する。
+概況＝天気情報['description']。
+概況['headlineText']を表示。
