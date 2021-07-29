@@ -37,7 +37,7 @@
 }
 .footer {
 	font-size:smaller; color:gray;
-	margin: 0 20px;
+	margin: 0 10px;
 }
 button {
 	padding: 5px 20px;
@@ -168,16 +168,15 @@ video {
 		<input type="file" id="load_media" accept=".jpg,.jpeg,.png,.gif,.mp3,.mp4,.wav,.wmv" onChange="nako3_getObjURL()" style="display: none"/>
 		<!-- エディタ側のサブメニュー -->
 		<div class="btnsub_flex" style="padding:8px;">
+			<div class="footer">クリックメニュー →</div>
 			<div class="footer">
-				<a href="https://nadesi.com/v3/doc/index.php?%E5%91%BD%E4%BB%A4%E4%B8%80%E8%A6%A7%2F%E6%A9%9F%E8%83%BD%E9%A0%86&show" target="_blank" rel="noopener noreferrer">なでしこv3の命令一覧</a>（公式サイトへ）
+				[<a href="https://nadesi.com/v3/doc/index.php?%E5%91%BD%E4%BB%A4%E4%B8%80%E8%A6%A7%2F%E6%A9%9F%E8%83%BD%E9%A0%86&show" target="_blank" rel="noopener noreferrer">なでしこv3の命令一覧(公式サイト)</a>]
 			</div>
 			<!-- モーダルメニュー -->
-			<div id="m_open" class="footer">
-				学習のヒントを見る
-			</div>
-			
-			<button onclick="nako3_clear_edit()">◆プログラムを消す</button>
-			<button onClick="nako3_click_load_media()">メディアのURL</button>
+			<div id="m_open" class="footer">[学習のヒント]</div>
+			<!-- 補助メニュー -->
+			<div class="footer" onclick="nako3_clear_edit()">[プログラムを消す]</div>
+			<div class="footer" onclick="nako3_click_load_media()">[メディアのURL]</div>
 		</div>
 	</div>
 	
@@ -247,8 +246,8 @@ video {
 	<div id="m_modal_bk" class="m_modal_bk">
 		<div id="m_contents">モーダル</div>
 		<hr />
-		<button id="m_close">閉じる
-		<button id="m_return">もどる
+		<button id="m_close">閉じる</button>
+		<button id="m_return">もどる</button>
 	</div>
 </div>
 

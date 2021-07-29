@@ -494,12 +494,16 @@ const nako3_init_modal = function() {
 		nako3_disp_modal( "./doc/default.html" );
 		m_modal.classList.add('is-show');
 		m_modal_bk.classList.add('is-show');
+		m_return.style.visibility ="hidden";
+		nako3_scrtop();
 	});
 
 	m_return.addEventListener('click', function () {
 		nako3_disp_modal( "./doc/default.html" );
 		m_modal.classList.add('is-show');
 		m_modal_bk.classList.add('is-show');
+		m_return.style.visibility ="hidden";
+		nako3_scrtop();
 	});
 
 	m_close.addEventListener('click', function () {
@@ -513,10 +517,18 @@ const nako3_init_modal = function() {
 	});
 }
 
+const nako3_click_m_button = function () {
+	const m_open = document.getElementById('m_open');
+	const m_close = document.getElementById('m_close');
+	const m_return = document.getElementById('m_return');
+
+};
+
 const nako3_disp_modal = function( fname ) {
 	if (!fname) return;
 
 	const m_contents = document.getElementById('m_contents');
+	document.getElementById('m_return').style.visibility = "visible";
 	
 	try {
 		fetch( fname )
