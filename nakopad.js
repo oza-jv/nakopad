@@ -486,6 +486,7 @@ function nako3_scrtop() {
 const nako3_init_modal = function() {
 	const m_open = document.getElementById('m_open');
 	const m_close = document.getElementById('m_close');
+	const m_return = document.getElementById('m_return');
 	const m_modal = document.getElementById('m_modal');
 	const m_modal_bk = document.getElementById('m_modal_bk');
 
