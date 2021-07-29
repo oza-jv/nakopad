@@ -490,7 +490,7 @@ const nako3_init_modal = function() {
 	const m_modal_bk = document.getElementById('m_modal_bk');
 
 	m_open.addEventListener('click', function () {
-		nako3_disp_modal( "./doc/pic.html" );
+		nako3_disp_modal( "./doc/default.html" );
 		m_modal.classList.add('is-show');
 		m_modal_bk.classList.add('is-show');
 	});
