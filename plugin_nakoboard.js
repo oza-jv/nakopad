@@ -93,13 +93,6 @@ let handleInputReport = (event) => {
   console.log(`sensor: ${ADval}` );
 }
 
-// n秒間待機
-function sleep(msec) {
-  // 指定ミリ秒間だけループさせる（CPUは常にビジー状態）
-  var startMsec = new Date();
-  while (new Date() - startMsec < msec);
-}
-
 // センサ１測定用の関数
 let WaitForInputReport;    // 「ボード接続」内で定義
 
@@ -252,12 +245,22 @@ const PluginNakoBoard = {
           outputReport[1] = 23;
         };
 
-        beep_turnon();
-        device.sendReport(outputReportId, outputReport);
-        sleep(sec*1000);
+	      beep_turnon();
+	      device.sendReport(outputReportId, outputReport);
 
-        beep_turnoff();
-        device.sendReport(outputReportId, outputReport);
+	      // ちょっと待つことで正常に動作させる。
+	        if (sys.__genMode == '非同期モード') {
+            sys.async = true;
+            setTimeout(() => {
+	            beep_turnoff();
+	            device.sendReport(outputReportId, outputReport);
+              sys.nextAsync(sys)
+            }, sec * 1000)
+	        } else {
+	          sys.__exec('秒逐次待機', [sec, sys]);
+            beep_turnoff();
+	          device.sendReport(outputReportId, outputReport);
+	        }
       }
     }
   },

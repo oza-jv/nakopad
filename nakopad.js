@@ -365,7 +365,7 @@ function nako3_break() {
 	navigator.nako3.clearPlugins();
 }
 
-// サンプルプログラムのオプションをこちらで定義 21.3.21  4/11追加
+// サンプルプログラムのオプションをこちらで定義 21.3.21  7/29追加
 const SAMPLE_LIST = [
 	{ value: './sample/sample-omikuji-1.txt', name: 'おみくじ1 もし～ならば' },
 	{ value: './sample/sample-omikuji-2.txt', name: 'おみくじ2 もし～ならば～違えば' },
@@ -385,7 +385,9 @@ const SAMPLE_LIST = [
 	{ value: './sample/sample-net01-zipcode.txt',  name: '双方向1 郵便番号取得' },
 	{ value: './sample/sample-net02-tenki.txt',    name: '双方向2 天気予報取得(1)' },
 	{ value: './sample/sample-net03-pcr.txt',      name: '双方向3 PCR陽性者数取得' },
-	{ value: './sample/sample-net04-weather2.txt', name: '双方向4 天気予報取得(2)' }
+	{ value: './sample/sample-net04-weather2.txt', name: '双方向4 天気予報取得(2)' },
+	{ value: '', name: '--' },
+	{ value: './sample/nb00-default.txt',  name: '計測制御1 なでしこボードを使う' }
 ];
 
 const nako3_init_samplelist = function () {
