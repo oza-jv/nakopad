@@ -3,17 +3,17 @@
 <div>
   <ul>
     <li>ピンポン　<button onClick="nako3_modal_sound('./audio/se_maoudamashii_chime13.mp3')">▶</button>
-    <li>ブブー　<button onClick="nako3_modal_sound('./audio/se_maoudamashii_onepoint32.mp3')">▶</button>
+    <li>ブブー　　<button onClick="nako3_modal_sound('./audio/se_maoudamashii_onepoint32.mp3')">▶</button>
     <li>発車ベル　<button onClick="nako3_modal_sound('./audio/se_maoudamashii_jingle03.mp3')">▶</button>
   </ul>
 </div>
 <hr />
 <div>
-■音を再生するときは、次の２行が必要。<br />
-<font color="green">
-　　Ｂ＝<font color="blue">ピンポン</font>を音追加。　　// 準備する行<br />
-　　Ｂを音再生。　　　　　　　// 音を鳴らす行<br />
-　　</font>
+  <p>■音を再生するときは、次の２行が必要。</p>
+  <p><font color="green">
+  Ｂ＝<font color="blue">ピンポン</font>を音追加。　　// 準備する行<br />
+  Ｂを音再生。　　　　　　　// 音を鳴らす行
+  </font></p>
 </div>
 
 <div>
@@ -24,12 +24,15 @@
   <li><b><font color="blue">変数Ｂ</font>を音再生。</b><br />
       　先ほど<b>音追加</b>した変数Ｂを指定して，その音を再生する。
 		 <ul><font color="green">
-		   <li>例：　Ｂ＝<font color="blue">ピンポン</font>を音追加。<br />　　　Ｂを音再生。　　　　　// ピンポンが鳴る
+		   <li>Ｂ＝<font color="blue">ピンポン</font>を音追加。<br />
+		       Ｂを音再生。　　　　　// ピンポンが鳴る
 		 </font></ul>
   <li><b><font color="blue">変数Ｂ</font>に<font color="blue">Ｃ</font>を音読込。</b><br />
       　先ほど<b>音追加</b>した変数Ｂを指定すると，その音をＣに変更できる。
 		 <ul><font color="green">
-		   <li>例：　Ｂに<font color="blue">ブブー</font>を音読込。<br />　　　Ｂを音再生。　　　　　// ブブーが鳴る
+		   <li>Ｂ＝<font color="blue">ピンポン</font>を音追加。<br />
+		       Ｂに<font color="blue">ブブー</font>を音読込。<br />
+		       Ｂを音再生。　　　　　// ブブーが鳴る
 		 </font></ul>
   <li><b><font color="blue">変数Ｂ</font>を音停止。</b><br />
       　再生中の音（変数Ｂで指定している音）を停止する。
