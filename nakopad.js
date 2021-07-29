@@ -538,3 +538,10 @@ const nako3_disp_modal = function( fname ) {
 	}
 }
 
+const nako3_modal_sound = function (s) {
+	s = "" + s // 文字列に変換
+	const audio = document.querySelector("#audio1");
+	audio.src = s;
+	audio.currentTime = 0;
+	audio.play();
+}
