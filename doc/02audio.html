@@ -7,24 +7,33 @@
     <li><div onClick="nako3_modal_sound('./audio/se_maoudamashii_jingle03.mp3')">発車ベル</div>
   </ul>
 </div>
+<hr />
+<div>
+■音を再生するときは、次の２行が必要。<br />
+<font color="green">
+　　Ｂ＝<font color="blue">ピンポン</font>を音追加。　　// 準備する行<br />
+　　Ｂを音再生。　　　　　　　// 音を鳴らす行<br />
+　　</font>
+</div>
 
 <div>
-■画像を扱う命令と，その使い方の紹介
+■音を扱う命令と，その使い方の紹介
  <ul>
-   <li><b><font color="blue">Ｐ</font>を絵追加。</b><br />
-      　Ｐで指定した画像を表示する。Ｐには，上にある画像の名前を指定する。
+  <li><b><font color="blue">変数Ｂ</font>＝<font color="blue">Ａ</font>を音追加。</b><br />
+      　Ａで指定した音を準備する。あとで変数Ｂを使って音を再生・変更できるようになる。
+  <li><b><font color="blue">変数Ｂ</font>を音再生。</b><br />
+      　先ほど<b>音追加</b>した変数Ｂを指定して，その音を再生する。
 		 <ul><font color="green">
-		  <li><font color="blue">クジラ</font>を絵追加。
-		  <li><font color="blue">黒クジラ</font>を絵追加。
-		  <li><font color="blue">ライオン</font>を絵追加。
-		  <li><font color="blue">ペンギン</font>を絵追加。
+		   <li>例：　Ｂ＝<font color="blue">ピンポン</font>を音追加。<br />　　　Ｂを音再生。　　　　　// ピンポンが鳴る
 		 </font></ul>
-  <li><b><font color="blue">変数</font>＝<font color="blue">Ｐ</font>を絵追加。</b><br />
-      　Ｐで指定した画像を表示する。あとで変数を使って画像を変更できるようになる。
-  <li><b><font color="blue">変数</font>に<font color="blue">Ｑ</font>を絵読込。</b><br />
-      　先ほど<b>絵追加</b>した変数を指定すると，その画像をＱに変更できる。
-      <ul><font color="green">
-          <li>例：　絵＝クジラを絵追加。<br />　　　絵に黒クジラを絵読込。
-      </font></ul>
+  <li><b><font color="blue">変数Ｂ</font>に<font color="blue">Ｃ</font>を音読込。</b><br />
+      　先ほど<b>音追加</b>した変数Ｂを指定すると，その音をＣに変更できる。
+		 <ul><font color="green">
+		   <li>例：　Ｂに<font color="blue">ブブー</font>を音読込。<br />　　　Ｂを音再生。　　　　　// ブブーが鳴る
+		 </font></ul>
+  <li><b><font color="blue">変数Ｂ</font>を音停止。</b><br />
+      　再生中の音（変数Ｂで指定している音）を停止する。
+  <li><b><font color="blue">変数Ｂ</font>を音再生。</b><br />
+      　停止させた音（変数Ｂで指定している音）を，再び再生する。停止した続きから再生する。
  </ul>
 </div>
