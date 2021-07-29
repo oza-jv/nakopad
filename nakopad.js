@@ -387,7 +387,9 @@ const SAMPLE_LIST = [
 	{ value: './sample/sample-net03-pcr.txt',      name: '双方向3 PCR陽性者数取得' },
 	{ value: './sample/sample-net04-weather2.txt', name: '双方向4 天気予報取得(2)' },
 	{ value: '', name: '--' },
-	{ value: './sample/nb00-default.txt',  name: '計測制御1 なでしこボードを使う' }
+	{ value: './sample/nb00-default.txt',    name: '計測・制御0 なでしこボードを使う' },
+	{ value: './sample/nb01-test.txt',       name: '計測・制御1 基本動作' },
+	{ value: './sample/nb09-carsencer.txt',  name: '計測・制御9 衝突防止アラーム' }
 ];
 
 const nako3_init_samplelist = function () {
