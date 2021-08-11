@@ -6,6 +6,6 @@
 - リリース版は https://www.manabu-tech.net/nakopad/ で公開する。
 
 ## なでしこボード対応版
-- https://oza-jv.github.io/nakopad/index-hid.html を開く。 ※まだ開発中
-- https://oza-jv.github.io/nakopad/index-hid.html?load=nbtest-1.txt
-- plugin_nakoboard.jsを編集する。 ※まだ開発中
+- 正式リリース（2021/7/29）
+- plugin_nakoboard.jsが必要。
+- 事前ロード　https://oza-jv.github.io/nakopad/index.html?load=nb00-default.txt
