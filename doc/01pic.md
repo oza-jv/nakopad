@@ -1,15 +1,17 @@
+<link href="https://raw.github.com/kottkrig/Markdown-CSS/master/markdown.css" rel="stylesheet"></link>
+
 なでしこパッドで使える画像
 ---
 
 |クジラ|黒クジラ|ライオン|ペンギン|
 |:----:|:----:|:----:|:----:|
-|![クジラ](./img/kujira.png)|![黒クジラ](./img/kujira-bk.png)|![ライオン](./img/lion.gif)|![ペンギン](./img/penguin.gif)|
+|<img src="./img/kujira.png" width=80 height=80>|<img src="./img/kujira-bk.png" width=80 height=80>|<img src="./img/lion.gif" width=80 height=80>|<img src="./img/penguin.gif" width=80 height=80>|
 
 ---
 
 #### ■画像を扱う命令と，その使い方の紹介
 
-- **Ｐ**を絵追加。
+- **Ｐを絵追加。**
 	- Ｐで指定した画像を表示する。Ｐには，上にある画像の名前を指定する。
 
 ```
@@ -19,8 +21,9 @@
 ペンギンを絵追加。
 ```
 
-- **変数**＝Ｐを絵追加。**
+- **変数＝Ｐを絵追加。**
 	- Ｐで指定した画像を表示する。あとで変数を使って画像を変更できるようになる。
+	
 - **変数にＱを絵読込。**
 	- 先ほど**絵追加**した変数を指定すると，その画像をＱに変更できる。
 
