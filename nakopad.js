@@ -495,7 +495,7 @@ const nako3_init_modal = function() {
 	const m_modal_bk = document.getElementById('m_modal_bk');
 
 	m_open.addEventListener('click', function () {
-		nako3_disp_modal( "./doc/default.html" );
+		nako3_disp_modal( "./doc/default.md" );
 		m_modal.classList.add('is-show');
 		m_modal_bk.classList.add('is-show');
 		m_return.style.visibility ="hidden";
@@ -544,7 +544,8 @@ const nako3_disp_modal = function( fname ) {
 				}
 			})
 			.then((text) => {
-				m_contents.innerHTML = text;
+				// marked.jsが必要
+				m_contents.innerHTML = marked(text);
 			})
 			.catch((e) => {
 				m_contents.innerHTML = e;
