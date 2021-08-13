@@ -535,7 +535,7 @@ const nako3_disp_modal = function( fname ) {
 	document.getElementById('m_return').style.visibility = "visible";
 	
 	try {
-		fetch( fname )
+		fetch( fname, {cache: "reload"} )
 			.then((data) => {
 				if (data.ok) {
 					return data.text();
