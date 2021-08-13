@@ -495,6 +495,8 @@ const nako3_init_modal = function() {
 	const m_modal_bk = document.getElementById('m_modal_bk');
 
 	m_open.addEventListener('click', function () {
+		m_modal.classList.remove('is-show');
+		m_modal_bk.classList.remove('is-show');
 		nako3_disp_modal( "./doc/default.md" );
 		m_modal.classList.add('is-show');
 		m_modal_bk.classList.add('is-show');
@@ -503,6 +505,8 @@ const nako3_init_modal = function() {
 	});
 
 	m_return.addEventListener('click', function () {
+		m_modal.classList.remove('is-show');
+		m_modal_bk.classList.remove('is-show');
 		nako3_disp_modal( "./doc/default.md" );
 		m_modal.classList.add('is-show');
 		m_modal_bk.classList.add('is-show');
