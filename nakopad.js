@@ -503,7 +503,7 @@ const nako3_init_modal = function() {
 	});
 
 	m_return.addEventListener('click', function () {
-		nako3_disp_modal( "./doc/default.html" );
+		nako3_disp_modal( "./doc/default.md" );
 		m_modal.classList.add('is-show');
 		m_modal_bk.classList.add('is-show');
 		m_return.style.visibility ="hidden";
