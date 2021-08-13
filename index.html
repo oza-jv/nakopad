@@ -141,19 +141,20 @@ video {
   visibility: visible;
 }
 
-pre {
+.m_markdown pre {
   margin: 1em 0;
   padding: 1em;
+  line-height: 1.25;
   border-radius: 5px;
   background: #25292f;
   color: #fff;
-  overflow-x: auto; /* ⭐ */
-  -webkit-overflow-scrolling: touch; /* ⭐ */
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-p code {
+.m_markdown p code {
   display: inline-block;
-  padding: 0.1em 0.25em; /* 文字周りの余白 */
+  padding: 0.2em; /* 文字周りの余白 */
   color: #444; /* 文字色 */
   background-color: #e7edf3; /* 背景色 */
   border-radius: 3px; /* 角丸 */
@@ -266,7 +267,7 @@ p code {
 <!-- モーダル -->
 <div id="m_modal" class="m_modal"></div>
 	<div id="m_modal_bk" class="m_modal_bk">
-		<div id="m_contents">モーダル</div>
+		<div id="m_contents" class="m_markdown">モーダル</div>
 		<hr />
 		<button id="m_close">閉じる</button>
 		<button id="m_return">もどる</button>
