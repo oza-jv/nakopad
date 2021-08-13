@@ -141,16 +141,7 @@ video {
   visibility: visible;
 }
 
-p code, li code {
-  display: inline-block;
-  padding: 0.1em 0.25em; /* 文字周りの余白 */
-  color: #444; /* 文字色 */
-  background-color: #e7edf3; /* 背景色 */
-  border-radius: 3px; /* 角丸 */
-  border: solid 1px #d6dde4; /* 枠線 */
-}
-
-pre code{
+pre {
   margin: 1em 0;
   padding: 1em;
   border-radius: 5px;
@@ -158,6 +149,17 @@ pre code{
   color: #fff;
   overflow-x: auto; /* ⭐ */
   -webkit-overflow-scrolling: touch; /* ⭐ */
+}
+
+pre code { }
+
+p code, li code {
+  display: inline-block;
+  padding: 0.1em 0.25em; /* 文字周りの余白 */
+  color: #444; /* 文字色 */
+  background-color: #e7edf3; /* 背景色 */
+  border-radius: 3px; /* 角丸 */
+  border: solid 1px #d6dde4; /* 枠線 */
 }
 
 </style>
