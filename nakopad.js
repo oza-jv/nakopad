@@ -388,8 +388,9 @@ const SAMPLE_LIST = [
 	{ value: './sample/sample-net04-weather2.txt', name: '双方向4 天気予報取得(2)' },
 	{ value: '', name: '--' },
 	{ value: './sample/nb00-default.txt',    name: '計測・制御0 なでしこボードを使う' },
-	{ value: './sample/nb01-test.txt',       name: '計測・制御1 基本動作' },
-	{ value: './sample/nb09-carsencer.txt',  name: '計測・制御9 衝突防止アラーム' }
+	{ value: './sample/nb01-test.txt',       name: '計測・制御1 基本動作テスト' },
+	{ value: './sample/nb08-carsensor-def.txt',  name: '計測・制御8 衝突防止ｱﾗｰﾑを作る' },
+	{ value: './sample/nb09-carsensor.txt',  name: '計測・制御9 衝突防止ｱﾗｰﾑ応用' }
 ];
 
 const nako3_init_samplelist = function () {
