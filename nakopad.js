@@ -242,6 +242,7 @@ const nako3_loaddefault= function (editor) {
 			.then((text) => {
 				editor.setValue( text, 1 );
 				nako3_scrtop();
+				document.title = fd + " - " + document.title;
 			})
 			.catch((e) => {
 				editor.setValue( defs , 1);
