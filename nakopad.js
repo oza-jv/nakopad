@@ -1,5 +1,6 @@
 // nadesiko init
 const LSKEY = "nakoedit";	// ローカルストレージの保存キー
+const TITLE = "なでしこパッド";	// documentのタイトル
 
 function nako3_run() {
 	if (typeof(navigator.nako3) === 'undefined' || editor === undefined) {
@@ -113,6 +114,7 @@ const nako3_loadls = function () {
 				editor.setValue(s, 1);
 				nako3_print("ローカルストレージに保存されているプログラムを読み込みました");
 				nako3_scrtop();
+				document.title = TITLE;
 			}
 		}
 	} catch(e) {
@@ -177,6 +179,8 @@ const nako3_loadfile= function () {
 				var s = baseName( f.name );
 				var fn = document.getElementById("nako3_filename");
 				fn.value = s;
+
+				makeTitle(f.name);
 			});
 			reader.readAsText(f);
 		}
@@ -208,6 +212,7 @@ const nako3_loadsample= function () {
 					nako3_clear(1);
 					nako3_print( s + " を読み込みました");
 					nako3_scrtop();
+					makeTitle(fname);
 				})
 				.catch(e => {
 					// fetchできない場合
@@ -222,35 +227,47 @@ const nako3_loadsample= function () {
 const nako3_loaddefault= function (editor) {
 	if (!editor) return;
 	try {
-		// パラメータでファイル名を指定したらsanpleフォルダ内から読み込む 2021.4.30
+		// パラメータでファイル名を指定したらsampleフォルダ内から読み込む 2021.4.30
 		var params = (new URL( document.location )).searchParams;
 		var fd = params.get('load');
+		var f = "";
+		var flag_title = 0;
+		
 		if( (fd === undefined) || (fd === null) ) {
-			var f = "./default.txt";
+			f = "./default.txt";
 		} else {
-			var f = "./sample/" + fd;
+			f = "./sample/" + fd;
+			flag_title = 1;
 		}
 		var defs =	"クジラを絵追加。\n「こんにちは、クジラです。よろしくね。」と声出す。\n";
+
 		fetch( f )
 			.then((data) => {
 				if (data.ok) {
 					return data.text();
 				} else {
+					//document.title = TITLE;
 					return Promise.reject(new Error('読み込み失敗'));
 				}
 			})
 			.then((text) => {
 				editor.setValue( text, 1 );
 				nako3_scrtop();
-				document.title = fd + " - " + document.title;
+				if (flag_title == 1) {
+					makeTitle(f);
+				} else {
+					makeTitle('');
+				}
 			})
 			.catch((e) => {
 				editor.setValue( defs , 1);
 				nako3_scrtop();
+				makeTitle('');
 			});
 	} catch(e) {
 		editor.setValue( defs , 1);
 		nako3_scrtop();
+		makeTitle('');
 	}
 }
 
@@ -284,6 +301,7 @@ const nako3_savefile= function () {
 		
 		nako3_print( "プログラムを保存しました。保存したファイルは，ダウンロードフォルダにあります。" );
 		//editor.focus();
+		makeTitle(fn);
 	} catch(e) {
 		nako3_print(e);
 	}
@@ -353,6 +371,21 @@ function baseName(str) {
 	if( base.lastIndexOf(".") != -1 )       
 		base = base.substring(0, base.lastIndexOf("."));
    return base;
+}
+
+// ファイル名を取得 2021/9/12
+function getFileName(str) {
+  var fname = new String('/' + str).substring(str.lastIndexOf('/') + 2); 
+  return fname;
+}
+
+// title文字列を生成 2021/9/12
+function makeTitle(fname) {
+  var title = TITLE;
+  if( fname != null ) {
+    title = getFileName(fname) + " -" + TITLE;
+  }
+  document.title = title;
 }
 
 // 「止める」ボタン…メディアの再生を停止
