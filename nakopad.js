@@ -382,8 +382,10 @@ function getFileName(str) {
 // title文字列を生成 2021/9/12
 function makeTitle(fname) {
   var title = TITLE;
-  if( fname != null ) {
+  if( fname != null && fname != '' ) {
     title = getFileName(fname) + " -" + TITLE;
+  } else {
+    title = TITLE;
   }
   document.title = title;
 }
@@ -420,6 +422,8 @@ const SAMPLE_LIST = [
 	{ value: './sample/sample-net02-tenki.txt',    name: '双方向2 天気予報取得(1)' },
 	{ value: './sample/sample-net03-pcr.txt',      name: '双方向3 PCR陽性者数取得' },
 	{ value: './sample/sample-net04-weather2.txt', name: '双方向4 天気予報取得(2)' },
+	{ value: './sample/jmooc-weather.txt',         name: '双方向5 JMOOC用 天気予報' },
+	{ value: './sample/wschat-2.txt',              name: '双方向6 簡易チャット' },
 	{ value: '', name: '--' },
 	{ value: './sample/nb00-default.txt',    name: '計測・制御0 なでしこボードを使う' },
 	{ value: './sample/nb01-test.txt',       name: '計測・制御1 基本動作テスト' },
