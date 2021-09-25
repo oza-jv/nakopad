@@ -52,21 +52,37 @@ const PluginHyouji = {
     return_none: true
   },
   
-  '表出力': { // @二次元配列をTABLEに変換して表示する。
+  '表出力': { // @二次元配列をTABLEに変換して表示する。 (#id)へ(配列)を(太さ)で
     type: 'func',
-    josi: [['を'],['で']],
+    josi: [['を'],['で'],['へ', 'に']],
     isVariableJosi: true,
     pure: true,
     fn: function (a, ...pID) {
       const sys = pID.pop();
-      if (!(a instanceof Array)) { throw new Error('『表列数』には配列を指定する必要があります。') }
+      if (!(a instanceof Array)) { throw new Error('『表出力』には配列を指定する必要があります。') }
+
+      // Elementの準備
+      const parent = sys.__v0['DOM親要素']
+      var te = document.createElement('table');
 
       let border = 0;
       let color = 'gray';
 
-      // 線の太さを取得する
+      // 可変長引数の処理
       if(  pID.length > 0 ) {
+        // 線の太さを取得する pID[0]
         if( !isNaN(pID[0]) ) border = Number(pID[0]);
+        
+        // 要素を指定した場合は，表を差し替える pID[1]
+        const el = pID[1];
+        if( el ) {
+          if( el.nodeName !== 'TABLE' ) {
+            throw new Error('『表出力』にはTABLEを指定する必要があります。') 
+          }
+          if (typeof el === 'string') { el = document.querySelector(el) }
+          
+          parent.removeChild(el);
+        }
       }
 
       // 行数取得
@@ -77,10 +93,6 @@ const PluginHyouji = {
       for (let i = 0; i < rows; i++) {
         if (a[i].length > cols) { cols = a[i].length }
       }
-
-      // Elementの準備
-      const parent = sys.__v0['DOM親要素']
-      var te = document.createElement('table');
 
       // 表を生成
       var data = [];
@@ -119,6 +131,23 @@ const PluginHyouji = {
       
       return `#${te.id} td`;
     }
+  },
+  
+  '引数確認': {
+    type: 'func',
+    josi: [['を'],['で'],['に']],
+    isVariableJosi: true,
+    pure: true,
+    fn: function (a, ...pID) {
+      const sys = pID.pop();
+      
+      if( pID.length > 0 ) {
+        console.log( `pID.length: ${pID.length}` );
+        for( let i = 0; i < pID.length; i++ ) {
+          console.log( `pID[${i}] = ${pID[i]} typeof: ${typeof(pID[i])}` );
+        }
+      }
+    }    
   },
   
   'クジラ': { type: 'const', value: './img/kujira.png' },
