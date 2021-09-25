@@ -62,11 +62,12 @@ const PluginHyouji = {
       if (!(a instanceof Array)) { throw new Error('『表出力』には配列を指定する必要があります。') }
 
       // Elementの準備
-      const parent = sys.__v0['DOM親要素']
+      const parent = sys.__v0['DOM親要素'];
       var te = document.createElement('table');
 
       let border = 0;
       let color = 'gray';
+      let el = null;
 
       // 可変長引数の処理
       if(  pID.length > 0 ) {
@@ -74,14 +75,15 @@ const PluginHyouji = {
         if( !isNaN(pID[0]) ) border = Number(pID[0]);
         
         // 要素を指定した場合は，表を差し替える pID[1]
-        const el = pID[1];
-        if( el ) {
-          if( el.nodeName !== 'TABLE' ) {
+        if( pID[1] ) {
+          el = pID[1];
+          if (typeof el === 'string') { el = document.querySelector('#' + el) }
+          if ( !el ) {
+            throw new Error('指定したElementが存在しません。') 
+          }
+          if ( el.nodeName !== 'TABLE' ) {
             throw new Error('『表出力』にはTABLEを指定する必要があります。') 
           }
-          if (typeof el === 'string') { el = document.querySelector(el) }
-          
-          parent.removeChild(el);
         }
       }
 
@@ -113,10 +115,15 @@ const PluginHyouji = {
       }
 
       // 表を出力
-      te.id = 'nadesi-dom-' + sys.__v0['DOM生成個数']
-      parent.appendChild(te);
-      sys.__v0['DOM生成個数']++;
-      return te;
+      if( !el ) {
+        te.id = 'nadesi-dom-' + sys.__v0['DOM生成個数']
+        parent.appendChild( te );
+        sys.__v0['DOM生成個数']++;
+      } else {
+        te.id = el.id;
+        parent.replaceChild( te, el );
+      }
+      return te.id;
     }
   },
   
@@ -124,12 +131,15 @@ const PluginHyouji = {
     type: 'func',
     josi: ['の'],
     pure: true,
-    fn: function (te, sys) {
-      if( te.nodeName !== 'TABLE' ) {
+    fn: function (el, sys) {
+     if (typeof el === 'string') { el = document.querySelector('#' + el) }
+     if ( !el ) {
+       throw new Error('指定したElementが存在しません。') 
+     }
+     if( el.nodeName !== 'TABLE' ) {
          throw new Error('『表セル』にはTABLEを指定する必要があります。') 
       }
-      
-      return `#${te.id} td`;
+      return `#${el.id} td`;
     }
   },
   
