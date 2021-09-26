@@ -169,7 +169,8 @@ const PluginHyouji = {
   '発車ベル': { type: 'const', value: './audio/se_maoudamashii_jingle03.mp3' },
   '陽性者数API': { type: 'const', value: './api/get_pcr_positive_daily.php' },
   '自分IP取得': { type: 'const', value: './api/ip.php' },		// 2021.6.12追加
-  'NPWSサーバ': { type: 'const', value: 'wss://a0tklsq8jk.execute-api.ap-northeast-1.amazonaws.com/prod' }		// 2021.9.20追加
+  'NPWSサーバ': { type: 'const', value: 'wss://a0tklsq8jk.execute-api.ap-northeast-1.amazonaws.com/prod' },		// 2021.9.20追加
+  '翻訳API': { type: 'const', value: 'https://3u3vc7vfz1.execute-api.ap-northeast-1.amazonaws.com/dev/translate' }		// 2021.9.26追加
 }
 
 // モジュールのエクスポート(必ず必要)
