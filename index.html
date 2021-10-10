@@ -182,17 +182,22 @@ table th, table td {
 		<div id="editor" style="height: 480px; width:100%; border:2px solid black;"></div>
 
 		<!-- ace.js editor -->
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script>
-		<script type="text/javascript" src="./nakopad.js?d=20210629"></script>
+		<!--script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script-->
+		<script type="text/javascript" src="./nakopad.js?d=20211010"></script>
+		<script src="./lib/ace.js"></script>
+		<script src="./lib/mode-nakopad_sh.js"></script>
+		<script src="./lib/theme-eclipse.js"></script>
 		<script>
 			// ace.js init
 			var editor = ace.edit("editor");
 			editor.setTheme("ace/theme/eclipse");
 			editor.setFontSize(16);
-			editor.getSession().setMode("ace/mode/text");
+			editor.getSession().setMode("ace/mode/nakopad_sh");
 			editor.getSession().setUseWrapMode(false);
 			editor.getSession().setTabSize(4);
-			editor.setOption("showInvisibles", false)
+			editor.setOptions({
+				showInvisibles: false
+			});
 		</script>
 
 		<!-- ObjectURLの実装テスト -->
@@ -264,7 +269,7 @@ table th, table td {
 
 <!-- footer -->
 <div class="footer">
-	<div>学習用なでしこパッド v1.51  (2021/9/25)　<a href="https://www.manabu-tech.net/category/nakopad/" target="_blank" rel="noopener noreferrer">更新履歴</a></div>
+	<div>学習用なでしこパッド v1.52  (2021/10/10)　<a href="https://www.manabu-tech.net/category/nakopad/" target="_blank" rel="noopener noreferrer">更新履歴</a></div>
 	<div>※<a href="https://nadesi.com/" target="_blank" rel="noopener noreferrer">日本語プログラミング言語「なでしこ」 v3.2.25</a> を利用しています。</div>
 	<div>※音素材は，<a href="https://maou.audio/" title="フリー音楽素材/魔王魂" target="_blank" rel="noopener noreferrer">フリー音楽素材/魔王魂</a>のものを使用しています。</div>
 	<div>※画像素材は，なでしこv1に同梱のもの を使用しています。</div>
