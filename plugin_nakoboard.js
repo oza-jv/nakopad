@@ -1,5 +1,6 @@
 /**
- * なでしこ3 追加プラグイン 2021/7/5  Ver1.01
+ * なでしこ3 追加プラグイン 2021/7/5   Ver.1.01
+ *                          2021/12/10 Ver.1.02 waitの調整
  * file : plugin_nakoboard.js
  * Chromeブラウザでなでしこボードを使うためのプラグイン。
  * なでしこv3.2.23以降の「!非同期モード」で実行するほうが正しく動作します。
@@ -11,7 +12,7 @@ let device;
 let ADval = 0;
 let USBconnected = 0;  // 処理可＝1，不可＝０
 let outputReport = new Uint8Array(64);
-const WAIT_SEC = 0.4;    // 処理を待機する秒数
+const WAIT_SEC = 0.5;    // 処理を待機する秒数
 
 /*---------------------------------------------
    なでしこボード用の関数群
@@ -233,7 +234,7 @@ const PluginNakoBoard = {
         }
 
         if( sec < 0 ) sec = 0;
-        if( sec > 2 ) sec = 2;  // 最大２秒にする
+        if( sec > 5 ) sec = 5;  // 最大5秒にする
 
         // beep
         const beep_turnon = () => {

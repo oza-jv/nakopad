@@ -3,6 +3,7 @@
  *                          2021/ 3/20  v1.3 audioタグ関係を修正
  *                          2021/ 3/20  v1.4 助詞の追加
  *                          2021/ 7/16  v1.5 非同期モードでのWAITを追加
+ *                          2021/12/10  v1.6 エラー表示処理を修正
  * file : plugin_media.js
  * 音声，静止画，動画を表示・再生するためのプラグイン
  * ローカルのファイルも扱える
@@ -43,7 +44,7 @@ const PluginMedia = {
         return img.id;
      } catch(e) {
         // エラーを表示
-        window.alert('絵追加 ' + e.message);
+        throw new Error('絵追加 ' + e.message);
         return -1;
      }
     }
@@ -65,7 +66,7 @@ const PluginMedia = {
         }
       } catch(e) {
         // エラーを表示
-        window.alert('絵読込 ' + e.message);
+        throw new Error('絵読込 ' + e.message);
         return -1;
       }
     }
@@ -83,7 +84,7 @@ const PluginMedia = {
         audio.src = aSrc;
       } catch(e) {
         // エラーを表示
-        window.alert('音読込 ' + e.message);
+        throw new Error('音読込 ' + e.message);
         return -1;
       }
     }
@@ -114,7 +115,7 @@ const PluginMedia = {
         return audio.id;
      } catch(e) {
         // エラーを表示
-        window.alert('音追加 ' + e.message);
+        throw new Error('音追加 ' + e.message);
         return -1;
      }
     }
@@ -137,7 +138,7 @@ const PluginMedia = {
         }
       } catch(e) {
         // エラーを表示
-        window.alert('音再生 ' + e.message);
+        throw new Error('音再生 ' + e.message);
         return -1;
       }
     }
@@ -159,7 +160,7 @@ const PluginMedia = {
         }
       } catch(e) {
         // エラーを表示
-        window.alert('音再開 ' + e.message);
+        throw new Error('音再開 ' + e.message);
         return -1;
       }
     }
@@ -181,7 +182,7 @@ const PluginMedia = {
         }
       } catch(e) {
         // エラーを表示
-        window.alert('音停止 ' + e.message);
+        throw new Error('音停止 ' + e.message);
         return -1;
       }
     }
@@ -207,7 +208,7 @@ const PluginMedia = {
         }
       } catch(e) {
         // エラーを表示
-        window.alert('動画読込 ' + e.message);
+        throw new Error('動画読込 ' + e.message);
         return -1;
       }
     }
@@ -247,7 +248,7 @@ const PluginMedia = {
         return video.id;
      } catch(e) {
         // エラーを表示
-        window.alert('動画追加 ' + e.message);
+        throw new Error('動画追加 ' + e.message);
         return -1;
      }
     }
@@ -270,7 +271,7 @@ const PluginMedia = {
         }
       } catch(e) {
         // エラーを表示
-        window.alert('動画再生 ' + e.message);
+        throw new Error('動画再生 ' + e.message);
         return -1;
       }
     }
@@ -292,7 +293,7 @@ const PluginMedia = {
         }
       } catch(e) {
         // エラーを表示
-        window.alert('動画停止 ' + e.message);
+        throw new Error('動画停止 ' + e.message);
         return -1;
       }
     }
@@ -314,7 +315,7 @@ const PluginMedia = {
         }
       } catch(e) {
         // エラーを表示
-        window.alert('動画再開 ' + e.message);
+        throw new Error('動画再開 ' + e.message);
         return -1;
       }
     }

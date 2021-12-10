@@ -1,0 +1,11 @@
+!非同期モード
+API＝「https://dog.ceo/api/breeds/image/random」。
+APIからAJAX受信。
+
+対象をJSONデコードして利用データに代入。
+
+利用データを反復
+　　「{対象キー}:{対象}」を表示。
+ここまで。
+
+利用データ["message"]を絵追加。
