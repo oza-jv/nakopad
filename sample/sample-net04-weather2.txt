@@ -7,6 +7,7 @@
 地域コード＝「140010」。
 API＝「https://weather.tsukumijima.net/api/forecast?city=」＆地域コード。
 APIからAJAX受信。
+//対象を表示。
 
 // (2) 受信したデータを利用しやすい形式に解析する
 対象をJSONデコードして利用データに代入。
@@ -15,10 +16,24 @@ APIからAJAX受信。
 利用データ["title"]を青色で表示。  // 地域名
 改行作成。
 
-時期＝0。                                                  // 0-今日,1-明日,2-明後日
+時期＝1。                                                  // 0-今日,1-明日,2-明後日
 利用データ["forecasts"][時期]["dateLabel"]を表示。         // 「今日」「明日」「明後日」
 利用データ["forecasts"][時期]["telop"]を表示。             // もっとも簡単な天気予報
-利用データ["forecasts"][時期]["detail"]["weather"]を表示。 // 予報の詳細
 利用データ["forecasts"][時期]["image"]["url"]を絵追加。    // 画像のURLを取得して表示
 改行作成。
-利用データ["forecasts"][時期]["description"]["headlineText"]を表示。  // 天気概況
+利用データ["forecasts"][時期]["detail"]["weather"]を表示。 // 予報の詳細
+利用データ["forecasts"][時期]["detail"]["wind"]を表示。    // 風の強さ
+利用データ["forecasts"][時期]["detail"]["wave"]を表示。    // 波の高さ
+利用データ["forecasts"][時期]["temperature"]["max"]["celsius"]を表示。    // 最高気温
+利用データ["forecasts"][時期]["temperature"]["min"]["celsius"]を表示。    // 最低気温
+利用データ["forecasts"][時期]["chanceOfRain"]["T00_06"]を表示。    // 降水確率0-6時
+利用データ["forecasts"][時期]["chanceOfRain"]["T06_12"]を表示。    // 降水確率6-12時
+利用データ["forecasts"][時期]["chanceOfRain"]["T12_18"]を表示。    // 降水確率12-18時
+利用データ["forecasts"][時期]["chanceOfRain"]["T18_24"]を表示。    // 降水確率18-24時
+利用データ["description"]["text"]を表示。                  // 天気概況
+
+文章＝利用データ["title"]＆「。」。
+文章＝文章＆利用データ["forecasts"][時期]["dateLabel"]＆「。」。
+文章＝文章＆利用データ["forecasts"][時期]["detail"]["weather"]＆「。」。
+文章＝文章＆「最高気温は」＆利用データ["forecasts"][時期]["temperature"]["max"]["celsius"]＆「度です。」。
+文章を声出す。

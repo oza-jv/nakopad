@@ -111,9 +111,7 @@ const nako3_loadls = function () {
 			if (c) {
 				nako3_clear(1);
 				s = "" + s;
-				editor.setValue(s);
-				editor.setCursor(0);
-				editor.clearHistory();
+				editor.setValue(s, 1);
 				nako3_print("ローカルストレージに保存されているプログラムを読み込みました");
 				nako3_scrtop();
 				document.title = TITLE;
@@ -172,9 +170,7 @@ const nako3_loadfile= function () {
 		if (c) {
 			const reader = new FileReader();
 			reader.addEventListener('load', (event) => {
-				editor.setValue( event.target.result );
-				editor.setCursor(0);
-				editor.clearHistory();
+				editor.setValue( event.target.result, 1 );
 				nako3_clear(2);
 				nako3_print( f.name + " を読み込みました");
 				nako3_scrtop();
@@ -212,9 +208,7 @@ const nako3_loadsample= function () {
 					}
 				})
 				.then((text) => {
-					editor.setValue( text );
-					editor.setCursor(0);
-					editor.clearHistory();
+					editor.setValue( text, 1 );
 					nako3_clear(1);
 					nako3_print( s + " を読み込みました");
 					nako3_scrtop();
@@ -257,9 +251,7 @@ const nako3_loaddefault= function (editor) {
 				}
 			})
 			.then((text) => {
-				editor.setValue( text );
-				editor.setCursor(0);
-				editor.clearHistory();
+				editor.setValue( text, 1 );
 				nako3_scrtop();
 				if (flag_title == 1) {
 					makeTitle(f);
@@ -268,16 +260,12 @@ const nako3_loaddefault= function (editor) {
 				}
 			})
 			.catch((e) => {
-				editor.setValue( defs );
-				editor.setCursor(0);
-				editor.clearHistory();
+				editor.setValue( defs , 1);
 				nako3_scrtop();
 				makeTitle('');
 			});
 	} catch(e) {
-		editor.setValue( defs );
-		editor.setCursor(0);
-		editor.clearHistory();
+		editor.setValue( defs , 1);
 		nako3_scrtop();
 		makeTitle('');
 	}
@@ -326,10 +314,8 @@ const nako3_getObjURL= function () {
 		const f = document.getElementById("load_media").files[0];
 		if (!f) return;
 
-		var cur = editor.getCursor();
-
 		objURL = URL.createObjectURL( f );
-		editor.replaceRange("「" + objURL + "」", {line:cur.line, ch:cur.ch} );	// カーソル位置にObjectURLを挿入
+		editor.insert("「" + objURL + "」");	// カーソル位置にObjectURLを挿入
 		editor.focus();
 	} catch(e) {
 		nako3_print(e);
@@ -459,7 +445,6 @@ const nako3_init_samplelist = function () {
 // プログラムを消すボタンを設置 21.3.21
 const nako3_clear_edit = function () {
 	editor.setValue('');
-	editor.clearHistory();
 	editor.focus();
 }
 
@@ -536,7 +521,7 @@ function nako3_scrtop() {
 	// UserAgentからのスマホ判定
 	if (!(navigator.userAgent.match(/iPhone|Android.+Mobile/))) {
 		editor.focus();
-		editor.setCursor(0);
+		editor.gotoLine(1);
 	}
 }
 
