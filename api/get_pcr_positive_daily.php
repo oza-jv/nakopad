@@ -20,8 +20,9 @@
       continue;
     }
 
-    if( $tmp[1] != "ALL" ) continue;
-    echo $tmp[0] . "," . $tmp[2] . "\n";
+    // 2021.12.10 csvの内容が変わっていたので対応
+    //if( $tmp[1] != "ALL" ) continue;
+    echo $tmp[0] . "," . $tmp[1] . "\n";
   }
 ?>
 

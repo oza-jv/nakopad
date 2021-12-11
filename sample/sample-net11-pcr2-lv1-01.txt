@@ -4,6 +4,6 @@
 // （データは厚生労働省のオープンデータを利用）
 
 // ネットワーク通信を利用してデータを受信する
-API＝「./api/get_pcr_positive_daily2.php」。
+API＝「./api/get_pcr_positive_daily.php」。
 APIからAJAX受信。
 対象を表示。
