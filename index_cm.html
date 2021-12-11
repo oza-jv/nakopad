@@ -28,6 +28,7 @@
 <script src="../codemirror/lib/codemirror.js"></script>
 <script src="../codemirror/mode/javascript/javascript.js"></script>
 <script src="../codemirror/addon/selection/active-line.js"></script>
+<script src="../codemirror/addon/mode/simple.js"></script>
 
 <!-- 独自スタイル定義 -->
 <link rel="stylesheet" href="./nakopad.css">
@@ -65,9 +66,27 @@
 		<!-- codemirror -->
 		<textarea id="editor"></textarea>
 		<script type="text/javascript">
+		    CodeMirror.defineSimpleMode("nadesiko", {
+			  start: [
+			    {regex: /"(?:[^\\]|\\.)*?(?:"|$)/, token: "string"},
+			    {regex: /'(?:[^\\]|\\.)*?(?:'|$)/, token: "string"},
+			    {regex: /「(?:[^\\]|\\.)*?(?:」|$)/, token: "string"},
+			    {regex: /^\/\/.*/, token: "comment"},
+			    {regex: /\/\*/, token: "comment", next: "comment"},
+			  ],
+			  comment: [
+			    {regex: /.*?\*\//, token: "comment", next: "start"},
+			    {regex: /.*/, token: "comment"}
+			  ],
+			  meta: {
+			      dontIndentStates: ["comment"],
+			      lineComment: "//"
+			  }
+			});
+
 		    var editor = CodeMirror.fromTextArea(document.getElementById("editor"),
 		    {
-		        mode:"javascript",  // 言語を設定する
+		        mode:"nadesiko",  // 言語を設定する
 		        lineNumbers: true,  // 行番号を表示する
 		        lineWrapping: false,    // 行を折り返す
 		        lineWiseCopyCut: false,
@@ -77,6 +96,7 @@
 		        dragDrop: false
 		    });
 		    editor.setSize("100%", 480);
+		    
 		</script>
 
 		<!-- ObjectURLの実装テスト -->
