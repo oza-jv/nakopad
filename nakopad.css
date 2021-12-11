@@ -142,14 +142,8 @@ table th, table td {
   
 }
 
-@font-face {
-  font-family: 'plemoljp';
-  src: url('./PlemolJP-Text.ttf');
-  //src: url('./PlemolJP-Medium.ttf');
-  //src: url('./RictyDiminishedDiscord-Regular.ttf');
+.CodeMirror {
+    font-size: 12pt;
+    border: 2px solid black;
 }
-
-//#editor {
-//  font-family: 'plemoljp';
-//}
 
