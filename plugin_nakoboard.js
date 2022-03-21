@@ -12,7 +12,7 @@ let device;
 let ADval = 0;
 let USBconnected = 0;  // 処理可＝1，不可＝０
 let outputReport = new Uint8Array(64);
-const WAIT_SEC = 0.5;    // 処理を待機する秒数
+const WAIT_SEC = 0.4;    // 処理を待機する秒数
 
 /*---------------------------------------------
    なでしこボード用の関数群
@@ -505,6 +505,10 @@ const PluginNakoBoard = {
       
       ChkHIDItem();
       if( USBconnected == 1 ) {
+          // ちょっと待つことで正常に動作させる。
+          sys.async = true;
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+
         // ビット列生成
         if( s.charAt(0) != '0' ) st |= 0x80;
         if( s.charAt(1) != '0' ) st |= 0x40;
@@ -538,6 +542,10 @@ const PluginNakoBoard = {
 
         ChkHIDItem();
         if( USBconnected == 1 ) {
+          // ちょっと待つことで正常に動作させる。
+          sys.async = true;
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+
           async function WaitForInput() {
             try {
               outputReport[0] = 'A'.charCodeAt(0);
@@ -551,10 +559,6 @@ const PluginNakoBoard = {
             }
           }
           WaitForInput();
-
-          // ちょっと待つことで正常に動作させる。
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
         }
       }
     }
@@ -573,6 +577,10 @@ const PluginNakoBoard = {
 
         ChkHIDItem();
         if( USBconnected == 1 ) {
+          // ちょっと待つことで正常に動作させる。
+          sys.async = true;
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+
           async function WaitForInput() {
             try {
               outputReport[0] = 'a'.charCodeAt(0);
@@ -586,10 +594,6 @@ const PluginNakoBoard = {
             }
           }
           WaitForInput();
-
-          // ちょっと待つことで正常に動作させる。
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
         }
       }
     }
@@ -608,6 +612,10 @@ const PluginNakoBoard = {
 
         ChkHIDItem();
         if( USBconnected == 1 ) {
+          // ちょっと待つことで正常に動作させる。
+          sys.async = true;
+          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+
           async function WaitForInput() {
             try {
               outputReport[0] = 'z'.charCodeAt(0);
@@ -621,10 +629,6 @@ const PluginNakoBoard = {
             }
           }
           WaitForInput();
-
-          // ちょっと待つことで正常に動作させる。
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
         }
       }
     }
@@ -686,7 +690,13 @@ const PluginNakoBoard = {
       sys.__exec('Bセット', ['0000', sys]);
 
       // ストックされている命令を停止
-      if (sys.__genMode == '非同期モード') { sys.__stopAsync(sys); }
+      if (sys.__genMode == '非同期モード') {
+        sys.__stopAsync(sys);
+
+        // ちょっと待つことで正常に動作させる。
+        sys.async = true;
+        setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+      }
     }
   }
 

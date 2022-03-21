@@ -3,7 +3,8 @@
 	mb_internal_encoding('UTF-8');
 	header('Content-Type: text/plain; charset=UTF-8');
 	// 郵便番号を取得
-	$result = file_get_contents('http://zip.cgis.biz/xml/zip.php?zn='.$_GET['zip']);
+	$zip = substr('0000000' . $_GET['zip'] , -7);
+	$result = file_get_contents('http://zip.cgis.biz/xml/zip.php?zn='.$zip);
 
 	$x = simplexml_load_string( $result );
 	//print_r( $x );

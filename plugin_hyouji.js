@@ -165,10 +165,24 @@ const PluginHyouji = {
   'ペンギン': { type: 'const', value: './img/penguin.gif' },
   '黒クジラ': { type: 'const', value: './img/kujira-bk.png' },
   'ピンポン': { type: 'const', value: './audio/se_maoudamashii_chime13.mp3' },
-  'ブブー': { type: 'const', value: './audio/se_maoudamashii_onepoint32.mp3' },
+  'ブブー':   { type: 'const', value: './audio/se_maoudamashii_onepoint32.mp3' },
   '発車ベル': { type: 'const', value: './audio/se_maoudamashii_jingle03.mp3' },
+  'ポコ':     { type: 'const', value: './audio/poka.mp3' },
+  '効果音1' : { type: 'const', value: './audio/se_maoudamashii_system49.mp3' },
+  '効果音2' : { type: 'const', value: './audio/se_maoudamashii_system05.mp3' },
+  '効果音3' : { type: 'const', value: './audio/se_maoudamashii_system10.mp3' },
+  '効果音4' : { type: 'const', value: './audio/se_maoudamashii_system23.mp3' },
+  '効果音5' : { type: 'const', value: './audio/se_maoudamashii_system25.mp3' },
+  '効果音6' : { type: 'const', value: './audio/se_maoudamashii_system27.mp3' },
+  '効果音7' : { type: 'const', value: './audio/se_maoudamashii_system28.mp3' },
+  '効果音8' : { type: 'const', value: './audio/se_maoudamashii_system29.mp3' },
+  '効果音9' : { type: 'const', value: './audio/se_maoudamashii_system38.mp3' },
+  '効果音10': { type: 'const', value: './audio/se_maoudamashii_system39.mp3' },
+  '効果音11': { type: 'const', value: './audio/se_maoudamashii_system41.mp3' },
+  '効果音12': { type: 'const', value: './audio/se_maoudamashii_system43.mp3' },
+  '効果音13': { type: 'const', value: './audio/se_maoudamashii_system46.mp3' },
+  '効果音14': { type: 'const', value: './audio/se_maoudamashii_system47.mp3' },
   '陽性者数API': { type: 'const', value: './api/get_pcr_positive_daily.php' },
-  '自分IP取得': { type: 'const', value: './api/ip.php' },		// 2021.6.12追加
   'NPWSサーバ': { type: 'const', value: 'wss://a0tklsq8jk.execute-api.ap-northeast-1.amazonaws.com/prod' },		// 2021.9.20追加
   '翻訳API': { type: 'const', value: 'https://3u3vc7vfz1.execute-api.ap-northeast-1.amazonaws.com/dev/translate' }		// 2021.9.26追加
 }

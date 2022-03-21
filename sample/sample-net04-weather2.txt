@@ -1,16 +1,12 @@
-!非同期モード
 // ネットワーク通信を利用して天気予報を取得するサンプル
 //  ※データは天気予報API(https://weather.tsukumijima.net/)を利用して作成。
 //  ※都市番号は，地点定義表 https://weather.tsukumijima.net/primary_area.xmlで確認する。
 
-// (1) データ(JSON形式)を受信する
+// (1) データ(JSON形式)を受信して
+// (2) 受信したデータを利用しやすい形式に解析する
 地域コード＝「140010」。
 API＝「https://weather.tsukumijima.net/api/forecast?city=」＆地域コード。
-APIからAJAX受信。
-//対象を表示。
-
-// (2) 受信したデータを利用しやすい形式に解析する
-対象をJSONデコードして利用データに代入。
+利用データ＝APIからAJAX_JSON取得。
 
 // (3) 解析したデータを利用する
 利用データ["title"]を青色で表示。  // 地域名

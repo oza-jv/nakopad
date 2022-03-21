@@ -1,0 +1,5 @@
+絵１＝「/kt/seikai.png」を絵追加。
+絵２＝「/kt/matigai.png」を絵追加。
+
+音＝「/kt/yattane.mp3」を音追加。
+音を音再生。

@@ -353,6 +353,38 @@ const PluginMedia = {
     }
   },
 
+  'カメラ表示': { // @id=aIDのvideo要素にカメラの映像を映す // @カメラオン
+    type: 'func',
+    josi: [['に']],
+    return_none: false,
+    fn: function (aID, sys) {
+      try {
+        const video = document.querySelector("#" +	 aID);
+
+        // カメラ映像取得
+        navigator.mediaDevices.getUserMedia({video: true, audio: true})
+          .then( stream => {
+          // 成功時にvideo要素にカメラ映像をセットし、再生
+          video.srcObject = stream;
+          video.play();
+          // 着信時に相手にカメラ映像を返せるように、グローバル変数に保存しておく
+
+          // 非同期モードでのWAITを追加
+          if (sys.__genMode == '非同期モード') {
+            sys.async = true;
+            setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
+          }
+
+          return stream;
+        });
+      } catch(e) {
+        // エラーを表示
+        throw new Error('カメラ表示 ' + e.message);
+        return -1;
+      }
+    }
+  },
+
    
   // --- 文字関係 ---
   '書': {
