@@ -4,25 +4,23 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<title>学習用なでしこパッド</title>
-</head>
-
 <body>
 <!-- なでしこ3のエンジンを取り込み -->
-<script type="text/javascript" src="https://nadesi.com/v3/cdn.php?v=3.2.44&f=release/wnako3.js?v=3.2.44"></script>
+<script type="text/javascript" src="https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/wnako3.js?v=3.3.61"></script>
 <!-- プラグインを取り込み -->
-<script defer src='https://nadesi.com/v3/cdn.php?v=3.2.44&f=release/plugin_csv.js'></script>
-<script defer src='https://nadesi.com/v3/cdn.php?v=3.2.44&f=release/plugin_datetime.js'></script>
-<script defer src='https://nadesi.com/v3/cdn.php?v=3.2.44&f=release/plugin_markup.js'></script>
-<script defer src='https://nadesi.com/v3/cdn.php?v=3.2.44&f=release/plugin_kansuji.js'></script>
-<script defer src='https://nadesi.com/v3/cdn.php?v=3.2.44&f=release/plugin_turtle.js'></script>
-<script defer src='https://nadesi.com/v3/cdn.php?v=3.2.44&f=release/nako_gen_async.js'></script>
+<script defer src='https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/plugin_csv.js'></script>
+<script defer src='https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/plugin_datetime.js'></script>
+<script defer src='https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/plugin_markup.js'></script>
+<script defer src='https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/plugin_kansuji.js'></script>
+<script defer src='https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/plugin_turtle.js'></script>
+<script defer src='https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/nako_gen_async.js'></script>
 <script defer src='https://cdn.jsdelivr.net/npm/chart.js@3.3.0/dist/chart.min.js'></script>
 <script type="text/javascript" src="./plugin_media.js"></script>
 <script type="text/javascript" src="./plugin_hyouji.js"></script>
 <script type="text/javascript" src="./plugin_speak.js"></script>
 <script type="text/javascript" src="./plugin_nakoboard.js"></script>
-<script src="https://cdn.webrtc.ecl.ntt.com/skyway-4.4.3.js"></script>
-<script type="text/javascript" src="./plugin_mesh.js"></script>
+<!--script src="https://cdn.webrtc.ecl.ntt.com/skyway-4.4.3.js"></script-->
+<!--script type="text/javascript" src="./plugin_mesh.js"></script-->
 <script type="text/javascript" src="./nakopad.js?d=20211211"></script>
 
 <link rel="stylesheet" href="../codemirror/lib/codemirror.css">
@@ -68,12 +66,15 @@
 		    {
 		        mode:"nadesiko",        // 言語を設定する
 		        lineNumbers: true,      // 行番号を表示する
-		        lineWrapping: false,    // 行を折り返す
+		        lineWrapping: false,    // 行を折り返さない
 		        lineWiseCopyCut: false, // 非選択時の行コピーを禁止
 		        theme: "eclipse",       // テーマ
 		        styleActiveLine: true,  // アクティブラインを反転
 		        matchBrackets: true,
 		        dragDrop: false,        // ドラッグドロップを禁止
+		        indentUnit: 4,
+		        smartIndent: true,
+		        tabSize: 4,        
 		        readOnly: false         // 読み書きを許可
 		    });
 		    editor.setSize("100%", 480);
@@ -144,8 +145,8 @@
 
 <!-- footer -->
 <div class="footer">
-	<div>学習用なでしこパッド v1.61 (2022/3/21)　<a href="https://www.manabu-tech.net/category/nakopad/" target="_blank" rel="noopener noreferrer">更新履歴</a></div>
-	<div>※<a href="https://nadesi.com/" target="_blank" rel="noopener noreferrer">日本語プログラミング言語「なでしこ」 v3.2.44</a> を利用しています。</div>
+	<div>学習用なでしこパッド v1.64 (2022/8/27)　<a href="https://www.manabu-tech.net/category/nakopad/" target="_blank" rel="noopener noreferrer">更新履歴</a></div>
+	<div>※<a href="https://nadesi.com/" target="_blank" rel="noopener noreferrer">日本語プログラミング言語「なでしこ」 v3.3.61</a> を利用しています。</div>
 	<div>※音素材は，<a href="https://maou.audio/" title="フリー音楽素材/魔王魂" target="_blank" rel="noopener noreferrer">フリー音楽素材/魔王魂</a>のものを使用しています。</div>
 	<div>※画像素材は，なでしこv1に同梱のもの を使用しています。</div>
 	<div>お問い合わせ先 : web (あっとまーく) manabu-tech.net</div>

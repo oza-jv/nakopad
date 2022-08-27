@@ -4,6 +4,7 @@
  *                          2021/ 3/20  v1.4 助詞の追加
  *                          2021/ 7/16  v1.5 非同期モードでのWAITを追加
  *                          2021/12/10  v1.6 エラー表示処理を修正
+ *                          2022/ 8/27  v1.7 v3.3以降のasyncFnに対応
  * file : plugin_media.js
  * 音声，静止画，動画を表示・再生するためのプラグイン
  * ローカルのファイルも扱える
@@ -12,6 +13,7 @@
  */
 
 const WAIT_SEC_md = 0.4;    // 処理を待機する秒数
+console.log('plugin_media');
 
 const PluginMedia = {
   // --- 画像関係 ---
@@ -22,7 +24,9 @@ const PluginMedia = {
     josi: [['の', 'を'],['へ', 'に']],
     isVariableJosi: true,
     return_none: false,
-    fn: function (aPic, ...pID) {
+    asyncFn: true,
+    
+    fn: async function (aPic, ...pID) {
       try {
         const sys = pID.pop();
         var parent = sys.__v0['DOM親要素'];
@@ -31,19 +35,14 @@ const PluginMedia = {
         };
         const img = document.createElement('img');
         img.src = aPic;
-        img.id = 'nadesi-dom-' + sys.__v0['DOM生成個数'];
+        img.id = 'nadesi-dom-' + sys.__v0['DOM部品個数'];
         parent.appendChild(img);
-        sys.__v0['DOM生成個数']++;
+        sys.__v0['DOM部品個数']++;
 
-        // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-        }
-        
         return img.id;
      } catch(e) {
         // エラーを表示
+        nako3_print("==ERROR==[実行時エラー]絵追加 " + e.message + "");
         throw new Error('絵追加 ' + e.message);
         return -1;
      }
@@ -54,19 +53,17 @@ const PluginMedia = {
     type: 'func',
     josi: [['に'],['を']],
     return_none: true,
-    fn: function (aID, aPic, sys) {
+    asyncFn: true,
+    
+    fn: async function (aID, aPic, sys) {
       try {
         const parent = document.querySelector("#" + aID);
         parent.src = aPic;
 
-        // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-        }
       } catch(e) {
         // エラーを表示
-        throw new Error('絵読込 ' + e.message);
+        nako3_print("==ERROR==[実行時エラー]絵読込 " + e.message + "");
+        throw new Error('==ERROR==絵読込 ' + e.message);
         return -1;
       }
     }
@@ -78,12 +75,15 @@ const PluginMedia = {
     type: 'func',
     josi: [['に'],['を']],
     return_none: true,
-    fn: function (aID, aSrc, sys) {
+    asyncFn: true,
+
+    fn: async function (aID, aSrc, sys) {
       try {
         const audio = document.querySelector("#" + aID);
         audio.src = aSrc;
       } catch(e) {
         // エラーを表示
+        nako3_print("==ERROR==[実行時エラー]音読込 " + e.message + "");
         throw new Error('音読込 ' + e.message);
         return -1;
       }
@@ -98,7 +98,10 @@ const PluginMedia = {
     josi: [['の', 'を'],['へ', 'に']],
     isVariableJosi: true,
     return_none: false,
-    fn: function (aSrc, ...pID) {
+    pure: true,
+    asyncFn: true,
+
+    fn: async function (aSrc, ...pID) {
       try {
         const sys = pID.pop();
         // var parent = document.body;
@@ -109,12 +112,14 @@ const PluginMedia = {
         const audio = document.createElement('audio');
         audio.src = aSrc;
         audio.classList.add('media');
-        audio.id = 'nadesi-dom-' + sys.__v0['DOM生成個数'];
+        audio.id = 'nadesi-dom-' + sys.__v0['DOM部品個数'];
         parent.appendChild(audio);
-        sys.__v0['DOM生成個数']++;
+        sys.__v0['DOM部品個数']++;
         return audio.id;
+        
      } catch(e) {
         // エラーを表示
+        nako3_print("==ERROR==[実行時エラー]音追加 " + e.message + "");
         throw new Error('音追加 ' + e.message);
         return -1;
      }
@@ -125,19 +130,18 @@ const PluginMedia = {
     type: 'func',
     josi: [['の', 'を']],
     return_none: true,
-    fn: function (aID, sys) {
+    pure: true,
+    asyncFn: true,
+
+    fn: async function (aID, sys) {
       try {
         const audio = document.querySelector("#" + aID);
         audio.currentTime = 0;
-        audio.play();
+        await audio.play();
 
-        // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-        }
       } catch(e) {
         // エラーを表示
+        nako3_print("==ERROR==[実行時エラー]音再生 " + e.message + "");
         throw new Error('音再生 ' + e.message);
         return -1;
       }
@@ -148,18 +152,16 @@ const PluginMedia = {
     type: 'func',
     josi: [['の', 'を']],
     return_none: true,
-    fn: function (aID, sys) {
+    asyncFn: true,
+
+    fn: async function (aID, sys) {
       try {
         const audio = document.querySelector("#" + aID);
-        audio.play();
+        await audio.play();
 
-        // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-        }
       } catch(e) {
         // エラーを表示
+        nako3_print("==ERROR==[実行時エラー]音再開 " + e.message + "");
         throw new Error('音再開 ' + e.message);
         return -1;
       }
@@ -170,18 +172,16 @@ const PluginMedia = {
     type: 'func',
     josi: [['の', 'を']],
     return_none: true,
-    fn: function (aID, sys) {
+    asyncFn: true,
+
+    fn: async function (aID, sys) {
       try {
         const audio = document.querySelector("#" + aID);
-        audio.pause();
+        await audio.pause();
 
-        // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md* 1000);
-        }
       } catch(e) {
         // エラーを表示
+        nako3_print("==ERROR==[実行時エラー]音停止 " + e.message + "");
         throw new Error('音停止 ' + e.message);
         return -1;
       }
@@ -194,20 +194,18 @@ const PluginMedia = {
     type: 'func',
     josi: [['に'],['を']],
     return_none: true,
-    fn: function (aID, aSrc, sys) {
+    asyncFn: true,
+
+    fn: async function (aID, aSrc, sys) {
       try {
         const video = document.querySelector("#" + aID);
         video.playsinline = true;
         video.muted = true;    // chromeではmutedがtrueでないと再生できない
         video.src = aSrc;
 
-        // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-        }
       } catch(e) {
         // エラーを表示
+        nako3_print("==ERROR==[実行時エラー]動画読込 " + e.message + "");
         throw new Error('動画読込 ' + e.message);
         return -1;
       }
@@ -221,7 +219,9 @@ const PluginMedia = {
     josi: [['の', 'を'],['へ', 'に']],
     isVariableJosi: true,
     return_none: false,
-    fn: function (aSrc, ...pID) {
+    asyncFn: true,
+
+    fn: async function (aSrc, ...pID) {
       try {
         const sys = pID.pop();
         var parent = sys.__v0['DOM親要素'];
@@ -231,23 +231,18 @@ const PluginMedia = {
         const video = document.createElement('video');
         video.src = aSrc;
         video.classList.add('media');
-        video.id = 'nadesi-dom-' + sys.__v0['DOM生成個数'];
+        video.id = 'nadesi-dom-' + sys.__v0['DOM部品個数'];
         video.width = '320';
         video.controls = false;
         video.playsinline = true;
         video.muted = true;     // chromeではmutedがtrueでないと再生できない
         parent.appendChild(video);
-        sys.__v0['DOM生成個数']++;
-
-        // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-        }
+        sys.__v0['DOM部品個数']++;
 
         return video.id;
      } catch(e) {
         // エラーを表示
+        nako3_print("==ERROR==[実行時エラー]動画追加 " + e.message + "");
         throw new Error('動画追加 ' + e.message);
         return -1;
      }
@@ -258,19 +253,17 @@ const PluginMedia = {
     type: 'func',
     josi: [['の', 'を']],
     return_none: true,
-    fn: function (aID, sys) {
+    asyncFn: true,
+
+    fn: async function (aID, sys) {
       try {
         const video = document.querySelector("#" + aID);
         video.currentTime = 0;
-        video.play();
+        await video.play();
 
-        // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-        }
       } catch(e) {
         // エラーを表示
+        nako3_print("==ERROR==[実行時エラー]動画再生 " + e.message + "");
         throw new Error('動画再生 ' + e.message);
         return -1;
       }
@@ -281,18 +274,16 @@ const PluginMedia = {
     type: 'func',
     josi: [['の', 'を']],
     return_none: true,
-    fn: function (aID, sys) {
+    asyncFn: true,
+
+    fn: async function (aID, sys) {
       try {
         const video = document.querySelector("#" + aID);
-        video.pause();
+        await video.pause();
 
-        // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-        }
       } catch(e) {
         // エラーを表示
+        nako3_print("==ERROR==[実行時エラー]動画停止 " + e.message + "");
         throw new Error('動画停止 ' + e.message);
         return -1;
       }
@@ -303,18 +294,16 @@ const PluginMedia = {
     type: 'func',
     josi: [['の', 'を']],
     return_none: true,
-    fn: function (aID, sys) {
+    asyncFn: true,
+
+    fn: async function (aID, sys) {
       try {
         const video = document.querySelector("#" + aID);
-        video.play();
+        await video.play();
 
-        // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-        }
       } catch(e) {
         // エラーを表示
+        nako3_print("==ERROR==[実行時エラー]動画再開 " + e.message + "");
         throw new Error('動画再開 ' + e.message);
         return -1;
       }
@@ -325,15 +314,11 @@ const PluginMedia = {
     type: 'func',
     josi: [['の', 'を']],
     return_none: true,
-    fn: function (aID, sys) {
+    asyncFn: true,
+
+    fn: async function (aID, sys) {
       const video = document.querySelector("#" + aID);
       video.muted = false;
-
-        // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-        }
     }
   },
 
@@ -341,47 +326,11 @@ const PluginMedia = {
     type: 'func',
     josi: [['の']],
     return_none: true,
-    fn: function (aID, sys) {
+    asyncFn: true,
+
+    fn: async function (aID, sys) {
       const video = document.querySelector("#" + aID);
       video.muted = true;
-
-        // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-        }
-    }
-  },
-
-  'カメラ表示': { // @id=aIDのvideo要素にカメラの映像を映す // @カメラオン
-    type: 'func',
-    josi: [['に']],
-    return_none: false,
-    fn: function (aID, sys) {
-      try {
-        const video = document.querySelector("#" +	 aID);
-
-        // カメラ映像取得
-        navigator.mediaDevices.getUserMedia({video: true, audio: true})
-          .then( stream => {
-          // 成功時にvideo要素にカメラ映像をセットし、再生
-          video.srcObject = stream;
-          video.play();
-          // 着信時に相手にカメラ映像を返せるように、グローバル変数に保存しておく
-
-          // 非同期モードでのWAITを追加
-          if (sys.__genMode == '非同期モード') {
-            sys.async = true;
-            setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-          }
-
-          return stream;
-        });
-      } catch(e) {
-        // エラーを表示
-        throw new Error('カメラ表示 ' + e.message);
-        return -1;
-      }
     }
   },
 
@@ -401,10 +350,10 @@ const PluginMedia = {
       parent.appendChild(te);
 
         // 2021.7.16 非同期モードでのWAITを追加
-        if (sys.__genMode == '非同期モード') {
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
-        }
+        //if (sys.__genMode == '非同期モード') {
+        //  sys.async = true;
+        //  setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
+        //}
     }
   }
 }

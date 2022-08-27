@@ -143,7 +143,10 @@ table th, table td {
 }
 
 .CodeMirror {
+    font-feature-settings: "palt" 0;
+    font-family: monospace, monospace;
     font-size: 13pt;
     border: 2px solid black;
+    line-height: 1.24em;
 }
 

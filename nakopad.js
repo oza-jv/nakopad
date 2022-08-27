@@ -7,17 +7,19 @@ function nako3_run() {
 		alert('現在ライブラリを読み込み中です。しばらくお待ちください。')
 		return
 	}
-	const code = editor.getValue()
-	var div_name = "#nako3_result"
-	var canvas_name = "#nako3_canvas"
-	var addon =
+	const code = editor.getValue();
+	const div_name = "#nako3_result";
+	const canvas_name = "#nako3_canvas";
+	let addon =
 		"「" + div_name + "」へDOM親要素設定;" +
 		"「" + div_name + "」に「」をHTML設定;" +
-		"「" + canvas_name + "」へ描画開始;\n"
-	//const preCode = addon
+		"「" + canvas_name + "」へ描画開始;\n";
+	addon += "\n";  // 重要(インデント構文対策)
 	try {
 		nako3_clear(2)
-		navigator.nako3.runReset(addon + code, '', addon)
+		//await nako3.loadDependencies(addon + code, '', addon);
+		//nako3.run(addon + code, '', addon);
+		navigator.nako3.run(addon + code, '', addon);
 		nako3_scr();
 	} catch (e) {
 		nako3_print("==ERROR==" + e.message + "")
@@ -34,15 +36,16 @@ const nako3_print = function (s) {
 
 	var audio = document.querySelector("#audio1");
 	
-	// エラーだった場合
 	if (s.substr(0, 9) == "==ERROR==") {
+		// エラーだった場合
 		s = s.substr(9)
 		err.innerHTML = s
 		err.style.display = 'block'
 		info.style.display = 'none'
 		audio.src = './audio/se_maoudamashii_system18.mp3';
 	} else {
-		info.innerHTML = to_html(s);
+		// エラー以外の場合
+		info.innerHTML = to_html(s) + "\n";
 		info.style.display = 'block'
 		err.style.display = 'none'
 		audio.src = './audio/se_maoudamashii_system13.mp3';

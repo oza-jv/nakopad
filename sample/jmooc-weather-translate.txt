@@ -1,4 +1,3 @@
-!非同期モード
 // ネットワーク通信を利用して
 // 天気予報を取得するサンプル
 // （データは天気予報API(https://weather.tsukumijima.net/)を利用して作成）
@@ -13,8 +12,7 @@ API＝「https://weather.tsukumijima.net/api/forecast?city=」＆都市番号。
 
 // (3) URIからJSON形式の情報を受信する。
 // 辞書型配列「天気情報」に代入する。
-APIからAJAX受信。
-天気情報＝対象をJSONデコード。
+天気情報＝APIからAJAX_JSON取得。
 　　
 // (4) 地域名を取得する。
 地域＝天気情報['title']。
@@ -61,8 +59,7 @@ APIからAJAX受信。
 　　URI="{翻訳API}?target={変換後}&input_text={元文}"。
 
     // (5) WebAPIから，翻訳された文を受信する
-　　URIからAJAX受信。
-　　翻訳文＝対象。
+　　翻訳文＝URIからAJAXテキスト取得。
 
     // (6) 翻訳された結果を表示する
 　　元文を表示。

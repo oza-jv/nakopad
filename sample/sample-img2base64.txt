@@ -1,0 +1,29 @@
+// 画像を読み込んでBASE64文字列へエンコードするサンプル
+// 2022.8.13
+
+絵URL＝「blob:https://www.manabu-tech.net/a824330f-d40e-451e-9d4b-22e86e9118f9」。
+絵URLの画像読んだ時には
+　　IM=対象。
+  
+    // 画像を縮小してcanvasに描画する
+    w=IMの「width」をDOM属性取得。 sw=160/w。
+    h=IMの「height」をDOM属性取得。sh=120/h。
+    もし，sw>shならば
+    　　scale=sh。
+    違えば
+    　　scale=sw。
+    ここまで。
+　　[ w*scale, h*scale ]のキャンバス作成。
+  　[0,0, w*scale, h*scale ]にIMを画像描画。
+　　改行作成。
+   
+    // 画像データをBASE64変換
+    画像URL＝描画データURL変換。
+　　画像URLを表示。
+    画像URLをクリップボード設定。
+      // ブラウザを開き，クリップボードに入っているURLを貼り付けると
+      // 画像が表示されるはずです！
+
+　　// BASE64文字列を画像に復元
+　　画像URLを絵追加。
+ここまで。
