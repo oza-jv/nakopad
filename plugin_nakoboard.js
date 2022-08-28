@@ -105,7 +105,9 @@ const PluginNakoBoard = {
   'ボード接続': {
     type: 'func',
     josi: [],
-    fn: function (sys) {
+    asyncFn: true,
+    
+    fn: async function (sys) {
       // HID APIを使えるか
       if(!("hid" in navigator)) {
           console.log('HID NG');
@@ -117,14 +119,8 @@ const PluginNakoBoard = {
       // すでに開いているか
       if( ChkHIDItem() == 1 ) return;
 
-      if (sys.__genMode != '非同期モード') {
-        // 非同期モードに対応していない時の処理
-        throw new Error('ボード接続は「!非同期モード」で使ってください');
-      } else {
-        sys.async = true;
-
-        // 接続を要求
-        (async () => {
+      // 接続を要求
+      (async () => {
           await navigator.hid.getDevices()
           .then( async (devices) => {
             if( devices.length == 0 ) {
@@ -154,32 +150,18 @@ const PluginNakoBoard = {
             ChkHIDItem();
 
             // 接続したことを表示
-            nako3_print("なでしこボードを接続しました。");
+            nako3_print("なでしこボードを接続しました。もう一度プログラムを実行してください。");
           });
-        })().catch( e => console.log(e) );
-
-        // ちょっと待つことで正常に動作させる。
-        try {
-          // ちょっと待つことで正常に動作させる。
-          if (sys.__genMode == '非同期モード') {
-            sys.async = true;
-            setTimeout(() => {
-              sys.nextAsync(sys)
-            }, WAIT_SEC * 1000)
-          } else {
-            sys.__exec('秒逐次待機', [WAIT_SEC, sys]);
-          }
-        } catch(e) {
-          console.log(e);
-        }
-      }
+      })().catch( e => console.log(e) );
     }
   },
   
   'ボード切断': {
     type: 'func',
     josi: [],
-    fn: function (text, sys) {
+    asyncFn: true,
+    
+    fn: async function (text, sys) {
       if (!device) return;
       if( ChkHIDItem() < 1 ) return;
 
@@ -191,7 +173,9 @@ const PluginNakoBoard = {
   'ボード状態': { // @利用可＝１，未オープン＝０，未接続＝－１
     type: 'func',
     josi: [],
-    fn: function (sys) {
+    asyncFn: true,
+    
+    fn: async function (sys) {
       ChkHIDItem();
       return USBconnected;
     }
@@ -215,7 +199,9 @@ const PluginNakoBoard = {
     josi: [[''], ['を']],
     isVariableJosi: true,
     return_none: true,
-    fn: function (sec, ...pID) {
+    asyncFn: true,
+    
+    fn: async function (sec, ...pID) {
       ChkHIDItem();
       if( USBconnected == 1 ) {
           let note = 15;
@@ -246,22 +232,11 @@ const PluginNakoBoard = {
           outputReport[1] = 23;
         };
 
-	      beep_turnon();
-	      device.sendReport(outputReportId, outputReport);
-
-	      // ちょっと待つことで正常に動作させる。
-	        if (sys.__genMode == '非同期モード') {
-            sys.async = true;
-            setTimeout(() => {
-	            beep_turnoff();
-	            device.sendReport(outputReportId, outputReport);
-              sys.nextAsync(sys)
-            }, sec * 1000)
-	        } else {
-	          sys.__exec('秒逐次待機', [sec, sys]);
-            beep_turnoff();
-	          device.sendReport(outputReportId, outputReport);
-	        }
+	      await beep_turnon();
+	      await device.sendReport(outputReportId, outputReport);
+        await sys.__exec('秒待', [sec, sys]);
+        await beep_turnoff();
+        await device.sendReport(outputReportId, outputReport);
       }
     }
   },
@@ -271,7 +246,9 @@ const PluginNakoBoard = {
     josi: [['を']],
     isVariableJosi: true,
     return_none: true,
-    fn: function (...pID) {
+    asyncFn: true,
+    
+    fn: async function (...pID) {
       ChkHIDItem();
       if( USBconnected == 1 ) {
           let text = 15;
@@ -281,7 +258,7 @@ const PluginNakoBoard = {
           if( pID.length > 0 )  text = pID[0];
           
           // 「noteを0.5秒発音」と同じ意味にする
-          sys.__exec( '秒発音', [0.5, text, sys] );
+          await sys.__exec( '秒発音', [0.5, text, sys] );
       }
     }
   },
@@ -506,8 +483,8 @@ const PluginNakoBoard = {
       ChkHIDItem();
       if( USBconnected == 1 ) {
           // ちょっと待つことで正常に動作させる。
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          //sys.async = true;
+          //setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
 
         // ビット列生成
         if( s.charAt(0) != '0' ) st |= 0x80;
@@ -533,18 +510,20 @@ const PluginNakoBoard = {
     type: 'func',
     josi: [],
     return_none: true,
-    fn: function (sys) { 
-      if (sys.__genMode != '非同期モード') {
+    asyncFn: true,
+    
+    fn: async function (sys) { 
+      //if (sys.__genMode != '非同期モード') {
         // 非同期モードに対応していない時の処理
-        throw new Error('センサ1測定は「!非同期モード」で使ってください')
-      } else {
-        sys.async = true;
+      //  throw new Error('センサ1測定は「!非同期モード」で使ってください')
+      //} else {
+      //  sys.async = true;
 
         ChkHIDItem();
         if( USBconnected == 1 ) {
           // ちょっと待つことで正常に動作させる。
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          //sys.async = true;
+          //setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
 
           async function WaitForInput() {
             try {
@@ -558,9 +537,9 @@ const PluginNakoBoard = {
               console.log(e);
             }
           }
-          WaitForInput();
+          await WaitForInput();
         }
-      }
+      //}
     }
   },
 
@@ -568,18 +547,20 @@ const PluginNakoBoard = {
     type: 'func',
     josi: [],
     return_none: true,
-    fn: function (sys) { 
-      if (sys.__genMode != '非同期モード') {
+    asyncFn: true,
+    
+    fn: async function (sys) { 
+      //if (sys.__genMode != '非同期モード') {
         // 非同期モードに対応していない時の処理
-        throw new Error('センサ2測定は「!非同期モード」で使ってください')
-      } else {
-        sys.async = true;
+      //  throw new Error('センサ2測定は「!非同期モード」で使ってください')
+      //} else {
+      //  sys.async = true;
 
         ChkHIDItem();
         if( USBconnected == 1 ) {
           // ちょっと待つことで正常に動作させる。
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          //sys.async = true;
+          //setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
 
           async function WaitForInput() {
             try {
@@ -593,9 +574,9 @@ const PluginNakoBoard = {
               console.log(e);
             }
           }
-          WaitForInput();
+          await WaitForInput();
         }
-      }
+      //}
     }
   },
 
@@ -603,18 +584,20 @@ const PluginNakoBoard = {
     type: 'func',
     josi: [],
     return_none: true,
-    fn: function (sys) { 
-      if (sys.__genMode != '非同期モード') {
+    asyncFn: true,
+    
+    fn: async function (sys) { 
+      //if (sys.__genMode != '非同期モード') {
         // 非同期モードに対応していない時の処理
-        throw new Error('センサ3測定は「!非同期モード」で使ってください')
-      } else {
-        sys.async = true;
+      //  throw new Error('センサ3測定は「!非同期モード」で使ってください')
+      //} else {
+      //  sys.async = true;
 
         ChkHIDItem();
         if( USBconnected == 1 ) {
           // ちょっと待つことで正常に動作させる。
-          sys.async = true;
-          setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
+          //sys.async = true;
+          //setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
 
           async function WaitForInput() {
             try {
@@ -628,8 +611,8 @@ const PluginNakoBoard = {
               console.log(e);
             }
           }
-          WaitForInput();
-        }
+          await WaitForInput();
+        //}
       }
     }
   },
@@ -638,67 +621,52 @@ const PluginNakoBoard = {
     type: 'func',
     josi: [],
     return_none: true,
-    fn: function (sys) {
+    asyncFn: true,
+    
+    fn: async function (sys) {
       ChkHIDItem();
-      if( USBconnected == 1 ) {
-        try {
-          // ちょっと待つことで正常に動作させる。
-          if (sys.__genMode == '非同期モード') {
-           sys.async = true;
-           setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
-          } else {
-            sys.__exec('秒逐次待機', [WAIT_SEC, sys])
-          }
-        } catch(e) {
-          console.log(e);
-        }
-      }
+      if( USBconnected == 1 ) { sys.__exec('秒待', [WAIT_SEC, sys]) }
     }
   },
 
-  '🚉': {  // @ エキ
+  '🚉': {  // @ エキ //「ボード待」と同じ
     type: 'func',
     josi: [],
     return_none: true,
-    fn: function (sys) {
+    asyncFn: true,
+    
+    fn: async function (sys) {
       ChkHIDItem();
-      if( USBconnected == 1 ) {
-          try {
-            // ちょっと待つことで正常に動作させる。
-            if (sys.__genMode == '非同期モード') {
-             sys.async = true;
-             setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
-            } else {
-              sys.__exec('秒逐次待機', [WAIT_SEC, sys])
-            }
-          } catch(e) {
-            console.log(e);
-          }
-      }
+      if( USBconnected == 1 ) { sys.__exec('秒待', [WAIT_SEC, sys]) }
     }
   },
   
-  '!クリア': {
+  'ボードリセット': {
     type: 'func',
     josi: [],
     pure: false,
     return_none: true,
     fn: function (sys) {
       //ボード側の出力を全てオフに
+      sys.__exec('LEDオフ', [sys]);
       sys.__exec('出力1オフ', [sys]);
       sys.__exec('出力2オフ', [sys]);
       sys.__exec('Bセット', ['0000', sys]);
+      sys.__exec('発音', ['23', sys]);
+      sys.__exec('全タイマー停止', [sys]);
+    }
+  },
 
-      // ストックされている命令を停止
-      if (sys.__genMode == '非同期モード') {
-        sys.__stopAsync(sys);
-
-        // ちょっと待つことで正常に動作させる。
-        sys.async = true;
-        setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC * 1000);
-      }
+  '!クリア': {
+    type: 'func',
+    josi: [],
+    pure: false,
+    return_none: true,
+    fn: function (sys) {
+      sys.__exec('ボードリセット', [sys]);
     }
   }
+
 
 }
 
