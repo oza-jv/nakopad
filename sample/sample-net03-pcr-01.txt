@@ -2,8 +2,8 @@
 // 新型コロナ陽性者数を取得するサンプル
 // （データは厚生労働省のオープンデータを利用）
 
-API＝「./api/get_pcr_positive_daily.php」。
-受信データ＝APIからAJAXテキスト取得。
-
 // 「AJAXテキスト取得」命令で，テキスト形式のデータを受信する
-受信データを表示。
+API＝「./api/get_pcr_positive_daily.php」。
+APIからAJAXテキスト取得。
+
+それを表示。

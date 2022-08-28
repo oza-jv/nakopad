@@ -1,14 +1,11 @@
-!非同期モード
 // ネットワーク通信を利用して
 // ネコの画像をランダムで表示する
 // random.cat
 
 // データ(JSON形式)を受信する
-API＝「https://aws.random.cat/meow」。
-APIからAJAX受信。
-
 // 受信したデータを利用しやすい形式に解析する
-対象をJSONデコードして利用データに代入。
+API＝「https://aws.random.cat/meow」。
+利用データ＝APIからAJAX_JSON取得。
 
 // 解析した内容を表示させる
 利用データを反復

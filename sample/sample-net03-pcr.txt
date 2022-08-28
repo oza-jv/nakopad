@@ -3,6 +3,6 @@
 // （データは厚生労働省のオープンデータを利用）
 
 API＝「./api/get_pcr_positive_daily.php」。
-受信データ＝APIからAJAXテキスト取得。
+APIからAJAXテキスト取得。
 
-受信データをCSV取得して棒グラフ描画。
+それをCSV取得して棒グラフ描画。
