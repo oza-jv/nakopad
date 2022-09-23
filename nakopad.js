@@ -16,7 +16,8 @@ function nako3_run() {
 		"「" + canvas_name + "」へ描画開始;\n";
 	addon += "\n";  // 重要(インデント構文対策)
 	try {
-		nako3_clear(2)
+		nako3_break();  // 2022.9.23 停止処理を追加
+		nako3_clear(2);
 		//await nako3.loadDependencies(addon + code, '', addon);
 		//nako3.run(addon + code, '', addon);
 		navigator.nako3.run(addon + code, '', addon);
@@ -419,33 +420,38 @@ function nako3_break() {
 }
 
 // サンプルプログラムのオプションをこちらで定義 21.3.21  7/29追加
+//                                              22.9.23 新サンプルを追加，名称の変更など
 const SAMPLE_LIST = [
 	{ value: './sample/sample-omikuji-1.txt', name: 'おみくじ1 もし～ならば' },
 	{ value: './sample/sample-omikuji-2.txt', name: 'おみくじ2 もし～ならば～違えば' },
 	{ value: './sample/sample-omikuji-3.txt', name: 'おみくじ3 もし～ならば～違えばもし' },
 	{ value: '', name: '--' },
-	{ value: './sample/sample-kazuate-1.txt', name: '数当て1 乱数と分岐' },
-	{ value: './sample/sample-kazuate-2.txt', name: '数当て2 音を加える' },
-	{ value: './sample/sample-kazuate-3.txt', name: '数当て3 反復' },
-	{ value: './sample/sample-kazuate-4.txt', name: '数当て4 ヒントを加える' },
-	{ value: './sample/sample-kazuate-6.txt', name: '数当て5 音を加える' },
-	{ value: './sample/sample-kazuate-7.txt', name: '数当て6 絵を加える' },
+	{ value: './sample/sample-kazuate-1.txt', name: '数当て1 乱数と分岐の例' },
+	{ value: './sample/sample-kazuate-2.txt', name: '数当て2 音を加える前' },
+	{ value: './sample/sample-kazuate-3.txt', name: '数当て3 反復の例' },
+	{ value: './sample/sample-kazuate-4.txt', name: '数当て4 ヒントを加えた例' },
+	{ value: './sample/sample-kazuate-6.txt', name: '数当て5 音を加えた例' },
+	{ value: './sample/sample-kazuate-7.txt', name: '数当て6 音と絵を加えた例' },
 	{ value: './sample/sample-kazuate.txt',   name: '数当てゲーム 豪華版' },
 	{ value: '', name: '--' },
 	{ value: './sample/sample-net00-api.txt',        name: '双方向0 WebAPIを使う' },
-	{ value: './sample/sample-net01-zipcode.txt',    name: '双方向1 郵便番号取得' },
-	{ value: './sample/sample-net02-tenki.txt',      name: '双方向2 天気予報取得(1)' },
-	{ value: './sample/sample-net03-pcr.txt',        name: '双方向3 PCR陽性者数取得' },
-	{ value: './sample/sample-net04-weather2.txt',   name: '双方向4 天気予報取得(2)' },
-	{ value: './sample/jmooc-weather.txt',           name: '双方向9 JMOOC用 天気予報' },
-	//{ value: './sample/wschat-2.txt',              name: '双方向6 簡易チャット' },
+	{ value: './sample/sample-net01-zipcode.txt',    name: '双方向1 WebAPI 郵便番号取得の例' },
+	{ value: './sample/sample-net02-tenki.txt',      name: '双方向2 WebAPI 天気予報取得の例(1) 簡易' },
+	{ value: './sample/sample-net03-pcr.txt',        name: '双方向3 WebAPI PCR陽性者数取得の例' },
+	{ value: './sample/sample-net04-weather2.txt',   name: '双方向4 WebAPI 天気予報取得の例(2) 詳細' },
+	{ value: './sample/sample-net04-weather2.txt',   name: '双方向5 WebAPI 天気予報取得の例(3) 都市を選べる' },
+	{ value: './sample/sample-net04-weather2.txt',   name: '双方向6 WebAPI 天気予報取得の例(4) 自動翻訳' },
+	{ value: './sample/sample-net31-translate.txt',  name: '双方向7 WebAPI かんたん翻訳アプリの例' },
+	{ value: './sample/jmooc-weather.txt',           name: '双方向9 JMOOC用 天気予報の例' },
+	{ value: '', name: '--' },
+	{ value: './sample/wschat-2.txt',                name: '通信1 簡易チャットの例' },
 	{ value: '', name: '--' },
 	{ value: './sample/nb00-default.txt',    name: '計測・制御0 なでしこボードを使う' },
 	{ value: './sample/nb01-test.txt',       name: '計測・制御1 基本動作テスト' },
 	{ value: './sample/nb05-ifthen.txt',     name: '計測・制御2 もし～ならば～違えば' },
 	{ value: './sample/nb06-ifthenelse.txt', name: '計測・制御3 もし～ならば～違えばもし' },
 	{ value: './sample/nb08-carsensor-def.txt',  name: '計測・制御8 衝突防止ｱﾗｰﾑを作る' },
-	{ value: './sample/nb09-carsensor.txt',  name: '計測・制御9 衝突防止ｱﾗｰﾑ応用' }
+	{ value: './sample/nb09-carsensor.txt',  name: '計測・制御9 衝突防止ｱﾗｰﾑの応用例' }
 ];
 
 const nako3_init_samplelist = function () {

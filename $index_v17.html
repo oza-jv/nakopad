@@ -4,24 +4,30 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
 	<title>学習用なでしこパッド</title>
-</head>
-
 <body>
 <!-- なでしこ3のエンジンを取り込み -->
-<script type="text/javascript" src="https://nadesi.com/v3/cdn.php?v=3.2.30&f=release/wnako3.js?v=3.2.30"></script>
+<script type="text/javascript" src="https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/wnako3.js?v=3.3.61"></script>
 <!-- プラグインを取り込み -->
-<script defer src='https://nadesi.com/v3/cdn.php?v=3.2.30&f=release/plugin_csv.js'></script>
-<script defer src='https://nadesi.com/v3/cdn.php?v=3.2.30&f=release/plugin_datetime.js'></script>
-<script defer src='https://nadesi.com/v3/cdn.php?v=3.2.30&f=release/plugin_markup.js'></script>
-<script defer src='https://nadesi.com/v3/cdn.php?v=3.2.30&f=release/plugin_kansuji.js'></script>
-<script defer src='https://nadesi.com/v3/cdn.php?v=3.2.30&f=release/plugin_turtle.js'></script>
-<script defer src='https://nadesi.com/v3/cdn.php?v=3.2.30&f=release/nako_gen_async.js'></script>
+<script defer src='https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/plugin_csv.js'></script>
+<script defer src='https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/plugin_datetime.js'></script>
+<script defer src='https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/plugin_markup.js'></script>
+<script defer src='https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/plugin_kansuji.js'></script>
+<script defer src='https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/plugin_turtle.js'></script>
+<script defer src='https://nadesi.com/v3/cdn.php?v=3.3.61&f=release/nako_gen_async.js'></script>
 <script defer src='https://cdn.jsdelivr.net/npm/chart.js@3.3.0/dist/chart.min.js'></script>
 <script type="text/javascript" src="./plugin_media.js"></script>
 <script type="text/javascript" src="./plugin_hyouji.js"></script>
 <script type="text/javascript" src="./plugin_speak.js"></script>
 <script type="text/javascript" src="./plugin_nakoboard.js"></script>
-<!--script type="text/javascript" src="./marked.js"></script-->
+<!--script src="https://cdn.webrtc.ecl.ntt.com/skyway-4.4.3.js"></script-->
+<!--script type="text/javascript" src="./plugin_mesh.js"></script-->
+<script type="text/javascript" src="./nakopad.js?d=20211211"></script>
+
+<link rel="stylesheet" href="../codemirror/lib/codemirror.css">
+<link rel="stylesheet" href="../codemirror/theme/eclipse.css">
+<script src="../codemirror/lib/codemirror.js"></script>
+<script src="../codemirror/addon/selection/active-line.js"></script>
+<script src="../codemirror/addon/mode/simple.js"></script>
 
 <!-- 独自スタイル定義 -->
 <link rel="stylesheet" href="./nakopad.css">
@@ -34,26 +40,44 @@
 			プログラムを入力したら、<button onclick="nako3_run()">▶ 実行</button> しよう！
 		</div>
 		<hr />
-		<!-- ace.js editor -->
-		<div id="editor" style="height: 480px; width:100%; border:2px solid black;"></div>
 
-		<!-- ace.js editor -->
-		<!--script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.12/ace.js"></script-->
-		<script type="text/javascript" src="./nakopad.js?d=20211010"></script>
-		<script src="./lib/ace.js"></script>
-		<script src="./lib/mode-nakopad_sh.js"></script>
-		<script src="./lib/theme-eclipse.js"></script>
-		<script>
-			// ace.js init
-			var editor = ace.edit("editor");
-			editor.setTheme("ace/theme/eclipse");
-			editor.setFontSize(16);
-			editor.getSession().setMode("ace/mode/nakopad_sh");
-			editor.getSession().setUseWrapMode(false);
-			editor.getSession().setTabSize(4);
-			editor.setOptions({
-				showInvisibles: false
+		<!-- codemirror -->
+		<textarea id="editor"></textarea>
+		<script type="text/javascript">
+		    CodeMirror.defineSimpleMode("nadesiko", {
+			  start: [
+			    {regex: /"(?:[^\\]|\\.)*?(?:"|$)/, token: "string"},
+			    {regex: /'(?:[^\\]|\\.)*?(?:'|$)/, token: "string"},
+			    {regex: /「(?:[^\\]|\\.)*?(?:」|$)/, token: "string"},
+			    {regex: /^\/\/.*/, token: "comment"},
+			    {regex: /\/\*/, token: "comment", next: "comment"},
+			  ],
+			  comment: [
+			    {regex: /.*?\*\//, token: "comment", next: "start"},
+			    {regex: /.*/, token: "comment"}
+			  ],
+			  meta: {
+			      dontIndentStates: ["comment"],
+			      lineComment: "//"
+			  }
 			});
+
+		    var editor = CodeMirror.fromTextArea(document.getElementById("editor"),
+		    {
+		        mode:"nadesiko",        // 言語を設定する
+		        lineNumbers: true,      // 行番号を表示する
+		        lineWrapping: false,    // 行を折り返さない
+		        lineWiseCopyCut: false, // 非選択時の行コピーを禁止
+		        theme: "eclipse",       // テーマ
+		        styleActiveLine: true,  // アクティブラインを反転
+		        matchBrackets: true,
+		        dragDrop: false,        // ドラッグドロップを禁止
+		        indentUnit: 4,
+		        smartIndent: true,
+		        tabSize: 4,        
+		        readOnly: false         // 読み書きを許可
+		    });
+		    editor.setSize("100%", 480);
 		</script>
 
 		<!-- ObjectURLの実装テスト -->
@@ -64,8 +88,6 @@
 			<div class="footer">
 				[<a href="https://nadesi.com/v3/doc/index.php?wnako&show" target="_blank" rel="noopener noreferrer">なでしこv3の命令一覧(公式サイト)</a>]
 			</div>
-			<!-- モーダルメニュー -->
-			<!-- div id="m_open" class="footer">[学習のヒント]</div -->
 			<!-- 補助メニュー -->
 			<div class="footer" onclick="nako3_clear_edit()">[プログラムを消す]</div>
 			<div class="footer" onclick="nako3_click_load_media()">[メディアのURL]</div>
@@ -118,32 +140,18 @@
 			<button onclick="nako3_clearls(1)">◇LSのプログラムを消去</button>
 		</div>
 	</div>
-	<!-- hr / -->
-	<!-- div>■学習用ワークシート <a href="./ws/nakopad-ws-all.pdf" target="_blank" rel="noopener noreferrer">ダウンロード</a></div -->
 	<hr />
 </div>
 
 <!-- footer -->
 <div class="footer">
-	<div>学習用なでしこパッド v1.53  (2021/10/23)　<a href="https://www.manabu-tech.net/category/nakopad/" target="_blank" rel="noopener noreferrer">更新履歴</a></div>
-	<div>※<a href="https://nadesi.com/" target="_blank" rel="noopener noreferrer">日本語プログラミング言語「なでしこ」 v3.2.30</a> を利用しています。</div>
+	<div>学習用なでしこパッド v1.7 (2022/8/28)　<a href="https://www.manabu-tech.net/category/nakopad/" target="_blank" rel="noopener noreferrer">更新履歴</a></div>
+	<div>※<a href="https://nadesi.com/" target="_blank" rel="noopener noreferrer">日本語プログラミング言語「なでしこ」 v3.3.61</a> を利用しています。</div>
 	<div>※音素材は，<a href="https://maou.audio/" title="フリー音楽素材/魔王魂" target="_blank" rel="noopener noreferrer">フリー音楽素材/魔王魂</a>のものを使用しています。</div>
 	<div>※画像素材は，なでしこv1に同梱のもの を使用しています。</div>
 	<div>お問い合わせ先 : web (あっとまーく) manabu-tech.net</div>
 	<div>Copyright © <a href="https://www.manabu-tech.net/" target="_blank" rel="noopener noreferrer">ギジュツを学ぼう！</a> All Rights Reserved.</div>
 </div>
-
-<!-- モーダル -->
-<!--
-<div id="m_modal" class="m_modal"></div>
-	<div id="m_modal_bk" class="m_modal_bk">
-		<div id="m_contents" class="m_markdown">モーダル</div>
-		<hr />
-		<button id="m_close">閉じる</button>
-		<button id="m_return">もどる</button>
-	</div>
-</div>
--->
 
 <script>
 	// 初期化
@@ -151,6 +159,5 @@
 	nako3_clear(2);
 	nako3_canvas_off();
 	nako3_init_samplelist();
-	//nako3_init_modal();
 </script>
 <body></html>
