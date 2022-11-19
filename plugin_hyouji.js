@@ -184,7 +184,19 @@ const PluginHyouji = {
   '効果音14': { type: 'const', value: './audio/se_maoudamashii_system47.mp3' },
   '陽性者数API': { type: 'const', value: './api/get_pcr_positive_daily.php' },
   'NPWSサーバ': { type: 'const', value: 'wss://a0tklsq8jk.execute-api.ap-northeast-1.amazonaws.com/prod' },		// 2021.9.20追加
-  '翻訳API': { type: 'const', value: 'https://3u3vc7vfz1.execute-api.ap-northeast-1.amazonaws.com/dev/translate' }		// 2021.9.26追加
+  '翻訳API': { type: 'const', value: 'https://3u3vc7vfz1.execute-api.ap-northeast-1.amazonaws.com/dev/translate' },		// 2021.9.26追加
+
+
+  // WS関連
+  'WS未接続': { // 2022.11.3 WS接続されていなければ「はい(1)」を，接続済なら「いいえ(0)」を返す。
+    type: 'func',
+    josi: [],
+    pure: true,
+    fn: function (sys) {
+      const ws = sys.__v0['WS:SOCKET'];
+      if ( !ws ) { return 1 } else { return 0 };
+    }
+  }
 }
 
 // モジュールのエクスポート(必ず必要)
