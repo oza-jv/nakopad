@@ -1,6 +1,6 @@
 .nako3result {
 	background-color: #f0fff0; padding:8px;
-	fontsize: 16px;
+	font-size: 16px;
 	line-height: 1.4em;
 }
 .nako3error {
@@ -144,7 +144,7 @@ table th, table td {
 
 .CodeMirror {
     font-feature-settings: "palt" 0;
-    font-family: 'Liberation Serif','Noto Sans CJK JP', Consolas, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', Monospace, monospace;
+    font-family: monospace, 'Liberation Serif','Noto Sans CJK JP', Consolas, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', Monospace;
     font-size: 13pt;
     border: 2px solid black;
     line-height: 1.24em;
