@@ -26,17 +26,17 @@ button {
 .main {
 	width: 50%;
 	padding: 0px 10px;
-	//background-color: #f0f0ff;
+	/* background-color: #f0f0ff; */
 }
 .sub {
 	width: 45%;
 	padding: 0px 10px;
-	//background-color: #fff0ff;
+	/* background-color: #fff0ff; */
 }
 .btnsub {
 	width: 95%;
 	padding: 0px 10px;
-	//background-color: #f0ffff;
+	/* background-color: #f0ffff; */
 }
 .btnsub_flex {
 	display: flex;
@@ -82,7 +82,7 @@ video {
   z-index: 9998;
 
   opacity: 0;
-  //visibility: hidden;
+  /* visibility: hidden; */
   display: none;
   transition: 0.6s;
 }
@@ -95,7 +95,7 @@ video {
   width: 60%;
   top: 100px;
   border-radius: 20px;
-  //overflow-y:scroll;
+  /* overflow-y:scroll; */
   transform: translate(-50%, 0);
   
   color: #555;
@@ -103,13 +103,13 @@ video {
   z-index: 9999;
 
   opacity: 0;
-  //visibility: hidden;
+  /* visibility: hidden; */
   display: none;
   transition: 0.6s;
 }
 .is-show {
   opacity: 1;
-  //visibility: visible;
+  /* visibility: visible; */
   display: block;
 }
 
@@ -142,9 +142,14 @@ table th, table td {
   
 }
 
+@font-face {
+  font-family: 'mymono';
+  src: url('./PlemolJP-Medium.ttf') format('truetype');
+}
+
 .CodeMirror {
     font-feature-settings: "palt" 0;
-    font-family: monospace, 'Liberation Serif','Noto Sans CJK JP', Consolas, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', Monospace;
+    font-family: 'mymono', 'Liberation Serif','Noto Sans CJK JP', Consolas, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', Monospace, monospace;
     font-size: 13pt;
     border: 2px solid black;
     line-height: 1.24em;
