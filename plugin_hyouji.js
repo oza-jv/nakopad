@@ -182,6 +182,12 @@ const PluginHyouji = {
   '効果音12': { type: 'const', value: './audio/se_maoudamashii_system43.mp3' },
   '効果音13': { type: 'const', value: './audio/se_maoudamashii_system46.mp3' },
   '効果音14': { type: 'const', value: './audio/se_maoudamashii_system47.mp3' },
+  '冷蔵庫閉1': { type: 'const', value: './img/refrigerator-close1.png' },
+  '冷蔵庫開1': { type: 'const', value: './img/refrigerator-open1.png' },
+  '冷蔵庫開2': { type: 'const', value: './img/refrigerator-open2.png' },
+  '車間1': { type: 'const', value: './img/distance-far.png' },
+  '車間2': { type: 'const', value: './img/distance-close.png' },
+  '車間3': { type: 'const', value: './img/distance-veryclose.png' },
   '陽性者数API': { type: 'const', value: './api/get_pcr_positive_daily.php' },
   'NPWSサーバ': { type: 'const', value: 'wss://a0tklsq8jk.execute-api.ap-northeast-1.amazonaws.com/prod' },		// 2021.9.20追加
   '翻訳API': { type: 'const', value: 'https://3u3vc7vfz1.execute-api.ap-northeast-1.amazonaws.com/dev/translate' },		// 2021.9.26追加

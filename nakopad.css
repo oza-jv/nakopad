@@ -150,3 +150,7 @@ table th, table td {
     line-height: 1.24em;
 }
 
+audio {
+    controlslist: nodownload;
+}
+
