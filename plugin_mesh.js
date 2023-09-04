@@ -6,7 +6,7 @@
 const PluginMesh = {
 //  '対話ID': { type: 'var', value: '' },
 
-  '対話サーバ接続': {
+  '対話サーバ開始': {
     type: 'func',
     josi: [],
     isVariableJosi: false,

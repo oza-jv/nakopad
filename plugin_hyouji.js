@@ -190,6 +190,7 @@ const PluginHyouji = {
   '車間3': { type: 'const', value: './img/distance-veryclose.png' },
   '陽性者数API': { type: 'const', value: './api/get_pcr_positive_daily.php' },
   'NPWSサーバ': { type: 'const', value: 'wss://a0tklsq8jk.execute-api.ap-northeast-1.amazonaws.com/prod' },		// 2021.9.20追加
+  'チャットサーバ': { type: 'const', value: 'wss://a0tklsq8jk.execute-api.ap-northeast-1.amazonaws.com/prod' },		// 2021.9.20追加
   '翻訳API': { type: 'const', value: 'https://3u3vc7vfz1.execute-api.ap-northeast-1.amazonaws.com/dev/translate' },		// 2021.9.26追加
 
 
