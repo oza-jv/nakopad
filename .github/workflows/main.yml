@@ -12,12 +12,15 @@ jobs:
         runs-on: ubuntu-latest
 
         steps:
+        - name: Get latest code
+          uses: actions/checkout@v3
+
         - name: sync files
           uses: SamKirkland/FTP-Deploy-Action@v4.3.4
           with:
-            server: ${{ secrets.FTP_SERVER }}
-            username: ${{ secrets.FTP_USERNAME }}
+            server: sv12200.xserver.jp
+            username: nakopad_ftp@manabu-tech.net
             password: ${{ secrets.FTP_PASSWORD }}
-            server-dir: ${{ secrets.FTP_SERVER_DIR }}
+            server-dir: /
             exclude: "[**/.**/**, .gitignore,  **/.git/**, **/node_modules/**, **/vendor/**, README.md, **.json, **.lock]"
             
