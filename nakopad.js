@@ -448,6 +448,8 @@ const SAMPLE_LIST = [
 	{ value: '', name: '--' },
 	{ value: './sample/nb00-default.txt',    name: '計測・制御0 なでしこボードを使う' },
 	{ value: './sample/nb01-test.txt',       name: '計測・制御1 基本動作テスト' },
+	{ value: './sample/nb02-doremi.txt',     name: '計測・制御1.1 ドレミのテスト' },
+	{ value: './sample/nb03-saita.txt',      name: '計測・制御1.2 さいたさいた' },
 	{ value: './sample/nb05-ifthen.txt',     name: '計測・制御2 もし～ならば～違えば' },
 	{ value: './sample/nb06-ifthenelse.txt', name: '計測・制御3 もし～ならば～違えばもし' },
 	{ value: './sample/nb08-carsensor-def.txt',      name: '計測・制御8 衝突防止ｱﾗｰﾑを作る' },
