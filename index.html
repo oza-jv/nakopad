@@ -169,5 +169,11 @@
 	// v3.4.21 デバッグ機能オン
 	navigator.nako3.debugOption.useDebug = true;
 	navigator.nako3.debugOption.waitTime = 0.02;
+
+	// 誤ってページ遷移しそうなときの処理を追加 23/10/1
+	window.onbeforeunload = function(e) {
+		e.preventDefault();
+		e.returnValue = '保存していませんが，このページを離れてもよいですか？';
+	}
 </script>
 <body></html>
