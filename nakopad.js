@@ -446,7 +446,7 @@ const SAMPLE_LIST = [
 	{ value: '', name: '--' },
 	{ value: './sample/wschat-2.txt',                name: '通信1 簡易チャットの例' },
 	{ value: '', name: '--' },
-	{ value: './sample/nb00-default.txt',    name: '計測・制御0 なでしこボードを使う' },
+	{ value: './sample/nb04-sensor1.txt',    name: '計測・制御0 なでしこボードを使う' },
 	{ value: './sample/nb01-test.txt',       name: '計測・制御1 基本動作テスト' },
 	{ value: './sample/nb02-doremi.txt',     name: '計測・制御1.1 ドレミのテスト' }, 
 	{ value: './sample/nb03-saita.txt',      name: '計測・制御1.2 さいたさいた' },
