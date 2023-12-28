@@ -160,7 +160,8 @@
   // Used mostly to find indentation.
   function countColumn(string, end, tabSize, startIndex, startValue) {
     if (end == null) {
-      end = string.search(/[^\s\u00a0]/);
+      //end = string.search(/[^\s\u00a0]/);
+      end = string.search(/[^\u0020\u00a0\t]/);
       if (end == -1) { end = string.length; }
     }
     for (var i = startIndex || 0, n = startValue || 0;;) {
