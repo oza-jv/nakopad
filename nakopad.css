@@ -145,7 +145,7 @@ table th, table td {
 @font-face {
   font-family: 'mymono';
   src: url('./PlemolJP-Medium.ttf') format('truetype');
-  //src: url('./ipag.ttf') format('truetype');
+  /* src: url('./ipag.ttf') format('truetype'); */
   font-weight: bold;
 }
 
