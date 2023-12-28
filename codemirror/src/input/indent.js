@@ -51,7 +51,7 @@ export function indentLine(cm, n, how, aggressive) {
   if (cm.options.indentWithTabs)
     for (let i = Math.floor(indentation / tabSize); i; --i) {pos += tabSize; indentString += "\t"}
 //  if (pos < indentation) indentString += spaceStr(indentation - pos)
-  if (pos < indentation) indentString += getLine(doc, n-1).text.match(/^\s*/)[0] + "*"
+  if (pos < indentation) indentString += getLine(doc, n-1).text.match(/^\s*/)[0]
 
   if (indentString != curSpaceString) {
     replaceRange(doc, indentString, Pos(n, 0), Pos(n, curSpaceString.length), "+input")
