@@ -19,7 +19,7 @@ const PluginHyouji = {
         color = '';
       }
 
-      const parent = sys.__getSysVar['DOM親要素']
+      const parent = sys.__v0['DOM親要素']
       var te = document.createElement('span')
       te.innerHTML = text + '<br />';
       te.style.color = color;
@@ -59,7 +59,7 @@ const PluginHyouji = {
       if (!(a instanceof Array)) { throw new Error('『表出力』には配列を指定する必要があります。') }
 
       // Elementの準備
-      const parent = sys.__getSysVar['DOM親要素'];
+      const parent = sys.__v0['DOM親要素'];
       var te = document.createElement('table');
 
       let border = 0;
@@ -113,9 +113,9 @@ const PluginHyouji = {
 
       // 表を出力
       if( !el ) {
-        te.id = 'nadesi-dom-' + sys.__getSysVar['DOM生成個数']
+        te.id = 'nadesi-dom-' + sys.__v0['DOM生成個数']
         parent.appendChild( te );
-        sys.setSysVar( 'DOM生成個数', sys.__getSysVar['DOM生成個数'] + 1 );
+        sys.__v0['DOM生成個数']++;
       } else {
         te.id = el.id;
         parent.replaceChild( te, el );
@@ -197,7 +197,7 @@ const PluginHyouji = {
     josi: [],
     pure: true,
     fn: function (sys) {
-      const ws = sys.__getSysVar['WS:SOCKET'];
+      const ws = sys.__v0['WS:SOCKET'];
       if ( !ws ) { return 1 } else { return 0 };
     }
   }
