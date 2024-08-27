@@ -4,6 +4,17 @@
  * サイト用に「表示」と定数を追加するだけ。
  */
 const PluginHyouji = {
+  'meta': {
+    type: 'const',
+    value: {
+      pluginName: 'PluginHyouji', // プラグインの名前
+      description: '表示関連命令と定数の追加',
+      pluginVersion: '2.0.0', // プラグインのバージョン
+      nakoRuntime: ['wnako'], // 対象ランタイム
+      NakoVersion: '3.6.0' // 最小要求なでしこバージョン
+    }
+  },
+
   '表示': {
     type: 'func',
     josi: [['の', 'と', 'を'], ['で']],
@@ -212,5 +223,5 @@ const PluginHyouji = {
 if (typeof (navigator) === 'object') {
   navigator.nako3.addPluginObject('PluginHyouji', PluginHyouji)
 } else {
-  module.exports = pluginHyouji
+  module.exports = PluginHyouji
 }
