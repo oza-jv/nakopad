@@ -1,5 +1,6 @@
 /**
  * なでしこ3 追加プラグイン 2021/9/11
+ *                      2024/8/27 v3.6に対応
  * file : plugin_hyouji.js
  * サイト用に「表示」と定数を追加するだけ。
  */
@@ -9,7 +10,7 @@ const PluginHyouji = {
     value: {
       pluginName: 'PluginHyouji', // プラグインの名前
       description: '表示関連命令と定数の追加',
-      pluginVersion: '2.0.0', // プラグインのバージョン
+      pluginVersion: '3.6.0', // プラグインのバージョン
       nakoRuntime: ['wnako'], // 対象ランタイム
       NakoVersion: '3.6.0' // 最小要求なでしこバージョン
     }
