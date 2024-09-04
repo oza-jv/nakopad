@@ -1,9 +1,21 @@
 /**
- * なでしこ3 追加プラグイン 2021/9/11
+ * なでしこ3 追加プラグイン v1.0 2021/9/11
+ *                      v2.0 2024/8/27 v3.6に対応
  * file : plugin_hyouji.js
  * サイト用に「表示」と定数を追加するだけ。
  */
 const PluginHyouji = {
+  'meta': {
+    type: 'const',
+    value: {
+      pluginName: 'PluginHyouji', // プラグインの名前
+      description: '表示関連命令と定数の追加',
+      pluginVersion: '2.0.0', // プラグインのバージョン
+      nakoRuntime: ['wnako'], // 対象ランタイム
+      nakoVersion: '3.6.0' // 最小要求なでしこバージョン
+    }
+  },
+
   '表示': {
     type: 'func',
     josi: [['の', 'と', 'を'], ['で']],
@@ -19,11 +31,11 @@ const PluginHyouji = {
         color = '';
       }
 
-      const parent = sys.__v0['DOM親要素']
-      var te = document.createElement('span')
+      const parent = sys.__getSysVar('DOM親要素');
+      var te = document.createElement('span');
       te.innerHTML = text + '<br />';
       te.style.color = color;
-      parent.appendChild(te)
+      parent.appendChild(te);
     }
   },
   
@@ -59,7 +71,7 @@ const PluginHyouji = {
       if (!(a instanceof Array)) { throw new Error('『表出力』には配列を指定する必要があります。') }
 
       // Elementの準備
-      const parent = sys.__v0['DOM親要素'];
+      const parent = sys.__getSysVar('DOM親要素');
       var te = document.createElement('table');
 
       let border = 0;
@@ -113,9 +125,9 @@ const PluginHyouji = {
 
       // 表を出力
       if( !el ) {
-        te.id = 'nadesi-dom-' + sys.__v0['DOM生成個数']
+        te.id = 'nadesi-dom-' + sys.__getSysVar('DOM生成個数')
         parent.appendChild( te );
-        sys.__v0['DOM生成個数']++;
+        sys.setSysVar( 'DOM生成個数', sys.__getSysVar('DOM生成個数') + 1 );
       } else {
         te.id = el.id;
         parent.replaceChild( te, el );
@@ -197,7 +209,7 @@ const PluginHyouji = {
     josi: [],
     pure: true,
     fn: function (sys) {
-      const ws = sys.__v0['WS:SOCKET'];
+      const ws = sys.__getSysVar('WS:SOCKET');
       if ( !ws ) { return 1 } else { return 0 };
     }
   }
@@ -212,5 +224,5 @@ const PluginHyouji = {
 if (typeof (navigator) === 'object') {
   navigator.nako3.addPluginObject('PluginHyouji', PluginHyouji)
 } else {
-  module.exports = pluginHyouji
+  module.exports = PluginHyouji
 }

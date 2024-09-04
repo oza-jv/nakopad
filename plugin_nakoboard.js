@@ -2,6 +2,7 @@
  * なでしこ3 追加プラグイン 2021/7/5   Ver.1.01
  *                          2021/12/10 Ver.1.02 waitの調整
  *                          2022/8/27  Ver.2    なでしこv3.3に対応
+ *                          2024/8/27  Ver.3    なでしこv3.6に対応
  * file : plugin_nakoboard.js
  * Chromeブラウザでなでしこボードを使うためのプラグイン。
  */
@@ -102,6 +103,17 @@ let WaitForInputReport;    // 「ボード接続」内で定義
    なでしこプラグインでの命令追加
   ---------------------------------------------*/
 const PluginNakoBoard = {
+  'meta': {
+    type: 'const',
+    value: {
+      pluginName: 'PluginNakoBoard', // プラグインの名前
+      description: '表示関連命令と定数の追加',
+      pluginVersion: '3.0.0', // プラグインのバージョン
+      nakoRuntime: ['wnako'], // 対象ランタイム
+      nakoVersion: '3.6.0' // 最小要求なでしこバージョン
+    }
+  },
+
   'ボード接続': {
     type: 'func',
     josi: [],
@@ -530,8 +542,8 @@ const PluginNakoBoard = {
               outputReport[0] = 'A'.charCodeAt(0);
               await device.sendReport(outputReportId, outputReport)
               await WaitForInputReport();
-              sys.__v0['センサ1'] = ADval;
-              sys.__v0['それ'] = ADval;
+              sys.__setSysVar( 'センサ1', ADval );
+              sys.__setSysVar( 'それ', ADval );
               //console.log( `センサ1測定: ${ADval}` );
             } catch(e) {
               console.log(e);
@@ -550,12 +562,6 @@ const PluginNakoBoard = {
     asyncFn: true,
     
     fn: async function (sys) { 
-      //if (sys.__genMode != '非同期モード') {
-        // 非同期モードに対応していない時の処理
-      //  throw new Error('センサ2測定は「!非同期モード」で使ってください')
-      //} else {
-      //  sys.async = true;
-
         ChkHIDItem();
         if( USBconnected == 1 ) {
           // ちょっと待つことで正常に動作させる。
@@ -567,8 +573,8 @@ const PluginNakoBoard = {
               outputReport[0] = 'a'.charCodeAt(0);
               await device.sendReport(outputReportId, outputReport)
               await WaitForInputReport();
-              sys.__v0['センサ2'] = ADval;
-              sys.__v0['それ'] = ADval;
+              sys.__setSysVar( 'センサ2', ADval );
+              sys.__setSysVar( 'それ', ADval );
               //console.log( `センサ2測定: ${ADval}` );
             } catch(e) {
               console.log(e);
@@ -587,12 +593,6 @@ const PluginNakoBoard = {
     asyncFn: true,
     
     fn: async function (sys) { 
-      //if (sys.__genMode != '非同期モード') {
-        // 非同期モードに対応していない時の処理
-      //  throw new Error('センサ3測定は「!非同期モード」で使ってください')
-      //} else {
-      //  sys.async = true;
-
         ChkHIDItem();
         if( USBconnected == 1 ) {
           // ちょっと待つことで正常に動作させる。
@@ -604,8 +604,8 @@ const PluginNakoBoard = {
               outputReport[0] = 'z'.charCodeAt(0);
               await device.sendReport(outputReportId, outputReport)
               await WaitForInputReport();
-              sys.__v0['センサ3'] = ADval;
-              sys.__v0['それ'] = ADval;
+              sys.__setSysVar( 'センサ3', ADval );
+              sys.__setSysVar( 'それ', ADval );
               //console.log( `センサ3測定: ${ADval}` );
             } catch(e) {
               console.log(e);
@@ -670,11 +670,9 @@ const PluginNakoBoard = {
 
 }
 
-// モジュールのエクスポート(必ず必要)
-if (typeof module !== 'undefined' && module.exports) {
-  module.exports = PluginNakoBoard
-}
 //プラグインの自動登録
 if (typeof (navigator) === 'object') {
   navigator.nako3.addPluginObject('PluginNakoBoard', PluginNakoBoard)
+} else {
+  module.exports = PluginNakoBoard
 }

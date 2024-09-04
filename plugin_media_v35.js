@@ -5,13 +5,15 @@
  *                          2021/ 7/16  v1.5 非同期モードでのWAITを追加
  *                          2021/12/10  v1.6 エラー表示処理を修正
  *                          2022/ 8/27  v1.7 v3.3以降のasyncFnに対応
- *                          2024/ 8/27  v1.8 v3.6に対応
  * file : plugin_media.js
  * 音声，静止画，動画を表示・再生するためのプラグイン
  * ローカルのファイルも扱える
  * 文字を「書く」命令もある
  * 
  */
+
+const WAIT_SEC_md = 0.4;    // 処理を待機する秒数
+console.log('plugin_media');
 
 const PluginMedia = {
   // --- 画像関係 ---
@@ -27,15 +29,15 @@ const PluginMedia = {
     fn: async function (aPic, ...pID) {
       try {
         const sys = pID.pop();
-        var parent = sys.__getSysVar('DOM親要素');
+        var parent = sys.__v0['DOM親要素'];
         if ( pID.length > 0 ) {
           parent = document.querySelector("#" + pID[0]);
         };
         const img = document.createElement('img');
         img.src = aPic;
-        img.id = 'nadesi-dom-' + sys.__getSysVar('DOM部品個数');
+        img.id = 'nadesi-dom-' + sys.__v0['DOM部品個数'];
         parent.appendChild(img);
-        sys.__setSysVar( 'DOM部品個数', sys.__getSysVar('DOM部品個数')+1 );
+        sys.__v0['DOM部品個数']++;
 
         return img.id;
      } catch(e) {
@@ -103,16 +105,16 @@ const PluginMedia = {
       try {
         const sys = pID.pop();
         // var parent = document.body;
-        var parent = sys.__getSysVar('DOM親要素');
+        var parent = sys.__v0['DOM親要素'];
         if ( pID.length > 0 ) {
           parent = document.querySelector("#" + pID[0]);
         };
         const audio = document.createElement('audio');
         audio.src = aSrc;
         audio.classList.add('media');
-        audio.id = 'nadesi-dom-' + sys.__getSysVar('DOM部品個数');
+        audio.id = 'nadesi-dom-' + sys.__v0['DOM部品個数'];
         parent.appendChild(audio);
-        sys.__setSysVar( 'DOM部品個数', sys.__getSysVar('DOM部品個数')+1 );
+        sys.__v0['DOM部品個数']++;
         return audio.id;
         
      } catch(e) {
@@ -222,20 +224,20 @@ const PluginMedia = {
     fn: async function (aSrc, ...pID) {
       try {
         const sys = pID.pop();
-        var parent = sys.__getSysVar('DOM親要素');
+        var parent = sys.__v0['DOM親要素'];
         if ( pID.length > 0 ) {
           parent = document.querySelector("#" + pID[0]);
         };
         const video = document.createElement('video');
         video.src = aSrc;
         video.classList.add('media');
-        video.id = 'nadesi-dom-' + sys.__getSysVar('DOM部品個数');
+        video.id = 'nadesi-dom-' + sys.__v0['DOM部品個数'];
         video.width = '320';
         video.controls = false;
         video.playsinline = true;
         video.muted = true;     // chromeではmutedがtrueでないと再生できない
         parent.appendChild(video);
-        sys.__setSysVar( 'DOM部品個数', sys.__getSysVar('DOM部品個数')+1 );
+        sys.__v0['DOM部品個数']++;
 
         return video.id;
      } catch(e) {
@@ -330,31 +332,37 @@ const PluginMedia = {
       const video = document.querySelector("#" + aID);
       video.muted = true;
     }
-  }
+  },
 
-/*   
+   
   // --- 文字関係 ---
   '書': {
     type: 'func',
     josi: [['と', 'を']],
     return_none: true,
     fn: function (text, sys) {
-      const parent = sys.__getSysVar('DOM親要素');
+      const parent = sys.__v0['DOM親要素']
       var te = document.createElement('span')
       te.innerHTML = text
       parent.appendChild(te)
       
       te = document.createElement('br');
       parent.appendChild(te);
+
+        // 2021.7.16 非同期モードでのWAITを追加
+        //if (sys.__genMode == '非同期モード') {
+        //  sys.async = true;
+        //  setTimeout(() => { sys.nextAsync(sys); }, WAIT_SEC_md * 1000);
+        //}
     }
   }
-*/
-
 }
 
+// モジュールのエクスポート(必ず必要)
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = PluginMedia
+}
 //プラグインの自動登録
 if (typeof (navigator) === 'object') {
   navigator.nako3.addPluginObject('PluginMedia', PluginMedia)
-} else {
-  module.exports = PluginMedia
 }
