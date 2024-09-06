@@ -138,7 +138,19 @@ const PluginMedia = {
       };
 
       try {
+        // ファイル選択　input要素を使う場合
+        /*
+        const elm_f = document.getElementById("load_pic");
+        if (elm_f) {
+          await elm_f.click();
+        }
+
+        const fh = await elm_f.files[0];
+        if (!fh) return 0;
+        */
+
         // ファイル選択ダイアログを表示して選択させる。キャンセル時は例外処理へ。
+        // なぜかiPad，iPhoneは動作しない
         const f_list = await window.showOpenFilePicker(opts);
         if (!f_list) return;
         const fh = f_list[0];
