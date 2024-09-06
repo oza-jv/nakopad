@@ -6,6 +6,7 @@
  *                          2021/12/10  v1.6 エラー表示処理を修正
  *                          2022/ 8/27  v1.7 v3.3以降のasyncFnに対応
  *                          2024/ 8/27  v2.0 v3.6に対応
+ *                          2024/ 9/ 6  v2.1 img画像をdataURLに変換する処理（絵ファイル選択読込，絵URL変換）を追加
  * file : plugin_media.js
  * 音声，静止画，動画を表示・再生するためのプラグイン
  * ローカルのファイルも扱える
@@ -19,7 +20,7 @@ const PluginMedia = {
     value: {
       pluginName: 'PluginMedia', // プラグインの名前
       description: '表示関連命令と定数の追加',
-      pluginVersion: '2.0.0', // プラグインのバージョン
+      pluginVersion: '2.1.0', // プラグインのバージョン
       nakoRuntime: ['wnako'], // 対象ランタイム
       nakoVersion: '3.6.0' // 最小要求なでしこバージョン
     }
@@ -77,7 +78,87 @@ const PluginMedia = {
       }
     }
   },
-  
+
+  // --- img → canvas → DataURLに変換する
+  '絵URL変換': { // @aIDの画像をDataURLに変換して返す // @エユーアールエルヘンカン
+    type: 'func',
+    josi: [['を']],
+    return_none: false,
+    asyncFn: false,
+    
+    fn: function (aID, sys) {
+      try {
+        const img = document.querySelector("#" + aID);
+
+        // canvasに仮描画
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, img.width, img.height);
+
+        // dataURLに変換
+        const dataURL = canvas.toDataURL("image/jpeg");
+
+        // canvasを削除
+        canvas.remove;
+
+        return dataURL;
+
+      } catch(e) {
+        // エラーを表示
+        nako3_print("==ERROR==[実行時エラー]絵URL変換 " + e.message + "");
+        throw new Error('絵URL変換 ' + e.message);
+        return -1;
+      }
+    }
+  },
+
+  // メディアファイルのObjectURLを取得する
+  '絵ファイル選択読込': {
+    type: 'func',
+    josi: [['に']],
+    return_none: false,
+    asyncFn: true,
+    
+    fn: async function (aID, sys) {
+      // ファイル選択ダイアログのオプション
+      const opts = {
+        types: [
+          {
+            description: '画像',
+            accept: {
+              'image/jpeg': ['.jpg', '.jpeg'],
+              'image/png':  ['.png'],
+            }
+          }
+        ],
+        multiple: false,
+        excludeAcceptAllOption: true
+      };
+
+      try {
+        // ファイル選択ダイアログを表示して選択させる。キャンセル時は例外処理へ。
+        const f_list = await window.showOpenFilePicker(opts);
+        if (!f_list) return;
+        const fh = f_list[0];
+        const f = await fh.getFile();
+        console.log('絵ファイル選択読込:' + f.name);
+
+        // 選んだファイルのobjectURLを生成
+        objURL = URL.createObjectURL( f );
+
+        // その画像を読み込む
+        const img = document.querySelector("#" + aID);
+        img.src = objURL;
+
+        return 1;   // 成功時は1(定数OK)を返す
+      } catch(e) {
+        return 0;   // エラー時は0(定数NG)を返す
+      }
+    }
+  },
+
   // --- 音関係 ---
   '音読込': { // @id=aIDのaudio要素にaSrcファイルを読み込む // @オトヨミコミ
     // あらかじめaudio要素を設置しておく場合はこっち。

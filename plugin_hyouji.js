@@ -201,16 +201,28 @@ const PluginHyouji = {
   'NPWSサーバ': { type: 'const', value: 'wss://a0tklsq8jk.execute-api.ap-northeast-1.amazonaws.com/prod' },		// 2021.9.20追加
   'チャットサーバ': { type: 'const', value: 'wss://a0tklsq8jk.execute-api.ap-northeast-1.amazonaws.com/prod' },		// 2021.9.20追加
   '翻訳API': { type: 'const', value: 'https://3u3vc7vfz1.execute-api.ap-northeast-1.amazonaws.com/dev/translate' },		// 2021.9.26追加
-
+  '白箱': { type: 'const', value: './img/white.png' },  // 2024.9.6追加
 
   // WS関連
-  'WS未接続': { // 2022.11.3 WS接続されていなければ「はい(1)」を，接続済なら「いいえ(0)」を返す。
+  'WS未接続': { // 2022.11.3 WS接続されていなければ「はい(1)」を，接続済なら「いいえ(0)」を返す。 2024.9.6修正
     type: 'func',
     josi: [],
     pure: true,
     fn: function (sys) {
       const ws = sys.__getSysVar('WS:SOCKET');
-      if ( !ws ) { return 1 } else { return 0 };
+      if( !ws ) {
+        // その他は，コネクションが綴じられている
+        console.log( 'WS未接続: ' + 1);
+        return 1;
+      } else {
+        if( ws.readyState == 1 ) {
+          // 1:OPEN コネクションが開かれ、通信の準備ができている
+          console.log( 'WS未接続: ' + 0);
+          return 0;
+        } else {
+          return 1;
+        }
+      }
     }
   }
 }
