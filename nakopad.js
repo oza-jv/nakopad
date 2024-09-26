@@ -223,6 +223,8 @@ const nako3_loadsample= function () {
 					nako3_print( s + " を読み込みました");
 					nako3_scrtop();
 					makeTitle(fname);
+					// URL書き換え 2024.9.26
+					window.history.replaceState('','','?load='+getFileName(fname));
 				})
 				.catch(e => {
 					// fetchできない場合
