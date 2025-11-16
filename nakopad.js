@@ -444,7 +444,6 @@ const SAMPLE_LIST = [
 	{ value: './sample/sample-net00-api.txt',        name: '双方向0 WebAPIを使う' },
 	{ value: './sample/sample-net01-zipcode.txt',    name: '双方向1 WebAPI 郵便番号取得の例' },
 	{ value: './sample/sample-net02-tenki.txt',      name: '双方向2 WebAPI 天気予報取得の例(1) 簡易' },
-	{ value: './sample/sample-net03-pcr.txt',        name: '双方向3 WebAPI PCR陽性者数取得の例' },
 	{ value: './sample/sample-net04-weather2.txt',   name: '双方向4 WebAPI 天気予報取得の例(2) 詳細' },
 	{ value: './sample/sample-net05-weather3.txt',   name: '双方向5 WebAPI 天気予報取得の例(3) 都市を選べる' },
 	{ value: './sample/sample-net06-weather-translate.txt',   name: '双方向6 WebAPI 天気予報取得の例(4) 自動翻訳' },

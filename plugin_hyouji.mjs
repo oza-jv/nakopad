@@ -232,6 +232,5 @@ const PluginHyouji = {
 if (typeof (navigator) === 'object') {
   navigator.nako3.addPluginObject('PluginHyouji', PluginHyouji)
 } else {
-  export default PluginHyouji
+  module.exports = PluginHyouji
 }
-
