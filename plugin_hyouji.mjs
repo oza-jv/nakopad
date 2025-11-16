@@ -5,7 +5,7 @@
  * file : plugin_hyouji.mjs
  * サイト用に「表示」と定数を追加するだけ。
  */
-export const PluginHyouji = {
+const PluginHyouji = {
   'meta': {
     type: 'const',
     value: {
@@ -232,6 +232,6 @@ export const PluginHyouji = {
 if (typeof (navigator) === 'object') {
   navigator.nako3.addPluginObject('PluginHyouji', PluginHyouji)
 } else {
-  export default PluginHoge;
+  export default PluginHyouji
 }
 
