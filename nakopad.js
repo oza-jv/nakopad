@@ -18,6 +18,7 @@ function nako3_run() {
 	try {
 		nako3_break();  // 2022.9.23 停止処理を追加
 		nako3_clear(2);
+
 		//await nako3.loadDependencies(addon + code, '', addon);
 		//nako3.run(addon + code, '', addon);
 		navigator.nako3.run(addon + code, '', addon);
@@ -25,6 +26,10 @@ function nako3_run() {
 	} catch (e) {
 		nako3_print("==ERROR==" + e.message + "")
 		nako3_scr();
+		if (writer) { // writer変数が存在＝接続済み
+			sendSerial("STOP");
+			console.log("micro:bit停止");
+		}
 	}
 }
 
@@ -419,6 +424,14 @@ function nako3_break() {
 	}
 	speechSynthesis.cancel();
 	navigator.nako3.clearPlugins();
+
+	// micro:bitを停止する命令を追加 2025.12.27
+	// もしmicro:bitがつながっていたら、停止する
+	if (writer) { // writer変数が存在＝接続済み
+		sendSerial("STOP");
+		sendSerial("CLEAR");
+	}
+
 }
 
 // サンプルプログラムのオプションをこちらで定義 21.3.21  7/29追加
