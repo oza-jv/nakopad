@@ -474,7 +474,10 @@ const SAMPLE_LIST = [
 	{ value: './sample/nb06-ifthenelse.txt', name: '計測・制御3 もし～ならば～違えばもし' },
 	{ value: './sample/nb08-carsensor-def.txt',      name: '計測・制御8 衝突防止ｱﾗｰﾑを作る' },
 	{ value: './sample/nb09-carsensor.txt',          name: '計測・制御9 衝突防止ｱﾗｰﾑの応用例' },
-	{ value: './sample/nb10-carsensor-media.txt',    name: '計測・制御10 衝突防止ｱﾗｰﾑ ﾒﾃﾞｨｱ利用例' }
+	{ value: './sample/nb10-carsensor-media.txt',    name: '計測・制御10 衝突防止ｱﾗｰﾑ ﾒﾃﾞｨｱ利用例' },
+	{ value: '', name: '--' },
+	{ value: './sample/mb00-microbit.txt',   name: '計測・制御0 micro:bitを使う' },
+	{ value: './sample/mb01-test.txt',       name: '計測・制御1 基本動作テスト' }
 ];
 
 const nako3_init_samplelist = function () {
