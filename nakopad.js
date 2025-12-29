@@ -430,6 +430,7 @@ function nako3_break() {
 	if (writer) { // writer変数が存在＝接続済み
 		sendSerial("STOP");
 		sendSerial("CLEAR");
+		sendSerial("SOUND:STOP");
 	}
 
 }
@@ -476,8 +477,10 @@ const SAMPLE_LIST = [
 	{ value: './sample/nb09-carsensor.txt',          name: '計測・制御9 衝突防止ｱﾗｰﾑの応用例' },
 	{ value: './sample/nb10-carsensor-media.txt',    name: '計測・制御10 衝突防止ｱﾗｰﾑ ﾒﾃﾞｨｱ利用例' },
 	{ value: '', name: '--' },
-	{ value: './sample/mb00-microbit.txt',   name: '計測・制御0 micro:bitを使う' },
-	{ value: './sample/mb01-test.txt',       name: '計測・制御1 基本動作テスト' }
+	{ value: './sample/mb00-default.txt',    name: '計測・制御0 micro:bitを使う' },
+	{ value: './sample/mb01-test.txt',       name: '計測・制御1 基本動作テスト' },
+	{ value: './sample/mb02-doremi.txt',     name: '計測・制御1.1 ドレミのテスト' }, 
+	{ value: './sample/mb03-saita.txt',      name: '計測・制御1.2 さいたさいた' }
 ];
 
 const nako3_init_samplelist = function () {

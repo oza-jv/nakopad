@@ -4,16 +4,26 @@
  * Chromeブラウザでmicro:bitを使うためのプラグイン。
  */
 
+// 通信状態管理
+let connectType = "NONE"; // "USB", "BLE", "NONE"
+
+// USB用変数
+let port, writer, reader;
+
 // シリアルポートの管理変数
-let port;
-let writer;
-let reader;
 let keepReading = false;
 let readerClosedPromise; // 読み込みループが完全に終わるのを待つためのPromise
 let writableStreamClosed;
 
-// センサー値・コールバック保持用
-let latestAcc = { x: 0, y: 0, z: 0 };
+// センサー値・状態保持用 ★★★
+let sensorData = { 
+  x: 0, y: 0, z: 0, 
+  btnA: 0, btnB: 0, 
+  light: 0, temp: 0,
+  p0: 0, p1: 0, p2: 0
+};
+
+// コールバック関数保持用
 let onButtonA_Callback = null;
 let onButtonB_Callback = null;
 
@@ -90,6 +100,44 @@ const MICROBIT_ARROWS = {
   '左上': 7
 };
 
+// ▼▼▼ メロディ定義（MakeCodeの配列の順番と合わせる） ▼▼▼
+// 値の形式: "タイプ:ID"  (S=Sound, M=Melody)
+const MICROBIT_MELODIES = {
+  // --- V2用サウンド (S) ---
+  'くすくす笑う': 'S:0',
+  'ハッピー': 'S:1',
+  'ハロー': 'S:2',
+  'ミステリアス': 'S:3',
+  '悲しい': 'S:4',
+  'するする動く': 'S:5',
+  '舞い上がる': 'S:6',
+  'バネ': 'S:7',
+  'キラキラ': 'S:8',
+  'あくび': 'S:9',
+
+  // --- メロディ (M) ---
+  'ダダダム': 'M:0',
+  'ジ・エンターテイナー': 'M:1',
+  'プレリュード': 'M:2',
+  '歓喜の歌': 'M:3',
+  'ニャン・キャット': 'M:4',
+  '着信メロディ': 'M:5',
+  'ファンク': 'M:6',
+  'ブルース': 'M:7',
+  'ハッピーバースデー': 'M:8',
+  'ウエディングマーチ': 'M:9',
+  'おそうしき': 'M:10',
+  'ちゃんちゃん♪': 'M:11',
+  'タッタラッタッター': 'M:12',
+  'チェイス': 'M:13',
+  'ピコーン！': 'M:14',
+  'ワワワワー': 'M:15',
+  'ジャンプアップ': 'M:16',
+  'ジャンプダウン': 'M:17',
+  'パワーアップ': 'M:18',
+  'パワーダウン': 'M:19'
+};
+
 /*---------------------------------------------
    micro:bit用の関数群
   ---------------------------------------------*/
@@ -133,7 +181,7 @@ async function readLoop() {
   }
 }
 
-// --- 1. 接続関数（再接続ガード付き） ---
+// --- 接続関数（再接続ガード付き） ---
 async function connectSerial() {
   // portが存在しても、閉じている(readableがnull)なら再接続を許可する
   if (port && port.readable) {
@@ -168,9 +216,10 @@ async function connectSerial() {
     if (typeof clearBuffer === "function") clearBuffer();
 
     // 接続したことを表示
-    nako3_print("micro:bitを接続しました。もう一度プログラムを実行してください。");
+    if (typeof nako3_print === "function") nako3_print("micro:bitを接続しました。もう一度プログラムを実行してください。");
 
     console.log("micro:bit-USB接続成功");
+    connectType = "USB";
     return true;
 
   } catch (e) {
@@ -183,47 +232,47 @@ async function connectSerial() {
   }
 }
 
-// --- 2. 切断関数（新規追加） ---
+// --- 切断関数 ---
 async function disconnectSerial() {
-  console.log("切断処理を開始します...");
+  console.log("USB切断処理を開始します...");
   keepReading = false;
   
-try {
-    // 1. Reader（読み込み）の強制終了
-    if (reader) {
-      // 読み込みをキャンセル。エラーが出ても無視して進む
-      await reader.cancel().catch(() => {});
-      // ループが完全に終わるのを待つ
-      if (readerClosedPromise) {
-        await readerClosedPromise.catch(() => {});
+  try {
+      // 1. Reader（読み込み）の強制終了
+      if (reader) {
+        // 読み込みをキャンセル。エラーが出ても無視して進む
+        await reader.cancel().catch(() => {});
+        // ループが完全に終わるのを待つ
+        if (readerClosedPromise) {
+          await readerClosedPromise.catch(() => {});
+        }
+        reader = null;
       }
-      reader = null;
-    }
-    
-    // 2. Writer（書き込み）の強制終了
-    if (writer) {
-      await writer.close().catch(e => console.log("Writer close error:", e));
-      writer = null;
-    }
-    // パイプ（pipeTo）が完全に流れ終わるのを待つ
-    if (writableStreamClosed) {
-      await writableStreamClosed.catch(() => {});
-      writableStreamClosed = null;
-    }
+      
+      // 2. Writer（書き込み）の強制終了
+      if (writer) {
+        await writer.close().catch(e => console.log("Writer close error:", e));
+        writer = null;
+      }
+      // パイプ（pipeTo）が完全に流れ終わるのを待つ
+      if (writableStreamClosed) {
+        await writableStreamClosed.catch(() => {});
+        writableStreamClosed = null;
+      }
 
-    // 3. Port（ポート本体）を閉じる
-    if (port) {
-      await port.close().catch(e => console.log("Port close error:", e));
-      port = null;
-      console.log("Micro:bit disconnected (Port closed)");    
-    }
+      // 3. Port（ポート本体）を閉じる
+      if (port) {
+        await port.close().catch(e => console.log("Port close error:", e));
+        port = null;
+        console.log("Micro:bit disconnected (Port closed)");    
+      }
 
-    // 切断したことを表示
-    nako3_print("micro:bitを切断しました。一度ケーブルを抜いてから再接続してください。");
+      // 切断したことを表示
+      nako3_print("micro:bitを切断しました。一度ケーブルを抜いてから再接続してください。");
 
   } catch (e) {
     console.error("切断中にエラーが発生しましたが、強制リセットします:", e);
-		nako3_print("==ERROR==" + e.message + "")
+    nako3_print("==ERROR==" + e.message + "")
     // 強制リセット
     port = null;
     writer = null;
@@ -231,63 +280,73 @@ try {
   }
 }
 
-// --- 3. バッファ・状態クリア関数（新規追加） ---
+// --- 切断関数（共通化） ---
+async function disconnectAll() {
+  disconnectSerial();
+  connectType = "NONE";
+  clearBuffer();
+}
+
+// --- 初期化 ---
 function clearBuffer() {
-  latestAcc = { x: 0, y: 0, z: 0 };
+  sensorData = { x: 0, y: 0, z: 0, btnA: 0, btnB: 0, light: 0, temp: 0, p0: 0, p1: 0, p2: 0 };
   onButtonA_Callback = null; // ボタンイベントの登録解除
   onButtonB_Callback = null;
   console.log("micro:bit-バッファと状態をクリアしました");
 }
 
-// --- 5. データ解析関数
+// --- データ解析関数
 function parseData(data) {
-  // イベント信号を受信した場合
+  // イベント信号
   if (data === "EVENT:A") {
-    // 登録された関数があれば実行する
-    if (onButtonA_Callback) {
-      // なでしこの関数を実行（sysを渡す必要がある場合がありますが、単純実行で動く場合が多いです）
-      // 非同期関数の可能性もあるので await しても良いですが、ここでは単純呼び出し
-      onButtonA_Callback(); 
-    }
+    if (onButtonA_Callback) onButtonA_Callback(); 
   }
   else if (data === "EVENT:B") {
     if (onButtonB_Callback) onButtonB_Callback();
   }
 
-  // "ACC: -120, 30, 1024" のようなデータを解析
-  else if (data.startsWith("ACC:")) {
+  // センサーデータ (DAT:ax,ay,az,ba,bb,li,te,p0,p1,p2)
+  // 順序: accX, accY, accZ, btnA, btnB, light, temp, p0, p1, p2
+  else if (data.startsWith("DAT:")) {
     const parts = data.substring(4).split(",");
-    if (parts.length === 3) {
-      latestAcc.x = parseInt(parts[0]);
-      latestAcc.y = parseInt(parts[1]);
-      latestAcc.z = parseInt(parts[2]);
+    if (parts.length >= 10) {
+      sensorData.x = parseInt(parts[0]);
+      sensorData.y = parseInt(parts[1]);
+      sensorData.z = parseInt(parts[2]);
+      sensorData.btnA = parseInt(parts[3]);
+      sensorData.btnB = parseInt(parts[4]);
+      sensorData.light = parseInt(parts[5]);
+      sensorData.temp = parseInt(parts[6]);
+      sensorData.p0 = parseInt(parts[7]);
+      sensorData.p1 = parseInt(parts[8]);
+      sensorData.p2 = parseInt(parts[9]);
     }
   }
 }
 
-// --- 6. データを送信する関数
+// --- データを送信する関数
 async function sendSerial(text) {
   if (!writer) return;
   // micro:bitのシリアル読み込みは改行(\n)を区切りとすることが多いため付与
-  try {
-    await writer.write(text + "\n");
-    console.log("送信:", text);
-  } catch (e) {
-    console.error("送信エラー:", e);
-  }
+  try { await writer.write(text + "\n"); } catch (e) { console.error(e); }
 }
 
-// 音関連
+// --- 音関連のヘルパー関数 ---
 // --- 1. すべての音を停止する ---
 async function microbitStopSound() {
   await sendSerial("SOUND:STOP");
 }
 
 // --- 2. 内蔵メロディを鳴らす ---
-// コマンド例: "MELODY:DADADADUM"
-// 引数 name には "DADADADUM", "ENTERTAINER", "PRELUDE" などを指定
 async function microbitPlayMelody(name) {
-  await sendSerial("MELODY:" + name);
+  // 辞書からIDを取得 (例: "S:1")
+  let id = MICROBIT_MELODIES[name];
+  
+  // もし辞書になければ、そのまま送る（旧互換用だが基本は使わない）
+  if (!id) return; 
+
+  // コマンド送信 (例: MELODY:S:1)
+  await sendSerial("MELODY:" + id);
 }
 
 // -- 3. 音を1拍鳴らす ---
@@ -331,11 +390,11 @@ const microbitUsbPlugin = {
   },
 
   'マイクロビット切断': {
-    type: 'func',
-    josi: [],
-    fn: async function (sys) {
-      await disconnectSerial();
-    }
+    type: 'func', 
+    josi: [], 
+    fn: async function (sys) { 
+      await disconnectAll(); 
+    } 
   },
   
   'マイクロビットバッファクリア': { // 名前は「初期化」などでもOK
@@ -347,7 +406,7 @@ const microbitUsbPlugin = {
   },
 
   // 生のコマンドを送る機能（上級者用）
-  'マイクロビットUSB送信': {
+  'マイクロビット送信': {
     type: 'func',
     josi: [['を', 'と']], 
     fn: async function (text, sys) {
@@ -464,32 +523,148 @@ const microbitUsbPlugin = {
       await sendSerial("MSG:" + text); 
     }
   },
-  
-  'マイクロビット端子出力': {
+
+  'マイクロビットLED表示': {
     type: 'func',
-    josi: [['を'], ['の']], // 「1を P0の マイクロビット端子出力」
-    fn: async function (val, pinName, sys) {
-      // P0, P1, P2などの文字列を受け取り、コマンドを作る
-      // 例: pinName="P0", val=1 -> "P0:1"
-      let cmd = pinName + ":" + val;
-      await sendSerial(cmd);
+    josi: [['を']], 
+    fn: async function (pattern, sys) {
+      // 1. 入力を強制的に文字列にする（念のため）
+      let s = String(pattern);
+      
+      // 2. 全角の「０」「１」を半角に直す（日本語入力対策）
+      s = s.replace(/０/g, '0').replace(/１/g, '1');
+
+      // 3. 半角の「0」と「1」以外をすべて削除する
+      // これにより、改行(Enter)、スペース、タブなどが全て消えて繋がります
+      let cleanPattern = s.replace(/[^01]/g, "");
+
+      // ★デバッグ用: ブラウザのコンソールに変換結果を表示
+      // 「F12」キーを押してConsoleを見ると、ここで何文字になったか分かります
+      console.log("LED変換前:", pattern);
+      console.log("LED変換後:", cleanPattern, "文字数:", cleanPattern.length);
+
+      // 4. 文字数チェック
+      if (cleanPattern.length !== 25) {
+        let msg = "LEDのエラー: 0と1の数が " + cleanPattern.length + " 個です。25個必要です。";
+        console.error(msg);
+        // なでしこ側にもメッセージを出す（可能なら）
+        if (sys && sys.__print) sys.__print(msg);
+        return;
+      }
+
+      // 5. 送信
+      await sendSerial("LED:" + cleanPattern);
+    }
+  },
+  // --- 点灯・消灯 ---
+  'マイクロビット点灯': {
+    type: 'func',
+    josi: [['と'], ['を', 'の']], 
+    fn: async function (x, y, sys) {
+      // 念のため半角数字に変換してから送る
+      // (parseFloatを通すことで、全角数字や文字列もきれいな数値になります)
+      let nx = parseFloat(x);
+      let ny = parseFloat(y);
+      
+      // 数値じゃなかったらエラー
+      if (isNaN(nx) || isNaN(ny)) {
+          console.error("点灯エラー: 座標は数字で指定してください", x, y);
+          return;
+      }
+      
+      await sendSerial("PLOT:" + nx + ":" + ny);
     }
   },
 
-  'マイクロビット加速度X': {
+  'マイクロビット消灯': {
     type: 'func',
-    josi: [],
-    fn: function (sys) { return latestAcc.x; }
+    josi: [['と'], ['を', 'の']],
+    fn: async function (x, y, sys) {
+      // こちらも同様に変換
+      let nx = parseFloat(x);
+      let ny = parseFloat(y);
+      
+      if (isNaN(nx) || isNaN(ny)) {
+          console.error("消灯エラー: 座標は数字で指定してください", x, y);
+          return;
+      }
+
+      await sendSerial("UNPLOT:" + nx + ":" + ny);
+    }
   },
-  'マイクロビット加速度Y': {
-    type: 'func',
-    josi: [],
-    fn: function (sys) { return latestAcc.y; }
+
+  // --- センサー（入力） ---
+  // 既存の加速度も sensorData を見るように変更
+  'マイクロビット加速度X': { type: 'func', josi: [], fn: function (sys) { return sensorData.x; } },
+  'マイクロビット加速度Y': { type: 'func', josi: [], fn: function (sys) { return sensorData.y; } },
+  'マイクロビット加速度Z': { type: 'func', josi: [], fn: function (sys) { return sensorData.z; } },
+
+  'マイクロビット照度': {
+    type: 'func', josi: [], 
+    fn: function (sys) { return sensorData.light; }
   },
-  'マイクロビット加速度Z': {
-    type: 'func',
-    josi: [],
-    fn: function (sys) { return latestAcc.z; }
+  
+  'マイクロビット温度': {
+    type: 'func', josi: [], 
+    fn: function (sys) { return sensorData.temp; }
+  },
+  
+  'マイクロビットAボタン状態': {
+    type: 'func', josi: [], 
+    fn: function (sys) { return (sensorData.btnA === 1); } // True/Falseを返す
+  },
+  
+  'マイクロビットBボタン状態': {
+    type: 'func', josi: [], 
+    fn: function (sys) { return (sensorData.btnB === 1); }
+  },
+
+  // --- 端子（入出力） ---
+  // 入力モードにする（＝読み取りON、出力OFF）
+  'マイクロビット端子入力モード設定': { 
+    type: 'func', 
+    josi: [['を', 'の']], // 「P0を...」
+    fn: async function (pinName, sys) {
+      // CONFIG:P0:1 を送る
+      await sendSerial("CONFIG:" + pinName + ":1");
+    }
+  },
+  // 出力モードにする（＝読み取りOFF、出力ON）
+  'マイクロビット端子出力モード設定': { 
+    type: 'func', 
+    josi: [['を', 'の']], 
+    fn: async function (pinName, sys) {
+      // CONFIG:P0:0 を送る
+      await sendSerial("CONFIG:" + pinName + ":0");
+    }
+  },
+  // デジタル入力（読み取り）
+  'マイクロビット端子デジタル入力': { // 「P0の マイクロビット端子デジタル入力」
+    type: 'func', josi: [['の']], 
+    fn: function (pinName, sys) {
+      if (pinName == "P0") return sensorData.p0;
+      if (pinName == "P1") return sensorData.p1;
+      if (pinName == "P2") return sensorData.p2;
+      return 0;
+    }
+  },
+
+  // アナログ出力（書き込み）
+  'マイクロビット端子アナログ出力': { // 「1023を P0へ マイクロビット端子アナログ出力」
+    type: 'func', josi: [['を'], ['へ', 'に']], 
+    fn: async function (val, pinName, sys) {
+      // ANALOG:P0:1023 形式で送信
+      await sendSerial("ANALOG:" + pinName + ":" + val);
+    }
+  },
+  // --- サーボモーター ---
+  'マイクロビットサーボ出力': { 
+    type: 'func', 
+    josi: [['を'], ['へ', 'に', 'の']], // 「90を P0へ...」
+    fn: async function (angle, pinName, sys) {
+      // 角度は0〜180の範囲
+      await sendSerial("SERVO:" + pinName + ":" + angle);
+    }
   },
 
   // イベント登録用の命令
@@ -505,8 +680,7 @@ const microbitUsbPlugin = {
     },
     return_none: true
   },
-  
-  'マイクロビットBボタン押時': {
+    'マイクロビットBボタン押時': {
     type: 'func',
     josi: [['を', 'には', 'は', '行う', '実行する']],
     fn: function (func, sys) {
@@ -524,11 +698,14 @@ const microbitUsbPlugin = {
     }
   },
 
-  'マイクロビットメロディ再生': {
-    type: 'func',
-    josi: [['を', 'の']], // 「"DADADADUM"を マイクロビットメロディ再生」
+  'マイクロビットメロディ再生': { 
+    type: 'func', 
+    josi: [['を', 'の']], 
     fn: async function (name, sys) {
-      await microbitPlayMelody(name);
+      // 日本語名からIDを検索 (見つからなければそのまま送る)
+      let id = MICROBIT_MELODIES[name];
+      if (!id) id = name; 
+      await microbitPlayMelody(id); 
     }
   },
 
