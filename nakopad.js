@@ -26,10 +26,10 @@ function nako3_run() {
 	} catch (e) {
 		nako3_print("==ERROR==" + e.message + "")
 		nako3_scr();
-		//if (writer) { // writer変数が存在＝接続済み
-		//	sendSerial("STOP");
-		//	console.log("micro:bit停止");
-		//}
+		if (writer) { // writer変数が存在＝接続済み
+			sendSerial("STOP");
+			console.log("micro:bit停止");
+		}
 	}
 }
 
@@ -432,7 +432,6 @@ function nako3_break() {
 		sendSerial("CLEAR");
 		sendSerial("SOUND:STOP");
 	}
-
 }
 
 // サンプルプログラムのオプションをこちらで定義 21.3.21  7/29追加
@@ -481,7 +480,9 @@ const SAMPLE_LIST = [
 	{ value: './sample/mb01-test.txt',       name: '計測・制御1 基本動作テスト' },
 	{ value: './sample/mb02-doremi.txt',     name: '計測・制御1.1 ドレミのテスト' }, 
 	{ value: './sample/mb03-saita.txt',      name: '計測・制御1.2 さいたさいた' },
-	{ value: './sample/mb34-servotest.txt',  name: '計測・制御34 サーボモータの動作テスト' }
+	{ value: './sample/mb10-Lchika.txt',  	 name: '計測・制御10 P0端子でLチカ' },
+	{ value: './sample/mb11-servotest.txt',  name: '計測・制御11 サーボモータの動作テスト' },
+	{ value: './sample/mb12-btnservotest.txt', name: '計測・制御12 ボタンとサーボモータの動作テスト' }
 ];
 
 const nako3_init_samplelist = function () {

@@ -28,6 +28,7 @@ let sensorData = {
 // コールバック関数保持用
 let onButtonA_Callback = null;
 let onButtonB_Callback = null;
+let onButtonAB_Callback = null;
 // ★タッチイベント用コールバック
 let onLogoTouched_Callback = null;
 let onLogoPressed_Callback = null;
@@ -318,6 +319,7 @@ function parseData(data) {
   // イベント信号
   if (data === "EVENT:A") { if (onButtonA_Callback) onButtonA_Callback(); }
   else if (data === "EVENT:B") { if (onButtonB_Callback) onButtonB_Callback(); }
+  else if (data === "EVENT:AB") { if (onButtonAB_Callback) onButtonAB_Callback(); }
   else if (data === "EVENT:LOGO_TOUCHED") { if (onLogoTouched_Callback) onLogoTouched_Callback(); }
   else if (data === "EVENT:LOGO_PRESSED") { if (onLogoPressed_Callback) onLogoPressed_Callback(); }
   else if (data === "EVENT:LOGO_RELEASED") { if (onLogoReleased_Callback) onLogoReleased_Callback(); }
@@ -426,6 +428,14 @@ const microbitUsbPlugin = {
     }
   },
 
+  'マイクロビット停止': {
+    type: 'func',
+    josi: [],
+    fn: async function (sys) {
+      await sendSerial("STOP");
+    }
+  },
+
   // 生のコマンドを送る機能（上級者用）
   'マイクロビット送信': {
     type: 'func',
@@ -449,7 +459,7 @@ const microbitUsbPlugin = {
     type: 'func',
     josi: [],
     fn: async function (sys) {
-      await sendSerial("STOP");
+      await sendSerial("SENSORSTOP");
     }
   },
 
@@ -678,16 +688,13 @@ const microbitUsbPlugin = {
     }
   },
 
-  // イベント登録用の命令
+  // ボタンを押した時のイベント
   'マイクロビットAボタン押時': {
     type: 'func',
     josi: [['を', 'には', 'は', '行う', '実行する']],
     fn: function (func, sys) {
       // 引数として渡された「処理ブロック(関数)」を変数に保存
-      onButtonA_Callback = function() {
-          // なでしこ3の関数実行の作法（sysを渡して実行）
-          func(sys); 
-      };
+      onButtonA_Callback = function() { func(sys); };
     },
     return_none: true
   },
@@ -698,6 +705,14 @@ const microbitUsbPlugin = {
       onButtonB_Callback = function() { func(sys); };
     },
     return_none: true
+  },
+  'マイクロビットABボタン押時': { 
+    type: 'func', 
+    josi: [['を', 'には', 'は', '行う', '実行する']], 
+    fn: function (f, s) { 
+      onButtonAB_Callback = function() { f(s); }; 
+    }, 
+    return_none: true 
   },
 
 //  'マイクロビットロゴタッチ時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onLogoTouched_Callback = function() { f(s); }; }, return_none: true },
