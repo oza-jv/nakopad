@@ -6,6 +6,7 @@
 
 // 通信状態管理
 let connectType = "NONE"; // "USB", "BLE", "NONE"
+let isMicrobitConnected = false;
 
 // USB用変数
 let port, writer, reader;
@@ -20,12 +21,18 @@ let sensorData = {
   x: 0, y: 0, z: 0, 
   btnA: 0, btnB: 0, 
   light: 0, temp: 0,
-  p0: 0, p1: 0, p2: 0
+  p0: 0, p1: 0, p2: 0,
+  logo: 0 
 };
 
 // コールバック関数保持用
 let onButtonA_Callback = null;
 let onButtonB_Callback = null;
+// ★タッチイベント用コールバック
+let onLogoTouched_Callback = null;
+let onLogoPressed_Callback = null;
+let onLogoReleased_Callback = null;
+let onLogoLong_Callback = null;
 
 // ▼▼▼ アイコンの日本語名とIDの対応表 ▼▼▼
 const MICROBIT_ICONS = {
@@ -168,7 +175,6 @@ async function readLoop() {
         for (const line of lines) {
           parseData(line.trim());
         }
-        console.log(value);
       }
     }
   } catch (error) {
@@ -183,12 +189,17 @@ async function readLoop() {
 
 // --- 接続関数（再接続ガード付き） ---
 async function connectSerial() {
+  // ★修正: 接続フラグとwriterの両方をチェック
+  if (isMicrobitConnected && writer) {
+    console.log("接続中です");
+    return true;
+  }
+
   // portが存在しても、閉じている(readableがnull)なら再接続を許可する
   if (port && port.readable) {
     console.log("既に接続されています");
     return true;
   }
-  
   // 以前の接続が中途半端に残っている場合は、正規の手順で切断する
   if (port) {
     await disconnectSerial();
@@ -215,11 +226,12 @@ async function connectSerial() {
     // バッファクリア等の初期化
     if (typeof clearBuffer === "function") clearBuffer();
 
+    connectType = "USB";
+    isMicrobitConnected = true;
+
     // 接続したことを表示
     if (typeof nako3_print === "function") nako3_print("micro:bitを接続しました。もう一度プログラムを実行してください。");
-
     console.log("micro:bit-USB接続成功");
-    connectType = "USB";
     return true;
 
   } catch (e) {
@@ -278,14 +290,18 @@ async function disconnectSerial() {
     writer = null;
     reader = null;
   }
-}
-
-// --- 切断関数（共通化） ---
-async function disconnectAll() {
-  disconnectSerial();
+  
+  isMicrobitConnected = false;  // 切断時にフラグをOFF
   connectType = "NONE";
   clearBuffer();
 }
+
+// --- 切断関数（共通化） ---
+//async function disconnectAll() {
+//  disconnectSerial();
+//  connectType = "NONE";
+//  clearBuffer();
+//}
 
 // --- 初期化 ---
 function clearBuffer() {
@@ -297,19 +313,21 @@ function clearBuffer() {
 
 // --- データ解析関数
 function parseData(data) {
-  // イベント信号
-  if (data === "EVENT:A") {
-    if (onButtonA_Callback) onButtonA_Callback(); 
-  }
-  else if (data === "EVENT:B") {
-    if (onButtonB_Callback) onButtonB_Callback();
-  }
+  if (data.startsWith("EVENT:")) console.log("Event:", data);
 
+  // イベント信号
+  if (data === "EVENT:A") { if (onButtonA_Callback) onButtonA_Callback(); }
+  else if (data === "EVENT:B") { if (onButtonB_Callback) onButtonB_Callback(); }
+  else if (data === "EVENT:LOGO_TOUCHED") { if (onLogoTouched_Callback) onLogoTouched_Callback(); }
+  else if (data === "EVENT:LOGO_PRESSED") { if (onLogoPressed_Callback) onLogoPressed_Callback(); }
+  else if (data === "EVENT:LOGO_RELEASED") { if (onLogoReleased_Callback) onLogoReleased_Callback(); }
+  else if (data === "EVENT:LOGO_LONG") { if (onLogoLong_Callback) onLogoLong_Callback(); }
+  
   // センサーデータ (DAT:ax,ay,az,ba,bb,li,te,p0,p1,p2)
-  // 順序: accX, accY, accZ, btnA, btnB, light, temp, p0, p1, p2
+  // 順序: accX, accY, accZ, btnA, btnB, light, temp, p0, p1, p2, lo
   else if (data.startsWith("DAT:")) {
     const parts = data.substring(4).split(",");
-    if (parts.length >= 10) {
+    if (parts.length >= 11) {
       sensorData.x = parseInt(parts[0]);
       sensorData.y = parseInt(parts[1]);
       sensorData.z = parseInt(parts[2]);
@@ -320,6 +338,7 @@ function parseData(data) {
       sensorData.p0 = parseInt(parts[7]);
       sensorData.p1 = parseInt(parts[8]);
       sensorData.p2 = parseInt(parts[9]);
+      sensorData.logo = parseInt(parts[10]);
     }
   }
 }
@@ -328,7 +347,9 @@ function parseData(data) {
 async function sendSerial(text) {
   if (!writer) return;
   // micro:bitのシリアル読み込みは改行(\n)を区切りとすることが多いため付与
-  try { await writer.write(text + "\n"); } catch (e) { console.error(e); }
+  try {
+    await writer.write(text + "\n"); 
+  } catch (e) { console.error(e); }
 }
 
 // --- 音関連のヘルパー関数 ---
@@ -339,13 +360,12 @@ async function microbitStopSound() {
 
 // --- 2. 内蔵メロディを鳴らす ---
 async function microbitPlayMelody(name) {
-  // 辞書からIDを取得 (例: "S:1")
-  let id = MICROBIT_MELODIES[name];
-  
-  // もし辞書になければ、そのまま送る（旧互換用だが基本は使わない）
-  if (!id) return; 
-
-  // コマンド送信 (例: MELODY:S:1)
+// 1. まず辞書にあるか探す
+  let n = String(name).trim();
+  let id = MICROBIT_MELODIES[n];
+  // 2. なければ（辞書にない or 既にIDが渡された）、そのまま使う
+  if (!id) id = name; 
+  // 3. 送信
   await sendSerial("MELODY:" + id);
 }
 
@@ -357,7 +377,7 @@ async function microbitPlayTone(noteFreq, duration) {
   // デフォルトで1拍=500msとします（引数がなければ）
   if (!duration) duration = 500; 
   await sendSerial("TONE:" + noteFreq + ":" + duration);
-  await new Promise(resolve => setTimeout(resolve, duration + 100));
+  await new Promise(resolve => setTimeout(resolve, duration + 200));
 }
 
 
@@ -382,9 +402,10 @@ const microbitUsbPlugin = {
     type: 'func',
     josi: [],
     fn: async function (sys) {
-      // 以前のconnectSerial関数を呼び出す
       if( !writer ) {
         return await connectSerial(); 
+      } else {
+        console.log("既に接続中");
       }
     }
   },
@@ -432,28 +453,10 @@ const microbitUsbPlugin = {
     }
   },
 
-  // ■ 接続状態を確認する命令（接続されていたら True を返す）
-  'マイクロビット接続中': {
-    type: 'func',
-    josi: [],
-    fn: function (sys) {
-      // writer変数が存在し、かつロックされていないか簡易チェック
-      return (writer !== undefined && writer !== null);
-    }
-  },
-
-  // ■ 未接続を確認する命令（接続されていなければ True を返す）
-  'マイクロビット未接続': {
-    type: 'func',
-    josi: [],
-    fn: function (sys) {
-      // 接続中の「逆」を返す
-      return !(writer !== undefined && writer !== null);
-    }
-  },
-
-  // --- ここから下が、授業で使いやすくするための命令 ---
+  'マイクロビット接続中': { type: 'func', josi: [], fn: function (sys) { return isMicrobitConnected; } },
+  'マイクロビット未接続': { type: 'func', josi: [], fn: function (sys) { return !isMicrobitConnected; } },
   
+  // --- ここから下が、授業で使いやすくするための命令 ---
   'マイクロビットハート表示': {
     type: 'func',
     josi: [],
@@ -619,6 +622,14 @@ const microbitUsbPlugin = {
     fn: function (sys) { return (sensorData.btnB === 1); }
   },
 
+  'マイクロビットロゴ状態': { 
+    type: 'func', 
+    josi: [], 
+    fn: function (sys) { 
+      return (sensorData.logo === 1); 
+    } 
+  },
+
   // --- 端子（入出力） ---
   // 入力モードにする（＝読み取りON、出力OFF）
   'マイクロビット端子入力モード設定': { 
@@ -689,6 +700,11 @@ const microbitUsbPlugin = {
     return_none: true
   },
 
+//  'マイクロビットロゴタッチ時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onLogoTouched_Callback = function() { f(s); }; }, return_none: true },
+  'マイクロビットロゴ押時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onLogoPressed_Callback = function() { f(s); }; }, return_none: true },
+  'マイクロビットロゴ離時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onLogoReleased_Callback = function() { f(s); }; }, return_none: true },
+  'マイクロビットロゴ長押時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onLogoLong_Callback = function() { f(s); }; }, return_none: true },
+
   // 4. 音・音楽関連
   'マイクロビット音停止': {
     type: 'func',
@@ -701,11 +717,8 @@ const microbitUsbPlugin = {
   'マイクロビットメロディ再生': { 
     type: 'func', 
     josi: [['を', 'の']], 
-    fn: async function (name, sys) {
-      // 日本語名からIDを検索 (見つからなければそのまま送る)
-      let id = MICROBIT_MELODIES[name];
-      if (!id) id = name; 
-      await microbitPlayMelody(id); 
+    fn: async function (n, sys) {
+      await microbitPlayMelody(n); 
     }
   },
 
