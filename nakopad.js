@@ -480,7 +480,8 @@ const SAMPLE_LIST = [
 	{ value: './sample/mb00-default.txt',    name: '計測・制御0 micro:bitを使う' },
 	{ value: './sample/mb01-test.txt',       name: '計測・制御1 基本動作テスト' },
 	{ value: './sample/mb02-doremi.txt',     name: '計測・制御1.1 ドレミのテスト' }, 
-	{ value: './sample/mb03-saita.txt',      name: '計測・制御1.2 さいたさいた' }
+	{ value: './sample/mb03-saita.txt',      name: '計測・制御1.2 さいたさいた' },
+	{ value: './sample/mb34-servotest.txt',  name: '計測・制御34 サーボモータの動作テスト' }
 ];
 
 const nako3_init_samplelist = function () {
