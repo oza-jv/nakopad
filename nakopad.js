@@ -26,10 +26,10 @@ function nako3_run() {
 	} catch (e) {
 		nako3_print("==ERROR==" + e.message + "")
 		nako3_scr();
-		if (writer) { // writer変数が存在＝接続済み
-			sendSerial("STOP");
-			console.log("micro:bit停止");
-		}
+		//if (writer) { // writer変数が存在＝接続済み
+		//	sendSerial("STOP");
+		//	console.log("micro:bit停止");
+		//}
 	}
 }
 
