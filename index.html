@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-	<title>学習用なでしこパッド v2.0</title>
+	<title>学習用なでしこパッド v3.0</title>
 </head>
 <body>
 <!-- なでしこ3のエンジンを取り込み -->
@@ -16,11 +16,12 @@
 <script defer src='https://nadesi.com/v3/cdn.php?v=3.7.9&f=release/plugin_webworker.js'></script>
 <script defer src='https://nadesi.com/v3/cdn.php?v=3.7.9&f=release/plugin_caniuse.js'></script>
 <script defer src='https://cdn.jsdelivr.net/npm/chart.js@3.3.0/dist/chart.min.js'></script>
-<script src="./nakopad.js?d=20251116"></script>
+<script src="./nakopad.js?d=20260101"></script>
 <script src="./plugin_hyouji.mjs"></script>
 <script src="./plugin_media.js"></script>
 <script src="./plugin_speak.js"></script>
 <script src="./plugin_nakoboard.js"></script>
+<script src="./plugin_microbit.js"></script>
 
 <link rel="stylesheet" href="./codemirror/lib/codemirror.css">
 <link rel="stylesheet" href="./codemirror/theme/eclipse.css">
@@ -99,7 +100,13 @@
 				[<a href="https://www.manabu-tech.net/nakopad/?load=manual_soundlist.txt" target="_blank" rel="noopener noreferrer">使える音を調べる</a>]
 			</div>
 		</div>
-
+		<div class="btnsub_flex" style="padding:8px;">
+			<div class="footer" onclick="connectSerial()">[micro:bitを接続する]</div>
+			<div class="footer" onclick="disconnectSerial();">[micro:bitを切断する]</div>
+			<div class="footer">
+				[<a href="https://www.manabu-tech.net/nakopad/microbit-microbit-nakopad-v1_0.hex" target="_blank" rel="noopener noreferrer">micro:bitに書きこむhexファイル v1.0</a>]
+			</div>
+		</div>
 	</div>
 	
 	<!-- 結果表示エリア -->
@@ -112,8 +119,8 @@
 		<!-- ERROR -->
 		<div id="nako3_error" class="nako3error" style="display: none"></div>
 
-		<!-- INFO -->
 		<div id="nako3_info" class="nako3info" style="display: none"></div>
+		<!-- INFO -->
 
 		<!-- RESULT -->
 		<audio id="audio1" class="media"></audio>
@@ -153,7 +160,7 @@
 
 <!-- footer -->
 <div class="footer">
-	<div>学習用なでしこパッド v2.0 (2025/11/16)　<a href="https://www.manabu-tech.net/category/nakopad/" target="_blank" rel="noopener noreferrer">更新履歴</a></div>
+	<div>学習用なでしこパッド v3.0 (2025/12/27)　<a href="https://www.manabu-tech.net/category/nakopad/" target="_blank" rel="noopener noreferrer">更新履歴</a></div>
 	<div>※<a href="https://nadesi.com/" target="_blank" rel="noopener noreferrer">日本語プログラミング言語「なでしこ」 v3.7.9</a> を利用しています。</div>
 	<div>※音素材は，<a href="https://maou.audio/" title="フリー音楽素材/魔王魂" target="_blank" rel="noopener noreferrer">フリー音楽素材/魔王魂</a>のものを使用しています。</div>
 	<div>※画像素材は，なでしこv1に同梱のもの，<a href="https://www.ac-illust.com/" title="イラストAC" target="_blank"  rel="noopener noreferrer">イラストAC</a> を使用しています。</div>
