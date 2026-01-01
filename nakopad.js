@@ -483,10 +483,16 @@ const SAMPLE_LIST = [
 	{ value: './sample/mb01-test.txt',       name: '計測・制御_M1 基本動作テスト' },
 	{ value: './sample/mb02-doremi.txt',     name: '計測・制御_M1.1 ドレミのテスト' }, 
 	{ value: './sample/mb03-saita.txt',      name: '計測・制御_M1.2 さいたさいた' },
-	{ value: './sample/mb10-Lchika.txt',  	 name: '計測・制御_M10 P0端子でLチカ' },
-	{ value: './sample/mb11-servotest.txt',  name: '計測・制御_M11 サーボモータの動作テスト' },
-	{ value: './sample/mb12-btnservotest.txt', name: '計測・制御_M12 ボタンとサーボモータの動作テスト' },
-	{ value: './sample/mb13-gesturetest.txt',  name: '計測・制御_M13 ジェスチャーセンサの動作テスト' }
+	{ value: './sample/mb05-ifthen.txt',     name: '計測・制御_M2 もし～ならば～違えば' },
+	{ value: './sample/mb06-ifthenelse.txt', name: '計測・制御_M3 もし～ならば～違えばもし' },
+	{ value: './sample/mb08-carsensor-def.txt',      name: '計測・制御_M8 衝突防止ｱﾗｰﾑを作る' },
+	{ value: './sample/mb09-carsensor.txt',          name: '計測・制御_M9 衝突防止ｱﾗｰﾑの応用例' },
+	{ value: './sample/mb10-carsensor-media.txt',    name: '計測・制御_M10 衝突防止ｱﾗｰﾑ ﾒﾃﾞｨｱ利用例' },
+	{ value: '', name: '--' },
+	{ value: './sample/mb23-gesturetest.txt', 	name: '計測・制御_M23 ジェスチャーセンサの動作テスト' },
+	{ value: './sample/mb30-Lchika.txt',  	 	name: '計測・制御_M30 P0端子でLチカ' },
+	{ value: './sample/mb31-servotest.txt',  	name: '計測・制御_M31 サーボモータの動作テスト' },
+	{ value: './sample/mb32-btnservotest.txt',	name: '計測・制御_M32 ボタンとサーボモータの動作テスト' }
 ];
 
 const nako3_init_samplelist = function () {
