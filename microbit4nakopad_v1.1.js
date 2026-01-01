@@ -135,10 +135,10 @@ function processCommand(command: string) {
         basic.clearScreen()
     }
     else if (command == "STOP") {   // 全て停止
+        commandQueue = []
         isSending = false
         basic.clearScreen()
         music.stopAllSounds()
-        commandQueue = []
         enableReadP0 = false
         enableReadP1 = false
         enableReadP2 = false
@@ -146,8 +146,8 @@ function processCommand(command: string) {
         pins.analogWritePin(AnalogPin.P1, 0)
         pins.analogWritePin(AnalogPin.P2, 0)
         pins.servoWritePin(AnalogPin.P0, 0)
-        pins.servoWritePin(AnalogPin.P0, 0)
-        pins.servoWritePin(AnalogPin.P0, 0)
+        pins.servoWritePin(AnalogPin.P1, 0)
+        pins.servoWritePin(AnalogPin.P2, 0)
     }
     else if (command == "SENSORSTOP") {  // センサ停止
         isSending = false

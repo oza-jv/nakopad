@@ -446,6 +446,7 @@ const microbitUsbPlugin = {
     type: 'func',
     josi: [],
     fn: async function (sys) {
+      //await sendSerial("SENSORSTOP");
       await sendSerial("STOP");
     }
   },

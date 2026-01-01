@@ -426,15 +426,18 @@ function nako3_break() {
 		media[i].pause();
 	}
 	speechSynthesis.cancel();
-	navigator.nako3.clearPlugins();
 
 	// micro:bitを停止する命令を追加 2025.12.27
 	// もしmicro:bitがつながっていたら、停止する
 	if (typeof writer !== 'undefined') { // writer変数が存在＝接続済み
-		sendSerial("STOP");
+		sendSerial("SENSORSTOP");
 		sendSerial("CLEAR");
 		sendSerial("SOUND:STOP");
+		sendSerial("STOP");
 	}
+
+	navigator.nako3.clearPlugins();
+
 }
 
 // サンプルプログラムのオプションをこちらで定義 21.3.21  7/29追加
