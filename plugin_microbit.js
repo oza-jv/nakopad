@@ -34,6 +34,12 @@ let onLogoTouched_Callback = null;
 let onLogoPressed_Callback = null;
 let onLogoReleased_Callback = null;
 let onLogoLong_Callback = null;
+// ★追加：ジェスチャー用コールバック
+let onShake_Callback = null;      // 振った
+let onScreenUp_Callback = null;   // 画面上
+let onScreenDown_Callback = null; // 画面下
+let onTiltLeft_Callback = null;   // 左傾き
+let onTiltRight_Callback = null;  // 右傾き
 
 // ▼▼▼ アイコンの日本語名とIDの対応表 ▼▼▼
 const MICROBIT_ICONS = {
@@ -47,7 +53,7 @@ const MICROBIT_ICONS = {
   '困る': 6,
   '怒る': 7,
   '寝る': 8,
-  '驚く': 9,
+  '驚く': 9, 'びっくり': 9,
   '変顔': 10,
   'すごい': 11,
   '普通': 12,
@@ -305,24 +311,34 @@ async function disconnectSerial() {
 // --- 初期化 ---
 function clearBuffer() {
   sensorData = { x: 0, y: 0, z: 0, btnA: 0, btnB: 0, light: 0, temp: 0, p0: 0, p1: 0, p2: 0 };
-  onButtonA_Callback = null; // ボタンイベントの登録解除
+  onButtonA_Callback = null;  // ボタン用コールバックの初期化
   onButtonB_Callback = null;
+  onShake_Callback = null;    // ジェスチャー用コールバックの初期化
+  onScreenUp_Callback = null;
+  onScreenDown_Callback = null;
+  onTiltLeft_Callback = null;
+  onTiltRight_Callback = null;
   console.log("micro:bit-バッファと状態をクリアしました");
 }
 
 // --- データ解析関数
 function parseData(data) {
-  if (data.startsWith("EVENT:")) console.log("Event:", data);
+  if (data.startsWith("EV:")) console.log("Event:"+ data + "\n");
 
   // イベント信号
-  if (data === "EVENT:A") { if (onButtonA_Callback) onButtonA_Callback(); }
-  else if (data === "EVENT:B") { if (onButtonB_Callback) onButtonB_Callback(); }
-  else if (data === "EVENT:AB") { if (onButtonAB_Callback) onButtonAB_Callback(); }
-  else if (data === "EVENT:LOGO_TOUCHED") { if (onLogoTouched_Callback) onLogoTouched_Callback(); }
-  else if (data === "EVENT:LOGO_PRESSED") { if (onLogoPressed_Callback) onLogoPressed_Callback(); }
-  else if (data === "EVENT:LOGO_RELEASED") { if (onLogoReleased_Callback) onLogoReleased_Callback(); }
-  else if (data === "EVENT:LOGO_LONG") { if (onLogoLong_Callback) onLogoLong_Callback(); }
-  
+  if (data === "EV:A") { if (onButtonA_Callback) onButtonA_Callback(); }
+  else if (data === "EV:B") { if (onButtonB_Callback) onButtonB_Callback(); }
+  else if (data === "EV:AB") { if (onButtonAB_Callback) onButtonAB_Callback(); }
+  else if (data === "EV:T") { if (onLogoTouched_Callback) onLogoTouched_Callback(); }
+  else if (data === "EV:P") { if (onLogoPressed_Callback) onLogoPressed_Callback(); }
+  else if (data === "EV:R") { if (onLogoReleased_Callback) onLogoReleased_Callback(); }
+  else if (data === "EV:L") { if (onLogoLong_Callback) onLogoLong_Callback(); }
+  else if (data.startsWith("EV:1")) { if (onScreenUp_Callback) onScreenUp_Callback(); }
+  else if (data.startsWith("EV:2")) { if (onScreenDown_Callback) onScreenDown_Callback(); }
+  else if (data.startsWith("EV:3")) { if (onTiltLeft_Callback) onTiltLeft_Callback(); }
+  else if (data.startsWith("EV:4")) { if (onTiltRight_Callback) onTiltRight_Callback(); }
+  else if (data.startsWith("EV:5")) { if (onShake_Callback) onShake_Callback(); }
+
   // センサーデータ (DAT:ax,ay,az,ba,bb,li,te,p0,p1,p2)
   // 順序: accX, accY, accZ, btnA, btnB, light, temp, p0, p1, p2, lo
   else if (data.startsWith("DAT:")) {
@@ -713,10 +729,17 @@ const microbitUsbPlugin = {
     return_none: true 
   },
 
-//  'マイクロビットロゴタッチ時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onLogoTouched_Callback = function() { f(s); }; }, return_none: true },
+  //  'マイクロビットロゴタッチ時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onLogoTouched_Callback = function() { f(s); }; }, return_none: true },
   'マイクロビットロゴ押時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onLogoPressed_Callback = function() { f(s); }; }, return_none: true },
   'マイクロビットロゴ離時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onLogoReleased_Callback = function() { f(s); }; }, return_none: true },
   'マイクロビットロゴ長押時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onLogoLong_Callback = function() { f(s); }; }, return_none: true },
+
+  // ★追加：加速度イベント
+  'マイクロビット振時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onShake_Callback = function() { f(s); }; }, return_none: true },
+  'マイクロビット画面上時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onScreenUp_Callback = function() { f(s); }; }, return_none: true },
+  'マイクロビット画面下時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onScreenDown_Callback = function() { f(s); }; }, return_none: true },
+  'マイクロビット左傾時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onTiltLeft_Callback = function() { f(s); }; }, return_none: true },
+  'マイクロビット右傾時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onTiltRight_Callback = function() { f(s); }; }, return_none: true },
 
   // 4. 音・音楽関連
   'マイクロビット音停止': {
