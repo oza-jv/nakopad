@@ -213,10 +213,11 @@ async function connectSerial() {
   }
 
   try {
-    const filters = [ { usbVendorId: 0x0d28 } ] // micro:bit (mbed) のVendor ID ];
+    //const filters = [ { usbVendorId: 0x0d28 } ] // micro:bit (mbed) のVendor ID ];
    
     // フィルタを適用してダイアログを表示
-    port = await navigator.serial.requestPort({ filters });
+    //port = await navigator.serial.requestPort({ filters });
+    port = await navigator.serial.requestPort({ filters: [] });
     await port.open({ baudRate: 115200 });
 
     // 書き込みストリームの準備
