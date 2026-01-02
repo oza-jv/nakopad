@@ -1,0 +1,23 @@
+name: Deploy via SFTP
+
+on:
+  push:
+    branches:
+      - main  # mainブランチにプッシュされた時に実行
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: SFTP Deploy
+        uses: wlixcc/SFTP-Deploy-action@v1.2.4
+        with:
+          username: ${{ secrets.SFTP_USERNAME }}
+          server: ${{ secrets.SFTP_SERVER }}
+          password: ${{ secrets.SFTP_PASSWORD }} # 鍵認証の場合は key: を使用
+          local_path: './*'              # 送信するローカルのパス
+          remote_path: '/home/xs658811/manabu-tech.net/public_html/nakopad'   # サーバー側の同期先パス（要変更）
+          delete_remote_files: true      # サーバーにしかないファイルを消す場合はtrue
