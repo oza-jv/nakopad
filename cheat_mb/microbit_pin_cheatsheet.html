@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>なでしこ micro:bit 端子（ピン）・サーボモータ　チートシート</title>
+    <style>
+        body {
+            font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            line-height: 1.5;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 18px;
+            background-color: #f0f0f0;
+            padding: 8px 12px;
+            border-left: 5px solid #e91e63;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #555;
+            border-bottom: 2px dotted #ccc;
+            padding-bottom: 5px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #f9f9f9;
+            font-weight: bold;
+        }
+        .text-left {
+            text-align: left;
+            padding-left: 20px;
+        }
+        .command {
+            font-family: "Courier New", Consolas, monospace;
+            font-weight: bold;
+            /* color: #d32f2f;
+            background-color: #fff3f3; */
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        .flex-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .flex-item {
+            flex: 1;
+            min-width: 300px; /* 画面が狭いときは縦に並ぶように */
+        }
+        .note {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .top-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #fce4ec;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        /* 印刷用の設定 */
+        @media print {
+            body { padding: 0; }
+            h2 {
+                background-color: transparent;
+                border-bottom: 1px solid #ccc;
+                border-left: none;
+                padding-left: 0;
+            }
+            .command { color: #000; background-color: transparent; border: 1px solid #ccc; }
+            .top-section { border: 1px solid #ccc; background-color: transparent; }
+            table { page-break-inside: avoid; }
+            .flex-container { display: flex; flex-wrap: wrap; }
+            .flex-item { flex: 0 0 48%; } /* 印刷時はきれいに2列にする */
+        }
+    </style>
+</head>
+<body>
+
+    <h1>なでしこ micro:bit 端子（ピン）・サーボモータ　チートシート</h1>
+
+    <h2>5. 端子（ピン）とサーボモーター</h2>
+    <p class="note">ワニ口クリップで外部の部品をピン（P0、P1、P2）につないで制御します。</p>
+    
+    <div style="text-align: center; margin: 15px 0;">
+        <svg width="100%" style="max-width: 400px;" viewBox="0 0 300 80" xmlns="http://www.w3.org/2000/svg">
+            <rect x="0" y="0" width="300" height="80" fill="#333" rx="10" ry="10" />
+            <rect x="0" y="60" width="300" height="20" fill="#111" />
+            <g fill="#ffd700" font-family="sans-serif" font-weight="bold" font-size="16" text-anchor="middle">
+                <path d="M 10 20 L 40 20 L 40 80 L 10 80 Z" />
+                <text x="25" y="45" fill="#333">0</text>
+                <path d="M 70 20 L 100 20 L 100 80 L 70 80 Z" />
+                <text x="85" y="45" fill="#333">1</text>
+                <path d="M 130 20 L 160 20 L 160 80 L 130 80 Z" />
+                <text x="145" y="45" fill="#333">2</text>
+                <path d="M 190 20 L 220 20 L 220 80 L 190 80 Z" />
+                <text x="205" y="45" fill="#333">3V</text>
+                <path d="M 250 20 L 280 20 L 280 80 L 250 80 Z" />
+                <text x="265" y="45" fill="#333">GND</text>
+            </g>
+            <g fill="#111">
+                <circle cx="25" cy="65" r="5" />
+                <circle cx="85" cy="65" r="5" />
+                <circle cx="145" cy="65" r="5" />
+                <circle cx="205" cy="65" r="5" />
+                <circle cx="265" cy="65" r="5" />
+            </g>
+        </svg>
+    </div>
+    <table>
+        <tr><th>命令の書き方</th><th>働き・説明</th></tr>
+        <tr><td><span class="command">「P0」をマイクロビット端子入力モード設定</span></td><td>指定した端子（P0、P1、P2）を「入力（計測）」に使う準備をします。</td></tr>
+        <tr><td><span class="command">「P0」をマイクロビット端子出力モード設定</span></td><td>指定した端子（P0、P1、P2）を「出力（制御）」に使う準備をします。</td></tr>
+        <tr><td><span class="command">「P0」のマイクロビット端子デジタル入力</span></td><td>端子に電気が流れていれば 1、流れていなければ 0 を返します。</td></tr>
+        <tr><td><span class="command">1023を「P0」へマイクロビット端子アナログ出力</span></td><td>指定した端子（P0、P1、P2）に電流を送ります。強さは0（弱い）〜1023（強い）で指定。</td></tr>
+        <tr><td><span class="command">90を「P0」へマイクロビットサーボ出力</span></td><td>指定した端子（P0、P1、P2）につないだサーボモータを、指定した角度（この例では90度）に動かします。</td></tr>
+    </table>
+
+    <table>
+        <tr><th>説明</th><th>つなぎ方の例</th></tr>
+        <tr><td>P0端子(赤色)にLEDのアノードを，GND端子(黒色)にLEDのカソードをつないだ例</td>
+            <td><img src="p0_led.jpg" width="60%"></td></tr>
+        <tr><td>P0端子(黄色)にサーボモータの白色を，3V端子(赤色)にサーボモータの赤色を，GND端子(黒色)にサーボモータの黒色をつないだ例</td>
+            <td><img src="p0_servo.jpg" width=60%"></td></tr>
+
+    </table>
+
+</body>
+</html>

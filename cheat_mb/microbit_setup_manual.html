@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>なでしこ × micro:bit 初期設定マニュアル</title>
+    <style>
+        body {
+            font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 26px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 20px;
+            background-color: #e3f2fd;
+            padding: 10px 15px;
+            border-left: 6px solid #1976d2;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+        .step-box {
+            border: 2px solid #bbdefb;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        .step-number {
+            display: inline-block;
+            background-color: #1976d2;
+            color: white;
+            font-weight: bold;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .important {
+            color: #d32f2f;
+            font-weight: bold;
+            background-color: #ffebee;
+            padding: 10px;
+            border-radius: 4px;
+            border-left: 4px solid #f44336;
+        }
+        .code-block {
+            font-family: "Courier New", Consolas, monospace;
+            background-color: #f5f5f5;
+            border: 1px solid #ccc;
+            padding: 15px;
+            border-radius: 4px;
+            font-size: 16px;
+            white-space: pre-wrap;
+        }
+        .highlight-link {
+            display: inline-block;
+            background-color: #fff9c4;
+            padding: 2px 6px;
+            border: 1px solid #fbc02d;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #d84315;
+        }
+        ul {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+        /* 印刷用の設定 */
+        @media print {
+            body { padding: 0; }
+            .step-box { page-break-inside: avoid; }
+            h2 { border-bottom: 1px solid #1976d2; background-color: transparent; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>なでしこパッド × micro:bit 初期設定マニュアル</h1>
+    <p>この手順にそって、なでしこからmicro:bitをあやつる準備をしましょう！</p>
+
+    <h2>１．なでしこパッドから通信用プログラムをダウンロードしよう</h2>
+    
+    <div class="step-box">
+        <div class="step-number">Step 1</div>
+        <p>ブラウザ（Google ChromeやEdgeなど）で、<strong>「なでしこパッド」</strong>のページを開きます。</p>
+        <p>URL: <a href="https://www.manabu-tech.net/nakopad/" target="_blank">https://www.manabu-tech.net/nakopad/</a></p>
+        
+        <div class="step-number">Step 2</div>
+        <p>画面のテキストエリア（プログラムを書く広い場所）の下にある、<br>
+        <span class="highlight-link">「micro:bitに書きこむhexファイル」</span> というリンクをクリックして、ファイルをパソコンにダウンロードします。</p>
+    </div>
+
+    <h2>２．micro:bitにプログラムを入れよう</h2>
+    
+    <div class="step-box">
+        <div class="step-number">Step 3</div>
+        <p>パソコンとmicro:bitをUSBケーブルでつなぎます。</p>
+        
+        
+        <div class="step-number">Step 4</div>
+        <p>パソコンのフォルダ（エクスプローラー）を開き、<strong>「MICROBIT」</strong>という名前のドライブがあることを確認します。</p>
+        
+        <div class="step-number">Step 5</div>
+        <p>Step 2でダウンロードしたファイル（<code>.hex</code>）を、<strong>「MICROBIT」ドライブの中にドラッグ＆ドロップ</strong>します。</p>
+        <p class="important">★micro:bitの裏側の黄色いランプがチカチカ点滅します。点滅が終わって、画面に「✓」マークが出たら準備完了です！</p>
+    </div>
+
+    <h2>３．パソコンとmicro:bitを通信させよう（重要！）</h2>
+    
+    <div class="step-box">
+        <div class="step-number">Step 6</div>
+        <p>なでしこパッドのエディタに、以下の「基本のプログラム」を入力して、<strong>「実行」</strong>ボタンを押します。</p>
+        
+        <div class="code-block">
+!「プラグインのURLまたはファイル」を取り込む
+
+マイクロビットUSB接続。
+「ハート」をマイクロビットアイコン表示。</div>
+        <p>※1行目の「取り込む」命令は、先生の指示に従って正しい内容を書いてください。</p>
+        
+        <div class="step-number">Step 7</div>
+        <p>画面の左上に<strong>「シリアルポートの接続要求」</strong>という小さな画面が出てきます。</p>
+        
+        <ul>
+            <li>リストの中から<strong>「BBC micro:bit CMSIS-DAP」</strong>（または「mbed Serial Port」）という名前をクリックして選びます。</li>
+            <li>青くなった<strong>「接続」</strong>ボタンをクリックします。</li>
+        </ul>
+        
+        <div class="step-number">Step 8</div>
+        <p class="important">★micro:bitの画面に「ハート」が表示されたら、大成功です！</p>
+        <p>チートシート（命令一覧表）を見ながら、表示するアイコンを変えたり、音を鳴らしたりしてみましょう。</p>
+    </div>
+
+    <h2>💡 うまく動かないときのチェックリスト</h2>
+    <ul>
+        <li><strong>実行してもダイアログが出ない：</strong><br>ブラウザが対応していない可能性があります。必ず「Google Chrome」か「Microsoft Edge」を使ってください。</li>
+        <li><strong>リストに「micro:bit」が出てこない：</strong><br>USBケーブルが奥までしっかり刺さっているか確認してください。「充電専用」のケーブルだと通信できません。</li>
+        <li><strong>エラーが出る・動かない：</strong><br>別のタブでMakeCode（メイクコード）を開いたままにしていませんか？MakeCodeのタブは閉じてから実行してください。</li>
+    </ul>
+
+</body>
+</html>

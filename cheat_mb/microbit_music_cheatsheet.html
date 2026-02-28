@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>なでしこ micro:bit 音楽・メロディチートシート</title>
+    <style>
+        body {
+            font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            line-height: 1.5;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 18px;
+            background-color: #f0f0f0;
+            padding: 8px 12px;
+            border-left: 5px solid #ff9800;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        h3 {
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: center;
+        }
+        th {
+            background-color: #f9f9f9;
+            font-weight: bold;
+        }
+        .text-left {
+            text-align: left;
+        }
+        .command {
+            font-family: "Courier New", Consolas, monospace;
+            font-weight: bold;
+            /* color: #d32f2f;
+            background-color: #fff3f3; */
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .flex-container {
+            display: flex;
+            gap: 20px;
+        }
+        .flex-item {
+            flex: 1;
+        }
+        .note {
+            font-size: 12px;
+            color: #666;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+        /* 印刷用の設定 */
+        @media print {
+            body { padding: 0; }
+            h2 {
+                background-color: transparent;
+                border-bottom: 1px solid #ccc;
+                border-left: none;
+                padding-left: 0;
+            }
+            .command { color: #000; background-color: transparent; border: 1px solid #ccc; }
+            table { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>なでしこ micro:bit 音楽・メロディチートシート</h1>
+
+    <h2>1. 音とメロディ</h2>
+    <table>
+        <tr><th>命令の書き方</th><th>働き・説明</th></tr>
+        <tr><td class="text-left"><span class="command">「ダダダム」をマイクロビットメロディ再生</span></td><td class="text-left">micro:bitに内蔵された曲や効果音（この例では「ダダダム」）を鳴らします。</td></tr>
+        <tr><td class="text-left"><span class="command">262をマイクロビット発音</span></td><td class="text-left">指定した周波数（Hz）の音を　0.5秒間鳴らします。</td></tr>
+        <tr><td class="text-left"><span class="command">262を2秒マイクロビット発音</span></td><td class="text-left">秒数を指定すると、指定した周波数（Hz）の音を、指定した秒数だけ鳴らします。</td></tr>
+        <tr><td class="text-left"><span class="command">マイクロビット音停止</span></td><td class="text-left">鳴っている音やメロディを強制的にストップします。</td></tr>
+    </table>
+
+    <h2>2. 音階と周波数（Hz）の対応表</h2>
+    <p class="note">命令の書き方例： <span class="command">262を2秒マイクロビット発音</span></p>
+    
+    
+    <div style="text-align: center; margin: 20px 0;">
+        <svg width="100%" style="max-width: 500px;" viewBox="0 0 400 140" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="#333" stroke-width="2" fill="#fff">
+                <rect x="0" y="0" width="50" height="90" />
+                <rect x="50" y="0" width="50" height="90" />
+                <rect x="100" y="0" width="50" height="90" />
+                <rect x="150" y="0" width="50" height="90" />
+                <rect x="200" y="0" width="50" height="90" />
+                <rect x="250" y="0" width="50" height="90" />
+                <rect x="300" y="0" width="50" height="90" />
+                <rect x="350" y="0" width="50" height="90" />
+            </g>
+            <g fill="#333">
+                <rect x="35" y="0" width="30" height="55" />
+                <rect x="85" y="0" width="30" height="55" />
+                <rect x="185" y="0" width="30" height="55" />
+                <rect x="235" y="0" width="30" height="55" />
+                <rect x="285" y="0" width="30" height="55" />
+            </g>
+            <g font-family="sans-serif" font-size="14" font-weight="bold" fill="#333" text-anchor="middle">
+                <text x="25" y="110">ド</text>
+                <text x="75" y="110">レ</text>
+                <text x="125" y="110">ミ</text>
+                <text x="175" y="110">ファ</text>
+                <text x="225" y="110">ソ</text>
+                <text x="275" y="110">ラ</text>
+                <text x="325" y="110">シ</text>
+                <text x="375" y="110">ド</text>
+            </g>
+            <g font-family="sans-serif" font-size="12" fill="#e65100" text-anchor="middle">
+                <text x="25" y="130">262</text>
+                <text x="75" y="130">294</text>
+                <text x="125" y="130">330</text>
+                <text x="175" y="130">349</text>
+                <text x="225" y="130">392</text>
+                <text x="275" y="130">440</text>
+                <text x="325" y="130">494</text>
+                <text x="375" y="130">523</text>
+            </g>
+        </svg>
+    </div>
+    
+    <h3>基本の高さ（真ん中のオクターブ）</h3>
+    <table>
+        <tr>
+            <th>音階（ドレミ）</th>
+            <td>ド</td><td>レ</td><td>ミ</td><td>ファ</td><td>ソ</td><td>ラ</td><td>シ</td><td>高いド</td>
+        </tr>
+        <tr>
+            <th>周波数（数値）</th>
+            <td>262</td><td>294</td><td>330</td><td>349</td><td>392</td><td>440</td><td>494</td><td>523</td>
+        </tr>
+    </table>
+
+    <div class="flex-container">
+        <div class="flex-item">
+            <h3>低い音</h3>
+            <table>
+                <tr><th>音階</th><th>数値</th></tr>
+                <tr><td>低いド</td><td>131</td></tr>
+                <tr><td>低いソ</td><td>196</td></tr>
+                <tr><td>低いラ</td><td>220</td></tr>
+                <tr><td>低いシ</td><td>247</td></tr>
+            </table>
+        </div>
+        <div class="flex-item">
+            <h3>高い音</h3>
+            <table>
+                <tr><th>音階</th><th>数値</th></tr>
+                <tr><td>高いレ</td><td>587</td></tr>
+                <tr><td>高いミ</td><td>659</td></tr>
+                <tr><td>高いソ</td><td>784</td></tr>
+                <tr><td>高いラ</td><td>880</td></tr>
+            </table>
+        </div>
+    </div>
+
+
+    <h2>3. メロディ・効果音（日本語名）一覧</h2>
+    <p class="note">命令の書き方例： <span class="command">「ハッピーバースデー」をマイクロビットメロディ再生</span></p>
+    
+    <div class="flex-container">
+        <div class="flex-item">
+            <h3>効果音（V2専用）</h3>
+            <table>
+                <tr><th class="text-left">日本語名（コピーして使う）</th></tr>
+                <tr><td class="text-left">くすくす笑う</td></tr>
+                <tr><td class="text-left">ハッピー</td></tr>
+                <tr><td class="text-left">ハロー</td></tr>
+                <tr><td class="text-left">ミステリアス</td></tr>
+                <tr><td class="text-left">悲しい</td></tr>
+                <tr><td class="text-left">するする動く</td></tr>
+                <tr><td class="text-left">舞い上がる</td></tr>
+                <tr><td class="text-left">バネ</td></tr>
+                <tr><td class="text-left">キラキラ</td></tr>
+                <tr><td class="text-left">あくび</td></tr>
+            </table>
+        </div>
+        <div class="flex-item">
+            <h3>メロディ（音楽）</h3>
+            <table>
+                <tr><th class="text-left">日本語名（コピーして使う）</th></tr>
+                <tr><td class="text-left">ダダダム</td></tr>
+                <tr><td class="text-left">ジ・エンターテイナー</td></tr>
+                <tr><td class="text-left">プレリュード</td></tr>
+                <tr><td class="text-left">歓喜の歌</td></tr>
+                <tr><td class="text-left">ニャン・キャット</td></tr>
+                <tr><td class="text-left">着信メロディ</td></tr>
+                <tr><td class="text-left">ファンク</td></tr>
+                <tr><td class="text-left">ブルース</td></tr>
+                <tr><td class="text-left">ハッピーバースデー</td></tr>
+                <tr><td class="text-left">ウエディングマーチ</td></tr>
+                <tr><td class="text-left">おそうしき</td></tr>
+                <tr><td class="text-left">ちゃんちゃん♪</td></tr>
+                <tr><td class="text-left">タッタラッタッター</td></tr>
+                <tr><td class="text-left">チェイス</td></tr>
+                <tr><td class="text-left">ピコーン！</td></tr>
+                <tr><td class="text-left">ワワワワー</td></tr>
+                <tr><td class="text-left">ジャンプアップ</td></tr>
+                <tr><td class="text-left">ジャンプダウン</td></tr>
+                <tr><td class="text-left">パワーアップ</td></tr>
+                <tr><td class="text-left">パワーダウン</td></tr>
+            </table>
+        </div>
+    </div>
+
+</body>
+</html>

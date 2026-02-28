@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>なでしこ micro:bit 制御チートシート</title>
+    <style>
+        body {
+            font-family: "Hiragino Kaku Gothic ProN", "Meiryo", sans-serif;
+            line-height: 1.5;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            border-bottom: 2px solid #333;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 18px;
+            background-color: #f0f0f0;
+            padding: 8px 12px;
+            border-left: 5px solid #0056b3;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ccc;
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f9f9f9;
+            font-weight: bold;
+            width: 45%;
+        }
+        .command {
+            font-family: "Courier New", Consolas, monospace;
+            font-weight: bold;
+            /* color: #d32f2f;
+            background-color: #fff3f3; */
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+        .note {
+            font-size: 12px;
+            color: #666;
+            margin-top: -10px;
+            margin-bottom: 15px;
+        }
+        /* メロディ用リンクボタン（オレンジ） */
+        .link-button {
+            display: inline-block;
+            background-color: #fff3e0;
+            color: #e65100;
+            padding: 4px 8px;
+            border: 1px solid #ffb74d;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .link-button:hover {
+            background-color: #ffe0b2;
+        }
+        /* アイコン用リンクボタン（ピンク） */
+        .link-button-icon {
+            display: inline-block;
+            background-color: #fce4ec;
+            color: #d81b60;
+            padding: 4px 8px;
+            border: 1px solid #f48fb1;
+            border-radius: 4px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .link-button-icon:hover {
+            background-color: #f8bbd0;
+        }
+        /* 印刷用の設定 */
+        @media print {
+            body { padding: 0; }
+            h2 {
+                background-color: transparent;
+                border-bottom: 1px solid #ccc;
+                border-left: none;
+                padding-left: 0;
+            }
+            .command { color: #000; background-color: transparent; border: 1px solid #ccc; }
+            .link-button, .link-button-icon { display: none; } /* 印刷時はリンクボタンを隠す */
+            table { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>なでしこ micro:bit 制御チートシート (USB版)</h1>
+
+    <h2>1. 接続と基本操作</h2>
+    <p class="note">プログラムの最初と最後に必ず書く命令です。</p>
+    <table>
+        <tr><th>命令の書き方</th><th>働き・説明</th></tr>
+        <tr><td><span class="command">マイクロビットUSB接続</span></td><td>micro:bitとPCをつなぎ，通信を開始します。（最初に1回書く）</td></tr>
+        <tr><td><span class="command">マイクロビット停止</span></td><td>マイクロビットのプログラムを安全に停止します。（最後に書く）</td></tr>
+        <tr><td><span class="command">マイクロビットセンサ開始</span></td><td>センサー情報の読み取りをスタートします。</td></tr>
+        <tr><td><span class="command">マイクロビットセンサ停止</span></td><td>センサー情報の読み取りをストップします。</td></tr>
+        <tr><td><span class="command">マイクロビットバッファクリア</span></td><td>マイクロビット内で処理を待っている命令があったとき，それを全て消去します。</td></tr>
+    </table>
+
+    <h2>2. LEDと画面表示</h2>
+    <table>
+        <tr><th>命令の書き方</th><th>働き・説明</th></tr>
+        <tr><td><span class="command">「・・・」をマイクロビット表示</span></td><td>・・・にかいた文字や数字をスクロール表示します。</td></tr>
+        <tr><td><span class="command">マイクロビットスマイル表示</span><br /><span class="command">マイクロビットハート表示</span><br /><span class="command">マイクロビットノー表示</span></td><td>micro:bitに内蔵のアイコンを表示します。</td></tr>
+        <tr><td><span class="command">「ハート」をマイクロビットアイコン表示</span></td><td>micro:bitに内蔵の「ハート」のアイコンを表示します。<a href="microbit_icon_cheatsheet.html" target="_blank" class="link-button-icon">▶ アイコンチートシートを開く</a></td></tr>
+        <tr><td><span class="command">「上」をマイクロビット矢印表示</span></td><td>その向きの矢印を表示します。<span class="note">（上，右上，右，右下，下，左下，左，左上）（北，北東，東，南東，南，南西，西，北西）</span></td></tr>
+        <tr><td><span class="command">マイクロビット表示消す</span></td><td>画面のLEDをすべて消します。</td></tr>
+        <tr><td><span class="command">XとYをマイクロビット点灯</span></td><td>指定した座標（X:0〜4, Y:0〜4）のLEDを光らせます。</td></tr>
+        <tr><td><span class="command">XとYをマイクロビット消灯</span></td><td>指定した座標（X:0〜4, Y:0〜4）のLEDを消します。</td></tr>
+    </table>
+
+    <h2>3. 音とメロディ</h2>
+    <p class="note">
+        ※メロディの日本語名や，音の高さの詳しい一覧は，音楽・メロディチートシート
+        <a href="microbit_music_cheatsheet.html" target="_blank" class="link-button">▶ 音楽・メロディチートシートを開く</a> 
+        をご覧ください。
+    </p>
+
+    <h2>4. センサーとボタン（入力）</h2>
+    <p class="note">※この命令を使う前に，必ず「マイクロビットセンサ開始」を実行してください。</p>
+    <table>
+        <tr><th>命令の書き方</th><th>働き・説明</th></tr>
+        <tr><td><span class="command">（変数）＝マイクロビットAボタン状態</span></td><td>Aボタンが押されていれば「1」，いなければ「0」を変数に代入します。</td></tr>
+        <tr><td><span class="command">（変数）＝マイクロビットBボタン状態</span></td><td>Bボタンが押されていれば「1」，いなければ「0」を変数に代入します。</td></tr>
+        <tr><td><span class="command">（変数）＝マイクロビット照度</span></td><td>センサが計測した明るさを，0（暗い）〜255（明るい）の値にして，変数に代入します。</td></tr>
+        <tr><td><span class="command">（変数）＝マイクロビット温度</span></td><td>センサが計測した温度（℃）を，変数に代入します。</td></tr>
+        <tr><td><span class="command">（変数）＝マイクロビット加速度X</span><br /><span class="command">（変数）＝マイクロビット加速度Y</span><br /><span class="command">（変数）＝マイクロビット加速度Z</span></td><td>傾きや動きの力を返します。（X:左右, Y:前後, Z:上下）</td></tr>
+        <tr><td><span class="command">マイクロビットAボタン押した時には　…　ここまで。</span></td><td>マイクロビットのAボタンを押した時に，「…」を実行します。</td></tr>
+        <tr><td><span class="command">マイクロビットBボタン押した時には　…　ここまで。</span></td><td>マイクロビットのBボタンを押した時に，「…」を実行します。</td></tr>
+        <tr><td><span class="command">マイクロビットABボタン押した時には　…　ここまで。</span></td><td>マイクロビットのAボタンとBボタンを同時に押した時に，「…」を実行します。</td></tr>
+        <tr><td><span class="command">マイクロビット振時には　…　ここまで。</span></td><td>マイクロビットを振った時に，「…」を実行します。</td></tr>
+        <tr><td><span class="command">マイクロビット左傾時には　…　ここまで。</span></td><td>マイクロビットを左にかたむけた時に，「…」を実行します。</td></tr>
+        <tr><td><span class="command">マイクロビット右傾時には　…　ここまで。</span></td><td>マイクロビットを右にかたむけた時に，「…」を実行します。</td></tr>
+        <tr><td><span class="command">マイクロビット画面上時には　…　ここまで。</span></td><td>マイクロビットを上向きにした時に，「…」を実行します。</td></tr>
+        <tr><td><span class="command">マイクロビット画面下時には　…　ここまで。</span></td><td>マイクロビットを下向きにした時に，「…」を実行します。</td></tr>
+    </table>
+
+    <h2>5. 端子（ピン）とサーボモーター</h2>
+    <p class="note">
+        ※端子（ピン）とサーボモータを使うための詳しい一覧は，端子（ピン）・サーボモータチートシート
+        <a href="microbit_pin_cheatsheet.html" target="_blank" class="link-button">▶ 端子（ピン）・サーボモータ　チートシートを開く</a> 
+        をご覧ください。
+    </p>
+
+</body>
+</html>
