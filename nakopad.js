@@ -495,7 +495,18 @@ const SAMPLE_LIST = [
 	{ value: './sample/mb23-gesturetest.txt', 	name: '計測・制御_M23 ジェスチャーセンサの動作テスト' },
 	{ value: './sample/mb30-Lchika.txt',  	 	name: '計測・制御_M30 P0端子でLチカ' },
 	{ value: './sample/mb31-servotest.txt',  	name: '計測・制御_M31 サーボモータの動作テスト' },
-	{ value: './sample/mb32-btnservotest.txt',	name: '計測・制御_M32 ボタンとサーボモータの動作テスト' }
+	{ value: './sample/mb32-btnservotest.txt',	name: '計測・制御_M32 ボタンとサーボモータの動作テスト' },
+	{ value: '', name: '--' },
+	{ value: './sample/ak00-default.txt',    name: '計測・制御_AK0 AkaDaKoを使う' },
+	{ value: './sample/ak01-test.txt',       name: '計測・制御_AK1 基本動作テスト' },
+	{ value: './sample/ak05-ifthen.txt',     name: '計測・制御_AK2 もし～ならば～違えば' },
+	{ value: './sample/ak06-ifthenelse.txt', name: '計測・制御_AK3 もし～ならば～違えばもし' },
+	{ value: './sample/ak08-carsensor-def.txt',      name: '計測・制御_AK8 衝突防止ｱﾗｰﾑを作る' },
+	{ value: './sample/ak09-carsensor.txt',          name: '計測・制御_AK9 衝突防止ｱﾗｰﾑの応用例' },
+	{ value: './sample/ak10-carsensor-media.txt',    name: '計測・制御_AK10 衝突防止ｱﾗｰﾑ ﾒﾃﾞｨｱ利用例' },
+	{ value: '', name: '--' },
+	{ value: './sample/ak30-Lchika.txt',  	 	name: '計測・制御_AK30 デジタルA1端子でLチカ' },
+	{ value: './sample/ak31-servotest.txt',  	name: '計測・制御_AK31 サーボモータの動作テスト' },
 ];
 
 const nako3_init_samplelist = function () {

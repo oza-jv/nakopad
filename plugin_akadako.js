@@ -32,7 +32,7 @@ const PluginAkaDako = {
             window.__akadako_board = await AkaDako.connect(); 
             
             if (window.__akadako_board && window.__akadako_board.isConnected) {
-                const msg = "アカダコを接続しました。もう一度プログラムを実行してください。";
+                const msg = "AkaDaKoを接続しました。";
                 if (typeof nako3_print === 'function') nako3_print(msg);
                 else if (sys.__exec) sys.__exec('表示', [msg]);
             }
@@ -53,7 +53,7 @@ const PluginAkaDako = {
             if (window.__akadako_board) {
                 window.__akadako_board.disconnect(); 
                 window.__akadako_board = null;
-                const msg = "アカダコを切断しました。";
+                const msg = "AkaDaKoを切断しました。";
                 if (typeof nako3_print === 'function') nako3_print(msg);
                 else if (sys.__exec) sys.__exec('表示', [msg]);
             }
@@ -291,7 +291,7 @@ const PluginAkaDako = {
     // ==========================================
     // --- 修正箇所：マニュアル記載の runServoTurn を使用 ---
     // ==========================================
-    'アカダコデジタルA1サーボ出力': {
+    'アカダコデジタルA1サーボ出力': {  // speed(0-100%)でangleに(を)アカダコデジタルA1サーボ出力。
         type: 'func',
         josi: [['で'], ['を', 'に']],
         isVariableJosi: true,
@@ -341,3 +341,47 @@ const PluginAkaDako = {
 if (typeof navigator !== 'undefined') {
     navigator.nako3.addPluginObject('PluginAkaDako', PluginAkaDako);
 }
+
+// ==========================================
+// HTMLのリンクやボタン(onclick)から呼び出すための関数
+// ==========================================
+
+/**
+ * AkaDakoを接続する
+ */
+window.connectAkaDako = async function() {
+    try {
+        if (typeof AkaDako === 'undefined') {
+            nako3_print("==ERROR==akadako.jsが読み込まれていません。先に読み込んでください。");
+            return;
+        }
+        // 既に接続されている場合は何もしない
+        if (window.__akadako_board && window.__akadako_board.isConnected) {
+            nako3_print("既に接続されています。");
+            return;
+        }
+        // 接続画面を表示して接続
+        window.__akadako_board = await AkaDako.connect();
+        
+        if (window.__akadako_board && window.__akadako_board.isConnected) {
+            console.log("AkaDako Connected via Link");
+            nako3_print("AkaDakoを接続しました。");
+        }
+    } catch (e) {
+        console.error("接続エラー:", e);
+        nako3_print("==ERROR==接続エラー: " + e);
+    }
+};
+
+/**
+ * AkaDakoを切断する
+ */
+window.disconnectAkaDako = function() {
+    if (window.__akadako_board) {
+        window.__akadako_board.disconnect();
+        window.__akadako_board = null;
+        nako3_print("AkaDakoを切断しました。");
+    } else {
+        nako3_print("==ERROR==AkaDakoは接続されていません。");
+    }
+};
