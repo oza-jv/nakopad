@@ -6,8 +6,8 @@ const PluginAkaDako = {
         type: 'const',
         value: {
             pluginName: 'plugin_akadako',
-            description: 'AkaDakoを制御するプラグイン（サーボモーターピン修正版）',
-            pluginVersion: '1.25',
+            description: 'AkaDakoを制御するプラグイン（runServoTurn公式対応版）',
+            pluginVersion: '1.28',
             nakoRuntime: ['browser'],
             nakoVersion: '3.6.0' 
         }
@@ -287,7 +287,10 @@ const PluginAkaDako = {
             } catch (e) {}
         }
     },
-    // --- 修正箇所：サーボのピン番号指定 ---
+
+    // ==========================================
+    // --- 修正箇所：マニュアル記載の runServoTurn を使用 ---
+    // ==========================================
     'アカダコデジタルA1サーボ出力': {
         type: 'func',
         josi: [['で'], ['を', 'に']],
@@ -298,7 +301,7 @@ const PluginAkaDako = {
             if (!board || !board.isConnected) return;
             
             const sys = pID.pop();
-            let speed = -1; 
+            let speed = 100; // 速度省略時は 100(%) をデフォルトにする
             let angle = 90;
             
             if (pID.length > 0) {
@@ -309,33 +312,28 @@ const PluginAkaDako = {
             }
 
             try {
+                // 角度の安全処理
                 if (isNaN(angle)) angle = 90;
                 if (angle < 0) angle = 0;
                 if (angle > 180) angle = 180;
                 
+                // 速度の安全処理
+                if (isNaN(speed)) speed = 100;
                 if (speed > 100) speed = 100;
-                if (speed < 0 && speed !== -1) speed = 0;
+                if (speed < 0) speed = 0;
                 
-                // 【重要】サーボ定数が無い場合、デジタル出力で確実に成功したA1ピンを流用する
-                let targetPin = 1;
-                if (typeof AkaDako !== 'undefined') {
-                    if (AkaDako.ServoWrite && AkaDako.ServoWrite.A1 !== undefined) {
-                        targetPin = AkaDako.ServoWrite.A1;
-                    } else if (AkaDako.DigitalWrite && AkaDako.DigitalWrite.A1 !== undefined) {
-                        targetPin = AkaDako.DigitalWrite.A1;
-                    } else if (AkaDako.PwmWrite && AkaDako.PwmWrite.A1 !== undefined) {
-                        targetPin = AkaDako.PwmWrite.A1;
-                    }
-                }
+                // マニュアル通り、AkaDako.DigitalWrite.A1 をターゲットに指定
+                const targetPin = AkaDako.DigitalWrite.A1;
 
-                if (typeof board.runServoSet === 'function') {
-                    if (speed !== -1) {
-                        await board.runServoSet(targetPin, angle, speed);
-                    } else {
-                        await board.runServoSet(targetPin, angle);
-                    }
+                if (typeof board.runServoTurn === 'function') {
+                    // board.runServoTurn(target, speed, angle) を実行
+                    await board.runServoTurn(targetPin, speed, angle);
+                } else {
+                    console.error("❌ [AkaDako] board.runServoTurn が見つかりません。");
                 }
-            } catch (e) {}
+            } catch (e) {
+                console.error("❌ [AkaDako] 実行時エラー:", e);
+            }
         }
     }
 };
