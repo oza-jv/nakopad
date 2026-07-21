@@ -59,7 +59,7 @@ const PluginAkaDako = {
             }
         }
     },
-    'アカダコLED点灯': {
+    'アカダコLED点灯': {  // 「赤色」を50でアカダコLED点灯　のように書く
         type: 'func',
         josi: [['を'], ['で']], 
         isVariableJosi: true,
@@ -71,6 +71,7 @@ const PluginAkaDako = {
 
             try {
                 let colorObj;
+                let RainbowFlag = false;
                 if (typeof colorVal === 'string') {
                     const c = colorVal.replace('色', '');
                     switch (c) {
@@ -84,6 +85,7 @@ const PluginAkaDako = {
                         case 'パープル': colorObj = AkaDako.Color.Purple; break;
                         case '白': colorObj = AkaDako.Color.White; break;
                         case '黒': colorObj = AkaDako.Color.Black; break;
+                        case '虹': RainbowFlag = true; break;
                         default: colorObj = AkaDako.Color.White; 
                     }
                 } 
@@ -108,23 +110,13 @@ const PluginAkaDako = {
                 if (b < 0) b = 0;
                 if (b > 100) b = 100;
                 
-                colorObj = colorObj.brightness(b);
+                if( RainbowFlag ) {
+                    colorObj = new AkaDako.Rainbow(b); 
+                } else {
+                    colorObj = colorObj.brightness(b);
+                }
 
                 await board.runColorLedFillColor(AkaDako.ColorLed.OnBoard, colorObj); 
-                await board.runColorLedShow(); 
-            } catch (e) {}
-        }
-    },
-    'アカダコLED虹色': {
-        type: 'func',
-        josi: [['で', 'に']], 
-        asyncFn: true,
-        fn: async function (a, sys) {
-            const board = window.__akadako_board;
-            if (!board || !board.isConnected) return;
-            try {
-                const rainbow = new AkaDako.Rainbow(a); 
-                await board.runColorLedFillColor(AkaDako.ColorLed.OnBoard, rainbow); 
                 await board.runColorLedShow(); 
             } catch (e) {}
         }
@@ -312,10 +304,10 @@ const PluginAkaDako = {
             }
 
             try {
-                // 角度の安全処理
+                // 角度の安全処理　とりあえずFT90Bに合わせて，-90度～90度にする
                 if (isNaN(angle)) angle = 0;
-                if (angle < -180) angle = -180;
-                if (angle > 180) angle = 180;
+                if (angle < -90) angle = -90;
+                if (angle > 90) angle = 90;
                 
                 // 速度の安全処理
                 if (isNaN(speed)) speed = 100;
