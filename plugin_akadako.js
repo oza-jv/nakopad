@@ -302,7 +302,7 @@ const PluginAkaDako = {
             
             const sys = pID.pop();
             let speed = 100; // 速度省略時は 100(%) をデフォルトにする
-            let angle = 90;
+            let angle = 0;
             
             if (pID.length > 0) {
                 speed = parseInt(speedOrAngle);
@@ -313,8 +313,8 @@ const PluginAkaDako = {
 
             try {
                 // 角度の安全処理
-                if (isNaN(angle)) angle = 90;
-                if (angle < 0) angle = 0;
+                if (isNaN(angle)) angle = 0;
+                if (angle < -180) angle = -180;
                 if (angle > 180) angle = 180;
                 
                 // 速度の安全処理
