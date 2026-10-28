@@ -29,17 +29,20 @@ let sensorData = {
 let onButtonA_Callback = null;
 let onButtonB_Callback = null;
 let onButtonAB_Callback = null;
-// ★タッチイベント用コールバック
+// タッチイベント用コールバック
 let onLogoTouched_Callback = null;
 let onLogoPressed_Callback = null;
 let onLogoReleased_Callback = null;
 let onLogoLong_Callback = null;
-// ★追加：ジェスチャー用コールバック
+// ジェスチャー用コールバック
 let onShake_Callback = null;      // 振った
 let onScreenUp_Callback = null;   // 画面上
 let onScreenDown_Callback = null; // 画面下
 let onTiltLeft_Callback = null;   // 左傾き
 let onTiltRight_Callback = null;  // 右傾き
+// 音検知用コールバック
+let onDetectedSound_Callback = null;  // 音検知
+
 
 // ▼▼▼ アイコンの日本語名とIDの対応表 ▼▼▼
 const MICROBIT_ICONS = {
@@ -334,6 +337,7 @@ function parseData(data) {
   else if (data === "EV:P") { if (onLogoPressed_Callback) onLogoPressed_Callback(); }
   else if (data === "EV:R") { if (onLogoReleased_Callback) onLogoReleased_Callback(); }
   else if (data === "EV:L") { if (onLogoLong_Callback) onLogoLong_Callback(); }
+  else if (data === "EV:S") { if (onDetectedSound_Callback) onDetectedSound_Callback(); }
   else if (data.startsWith("EV:1")) { if (onScreenUp_Callback) onScreenUp_Callback(); }
   else if (data.startsWith("EV:2")) { if (onScreenDown_Callback) onScreenDown_Callback(); }
   else if (data.startsWith("EV:3")) { if (onTiltLeft_Callback) onTiltLeft_Callback(); }
@@ -709,7 +713,6 @@ const microbitUsbPlugin = {
     type: 'func',
     josi: [['を', 'には', 'は', '行う', '実行する']],
     fn: function (func, sys) {
-      // 引数として渡された「処理ブロック(関数)」を変数に保存
       onButtonA_Callback = function() { func(sys); };
     },
     return_none: true
@@ -736,14 +739,31 @@ const microbitUsbPlugin = {
   'マイクロビットロゴ離時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onLogoReleased_Callback = function() { f(s); }; }, return_none: true },
   'マイクロビットロゴ長押時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onLogoLong_Callback = function() { f(s); }; }, return_none: true },
 
-  // ★追加：加速度イベント
+  // 加速度イベント
   'マイクロビット振時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onShake_Callback = function() { f(s); }; }, return_none: true },
   'マイクロビット画面上時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onScreenUp_Callback = function() { f(s); }; }, return_none: true },
   'マイクロビット画面下時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onScreenDown_Callback = function() { f(s); }; }, return_none: true },
   'マイクロビット左傾時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onTiltLeft_Callback = function() { f(s); }; }, return_none: true },
   'マイクロビット右傾時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onTiltRight_Callback = function() { f(s); }; }, return_none: true },
 
-  // 4. 音・音楽関連
+  // 音検知イベント
+  'マイクロビット音検知時': { type: 'func', josi: [['を', 'には', 'は', '行う', '実行する']], fn: function (f, s) { onDetectedSound_Callback = function() { f(s); }; }, return_none: true },
+  'マイクロビットマイクオン': {
+    type: 'func',
+    josi: [],
+    fn: async function (sys) {
+      await sendSerial("MIC:ON");
+    }
+  },
+  
+  'マイクロビットマイクオフ': {
+    type: 'func',
+    josi: [],
+    fn: async function (sys) {
+      await sendSerial("MIC:OFF");
+    }
+  },
+  // 音・音楽関連
   'マイクロビット音停止': {
     type: 'func',
     josi: [],
@@ -777,7 +797,6 @@ const microbitUsbPlugin = {
       await microbitPlayTone(freq, sec*1000);
     }
   }
-
 };
 
 //プラグインの自動登録
